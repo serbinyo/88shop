@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>Tweak 152 FZ for OpenCart 3x Russkaya sborka</name>
+<code>Tweak 152 FZ for OpenCart 3x Russkaya sborka</code>
+<version>3.0.3.7</version>
+<date>04.02.2021</date>
+<author>Romans</author>
+<link>http://opencart-russia.ru</link>
+
+
+
+<!-- Приводим немного сайт к 152 ФЗ	 -->   
+<file path="catalog/controller/information/contact.php">
+
+	<operation>
+		<search><![CDATA[
+			if (isset($this->error['name'])) {
+		]]></search>
+		<add position="before"><![CDATA[
+		if (isset($this->error['warning'])) {
+			$data['error_warning'] = $this->error['warning'];
+		} else {
+			$data['error_warning'] = '';
+		}
+		]]></add>
+	</operation>
+
+	<operation>
+		<search><![CDATA[
+			$data['comment'] = $this->config->get('config_comment');
+		]]></search>
+		<add position="after"><![CDATA[
+		if ($this->config->get('config_account_id')) {
+			$this->load->model('catalog/information');
+
+			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+
+			if ($information_info) {
+				$data['text_agree'] = sprintf($this->language->get('text_agree'), $this->url->link('information/information/agree', 'information_id=' . $this->config->get('config_account_id'), true), $information_info['title'], $information_info['title']);
+			} else {
+				$data['text_agree'] = '';
+			}
+		} else {
+			$data['text_agree'] = '';
+		}
+
+		if (isset($this->request->post['agree'])) {
+			$data['agree'] = $this->request->post['agree'];
+		} else {
+			$data['agree'] = false;
+		}
+		]]></add>
+	</operation>
+
+	<operation>
+		<search><![CDATA[
+			return !$this->error;
+		]]></search>
+		<add position="before"><![CDATA[
+		// Agree to terms
+		if ($this->config->get('config_account_id')) {
+			$this->load->model('catalog/information');
+
+			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+
+			if ($information_info && !isset($this->request->post['agree'])) {
+				$this->error['warning'] = sprintf($this->language->get('error_agree'), $information_info['title']);
+			}
+		}
+		]]></add>
+	</operation>
+
+</file>
+
+<file path="catalog/view/theme/*/template/information/contact.twig">
+
+	<operation>
+		<search><![CDATA[
+			<div class="row">{{ column_left }}
+		]]></search>
+		<add position="before"><![CDATA[
+		{% if error_warning %}
+		<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+		{% endif %}
+		]]></add>
+	</operation>
+
+	<operation>
+		<search><![CDATA[
+			<div class="buttons">
+		]]></search>
+		<add position="before"><![CDATA[
+		{% if text_agree %}
+		<div class="buttons">
+		  <div class="pull-right">{{ text_agree }}
+			{% if agree %}
+			<input type="checkbox" name="agree" value="1" checked="checked" />
+			{% else %}
+			<input type="checkbox" name="agree" value="1" />
+			{% endif %}
+			&nbsp;
+			<input type="submit" value="{{ button_submit }}" class="btn btn-primary" />
+		  </div>
+		</div>
+		{% else %}
+		]]></add>
+	</operation>
+
+	<operation>
+		<search><![CDATA[
+			</form>
+		]]></search>
+		<add position="before"><![CDATA[
+		{% endif %}
+		]]></add>
+	</operation>
+
+</file>
+
+
+</modification>
