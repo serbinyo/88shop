@@ -1,0 +1,94 @@
+{{ header }}
+<div id="account-reward" class="container">
+	<ul class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key+1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-6 col-lg-6 col-xxl-12' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">
+			{{ content_top }}
+			<div class="heading-h1"><h1>{{ heading_title }}</h1></div>
+			<div class="account-reward">
+				{% if rewards %}
+					{% if column_left and column_right %}
+						{% set class = 'col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xxl-6-1' %}
+					{% elseif column_left or column_right %}
+						{% set class = 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xxl-6-1' %}
+					{% else %}
+						{% set class = 'col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xxl-6-1' %}
+					{% endif %}
+					<div class="account-reward__total">{{ text_total }} <b>{{ total }}</b></div>
+					<!--
+					<div class="account-reward__wrap">
+						<div class="table-responsive">
+							<table class="account-reward__table">
+								<tr class="account-reward__heading">
+									<td class="account-reward__date text-left">{{ column_date_added }}</td>
+									<td class="account-reward__description text-left">{{ column_description }}</td>
+									<td class="account-reward__points text-right">{{ column_points }}</td>
+								</tr>
+								{% for reward in rewards %}
+									<tr class="account-reward__item">
+										<td class="account-reward__date text-left">{{ reward.date_added }}</td>
+										<td class="account-reward__description text-left">
+											{% if reward.order_id %}
+												<a href="{{ reward.href }}">{{ reward.description }}</a>
+											{% else %}
+												{{ reward.description }}
+											{% endif %}
+										</td>
+										<td class="account-reward__points text-right">{{ reward.points }}</td>
+									</tr>
+								{% endfor %}
+							</table>
+						</div>
+					</div>
+					-->
+					
+					<div class="row row-flex">
+						{% for reward in rewards %}
+							<div class="{{ class }}">
+								<div class="account-reward__item uni-item">
+									<div href="" class="account-reward__name">
+										{% if reward.order_id %}
+											<a href="{{ reward.href }}">{{ reward.description }}</a>
+										{% else %}
+											{{ reward.description }}
+										{% endif %}
+									</div>
+									<div class="account-reward__description">
+										<div class="account-reward__description-item date-added"><div class="account-reward__description-div"><span class="account-reward__description-span">{{ column_date_added }}</span></div>{{ reward.date_added }}</div>
+										<div class="account-reward__description-item points"><div class="account-reward__description-div"><span class="account-reward__description-span">{{ column_points }}</span></div>{{ reward.points }}</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+					{{ pagination }}
+					<div class="pagination-text">{{ results }}</div>
+				{% else %}
+					<div class="div-text-empty">{{ text_empty }}</div>
+				{% endif %}	
+			</div>
+			<div class="buttons clearfix hidden">
+				<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+			</div>
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

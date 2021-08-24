@@ -1,0 +1,28 @@
+{% if banners %}
+	<script>
+		{% for banner in banners %}
+			{% set banner_style = banner.image ? 'style="max-height:'~banner.height~'px"' %}
+							
+			var html = '<div class="banner-in-category id-{{ banner.banner_id }} uni-href" data-href="{{ banner.href }}">';
+				{% if banner.image %}
+					html += '<img src="{{ banner.image }}" class="banner-in-category__img img-responsive" {{ banner_style }} />';
+				{% endif %}
+				{% if banner.description or banner.button %}
+					html += '<div class="banner-in-category__wrap">';
+					html += '<div class="banner-in-category__description">{{ banner.description }}</div>';
+					{% if banner.button %}
+						html += '<button class="banner-in-category__btn btn btn-lg btn-primary uni-href" data-href="{{ banner.href }}">{{ banner.button }}</button>';
+					{% endif %}
+					html += '</div>';
+					html += '</div>';
+				{% endif %}
+								
+			var window_width = $(window).width(),
+				position = (window_width >= 1585) ? {{ banner.position2 }} : {{ banner.position }};
+								
+			if(window_width > 992) {
+				$('.products-block .product-layout:eq('+(position-1)+')').before(html);
+			}
+		{% endfor %}
+	</script>
+{% endif %}

@@ -1,0 +1,36 @@
+<?php
+$_['heading_title'] = '<b>UniShop2</b> - Банери в категоріях';
+$_['text_module'] = 'Модулі';
+$_['text_success'] = 'Налаштування успішно змінено!';
+$_['column_name'] = 'Ім\'я';
+$_['column_category'] = 'Категорії';
+$_['column_date'] = 'Початок і закінчення показу';
+$_['column_status'] = 'Статус';
+$_['column_edit'] = 'Дія';
+$_['text_edit'] = 'Редагування';
+$_['text_list'] = 'Список банерів';
+$_['text_type1'] = 'Блок товару';
+$_['text_type2'] = 'Смугою на всю ширину блоку категорії';
+$_['text_position'] = 'Дозвіл від 992px до 1600px';
+$_['text_position2'] = 'Дозвіл від 1600px і вище';
+$_['text_date_undefined'] = 'Не вказано';
+$_['entry_banner'] = 'Багатомовні дані';
+$_['entry_name'] = 'Ім\'я';
+$_['entry_image'] = 'Зображення';
+$_['entry_description'] = 'Текст банера';
+$_['entry_button'] = 'Текст на кнопці';
+$_['entry_link'] = 'Посилання';
+$_['entry_category'] = 'Показувати в категоріях';
+$_['entry_store'] = 'Показувати в магазинах';
+$_['entry_type'] = 'Вид відображення';
+$_['entry_position'] = 'Позиція в списку товарів';
+$_['entry_image_dimension'] = 'Розмір зображення (max)';
+$_['entry_date'] = 'Дати початку і закінчення показу';
+$_['entry_status'] = 'Статус';
+$_['entry_status_mod'] = 'Статус модуля';
+$_['error_permission'] = 'У вас недостатньо прав для внесення змін!';
+$_['button_add'] = 'Додати';
+$_['button_save'] = 'Зберегти';
+$_['button_delete'] = 'Видалити';
+$_['button_cancel'] = 'Скасування';
+?>

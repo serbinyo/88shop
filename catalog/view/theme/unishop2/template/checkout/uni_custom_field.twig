@@ -1,0 +1,127 @@
+{% if custom_fields %}
+	<div class="custom-field">
+		{% for custom_field in custom_fields %}
+		
+			{% set fieldValue = checked[custom_field.location][custom_field.custom_field_id] %}
+		
+			{% if custom_field.type == 'select' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<label class="custom-field__label control-label" for="input-shipping-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.required ? '*' }}{{ custom_field.name }}</label>
+					<select name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" class="form-control">
+						<option value="">{{ text_select }}</option>
+						{% for custom_field_value in custom_field.custom_field_value %}
+							<option value="{{ custom_field_value.custom_field_value_id }}" {{ fieldValue == custom_field_value.custom_field_value_id ? 'selected="selected"' }}>{{ custom_field_value.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			{% endif %}
+			{% if custom_field.type == 'radio' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<label class="custom-field__label control-label">{{ custom_field.name }}</label>
+					{% for custom_field_value in custom_field.custom_field_value %}
+						<label class="input">
+							<input type="radio" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field_value.custom_field_value_id }}" {{ fieldValue == custom_field_value.custom_field_value_id ? 'checked="checked"' }} />{{ custom_field_value.name }}
+						</label>
+					{% endfor %}
+				</div>
+			{% endif %}
+			{% if custom_field.type == 'checkbox' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<label class="custom-field__label control-label">{{ custom_field.name }}</label>
+					{% for custom_field_value in custom_field.custom_field_value %}
+						<label class="input">
+							<input type="checkbox" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" value="{{ custom_field_value.custom_field_value_id }}" {{ fieldValue == custom_field_value.custom_field_value_id ? 'checked="checked"' }} />{{ custom_field_value.name }}
+						</label>
+					{% endfor %}
+				</div>
+			{% endif %}
+			{% if custom_field.type == 'text' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ fieldValue ? fieldValue : custom_field.value }}" placeholder="{{ custom_field.name }}" class="form-control" />
+				</div>
+			{% endif %}
+			{% if custom_field.type == 'textarea' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<textarea name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" rows="5" placeholder="{{ custom_field.name }}" class="form-control">{{ custom_field.value }}</textarea>
+				</div>
+			{% endif %}
+			{% if custom_field.type == 'file' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<label class="custom-field__label control-label">{{ custom_field.name }}</label>
+					<button type="button" id="button-payment-custom-field{{ custom_field.custom_field_id }}" class="btn btn-default"><i class="fa fa-upload"></i> {{ button_upload }}</button>
+					<input type="hidden" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field.value }}" />
+				</div>
+			{% endif %}
+			{% if custom_field.type == 'date' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<input type="date" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field.value }}" placeholder="{{ custom_field.name }}" class="form-control" />
+				</div>
+			{% endif %}
+			{% if custom_field.type == 'datetime' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<input type="datetime-local" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field.value }}" placeholder="{{ custom_field.name }}" class="form-control" />
+				</div>
+			{% endif %}
+			{% if custom_field.type == 'time' %}
+				<div class="form-group {{ custom_field.required ? 'required' }}">
+					<input type="time" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field.value }}" placeholder="" class="form-control" />
+				</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+	
+	<script>
+		$('button[id^=\'button-payment-custom-field\']').on('click', function() {
+			var node = this;
+
+			$('#form-upload').remove();
+
+			$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+			$('#form-upload input[name=\'file\']').trigger('click');
+
+			if (typeof timer != 'undefined') {
+				clearInterval(timer);
+			}
+
+			timer = setInterval(function() {
+				if ($('#form-upload input[name=\'file\']').val() != '') {
+					clearInterval(timer);
+
+					$.ajax({
+						url: 'index.php?route=tool/upload',
+						type: 'post',
+						dataType: 'json',
+						data: new FormData($('#form-upload')[0]),
+						cache: false,
+						contentType: false,
+						processData: false,
+						beforeSend: function() {
+							$(node).button('loading');
+						},
+						complete: function() {
+							$(node).button('reset');
+						},
+						success: function(json) {
+							$(node).parent().find('.text-danger').remove();
+
+							if (json['error']) {
+								$(node).parent().find('input[name^=\'custom_field\']').after('<div class="text-danger">' + json['error'] + '</div>');
+							}
+
+							if (json['success']) {
+								alert(json['success']);
+
+								$(node).parent().find('input[name^=\'custom_field\']').val(json['code']);
+							}
+						},
+						error: function(xhr, ajaxOptions, thrownError) {
+							alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+						}
+					});
+				}
+			}, 500);
+		});
+	</script>
+	
+{% endif %}

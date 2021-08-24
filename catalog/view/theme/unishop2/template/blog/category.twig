@@ -1,0 +1,103 @@
+{{ header }}
+<div class="container">
+	<ul class="breadcrumb {{ menu_expanded ? 'col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' }}">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key + 1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-6 col-lg-6 col-xxl-12' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">
+			{{ content_top }}
+			<div class="heading-h1"><h1>{{ heading_title }}</h1></div>
+				{% if description %}
+					<div class="category-page category-info">
+						{% if thumb %}
+							<div class="category-info__image">
+								<img src="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="img-thumbnail" />
+							</div>
+						{% endif %}
+						<div class="description">{{ description }}</div>
+					</div>
+				{% endif %}
+				{% if articles %}
+				<div class="sorts-block">
+					<div class="sorts-block__item hidden-xs"></div>
+					<div class="sorts-block__item">
+						<select id="input-sort" class="sorts-block__select form-control" onchange="location = this.value;">
+							{% for sorts in sorts %}
+								{% if sorts.value == '%s-%s'|format(sort, order) %}
+									<option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+								{% else %}
+									<option value="{{ sorts.href }}">{{ sorts.text }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+						<select id="input-limit" class="sorts-block__select sorts-block__limit form-control" onchange="location = this.value;">
+							{% for limits in limits %}
+								{% if limits.value == limit %}
+									<option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+								{% else %}
+									<option value="{{ limits.href }}">{{ limits.text }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<hr />
+				<div class="article-list">
+					 {% for article in articles %}
+						<div class="article-list__item uni-item row row-flex">
+							<div class="article-list__image col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xxl-4">
+								<a class="uni-href" data-href="{{ article.href }}">
+									<img src="{{ article.thumb }}" alt="{{ article.name }}" class="img-responsive" />
+								</a>
+							</div>
+							<div class="col-sm-8 col-md-9 col-lg-9 col-xxl-16">
+								<div class="article-list__description">
+									<h4 class="uni-href" data-href="{{ article.href }}" style="cursor:pointer">{{ article.name }}</h4>
+									{{ article.description }}
+								</div>
+								<div class="article-list__posted">
+									{% if configblog_review_status %}
+										{% if article.rating >= 0 %}
+											<span class="article-list__rating rating">
+												{% for i in 1..5 %}
+													<i class="{{ article.rating < i ? 'far fa-star' : 'fa fa-star' }}"></i>
+												{% endfor %} 
+											</span>
+										{% endif %}
+									{% endif %}
+									<i class="article-list__icon fa fa-calendar"></i>{{ article.date_added }}
+									<i class="article-list__icon fa fa-eye"></i>{{ article.viewed }}
+									<a class="article-list__more" href="{{ article.href }}" title="{{ article.name }}">{{ button_more }} &rarr;</a>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				{{ pagination }}
+			    <div class="pagination-text">{{ results }}</div>
+			{% else %}
+				<p>{{ text_empty }}</p>
+				<div class="buttons">
+					<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+				</div>
+			{% endif %}
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

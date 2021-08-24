@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><i class="fa fa-question-circle"></i>{{heading_title}}</h3>
+	</div>
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+			<tr>
+				<td>{{column_type}}</td>
+				<td>{{column_name}}</td>
+				<td>{{column_phone}}</td>
+				<td>{{column_mail}}</td>
+				<td>{{column_date}}</td>
+				<td>{{column_status}}</td>
+				<td class="text-right">{{column_action}}</td>
+			</tr>
+			</thead>
+			{% if requests %}
+				{% for result in requests %}
+					<tr>
+						<td>{{result.type}}</td>
+						<td>{{result.name}}</td>
+						<td>{{result.phone}}</td>
+						<td>{{result.mail}}</td>
+						<td>{{result.date}}</td>
+						<td>{{result.status}}</td>
+						<td class="text-right"><a href="{{result.action}}" data-toggle="tooltip" title="{{button_view}}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td class="text-center" colspan="8">{{text_no_results}}</td>
+				</tr>
+			{% endif %}
+		</table>
+	</div>
+</div>

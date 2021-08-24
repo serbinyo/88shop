@@ -1,0 +1,30 @@
+<?php
+$_['text_product'] = '<b>Product:</b> ';
+$_['text_name'] = '<b>Name:</b> ';
+$_['text_phone'] = '<b>Phone:</b> ';
+$_['text_mail'] = '<b>E-mail:</b> ';
+$_['text_comment'] = '<b>Comment:</b> ';
+$_['text_reason'] = 'Topic: %s on %s';
+$_['text_reason2'] = 'Topic: %s';
+$_['text_notify'] = 'Notify on availability';
+$_['text_question'] = 'Question about the product';
+$_['text_success'] = 'Thank you, we will contact you shortly.';
+$_['text_success2'] = 'Thank you, your question has been sent successfully. We will contact you shortly.';
+$_['text_error_name'] = 'Please enter your name.<br>';
+$_['text_error_phone'] = 'Enter the contact phone.<br>';
+$_['text_error_mail'] = 'Enter a valid e-mail.';
+$_['text_error_comment'] = 'Write your question.';
+$_['text_admin_reply'] = 'The administration\'s response:';
+$_['button_new_request'] = 'New question';
+$_['button_add_new_request'] = 'Send your question';
+$_['entry_request_name'] = 'Your name:';
+$_['entry_request_phone'] = 'Contact phone:';
+$_['entry_request_mail'] = 'Your e-mail:';
+$_['entry_request_mail_required'] = ' (complete if you wish to receive notification of the response of the administration)';
+$_['entry_request_text'] = 'Your question:';
+$_['tab_question'] = 'Question-answer ';
+$_['text_no_requests'] = 'No questions about this product.';
+$_['text_error'] = 'The page you requested was not found!';
+$_['text_location'] = '<b>Submission page: </b> ';
+$_['text_question_total'] = 'Questions: %s';
+?>

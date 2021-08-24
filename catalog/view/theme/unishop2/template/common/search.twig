@@ -1,0 +1,19 @@
+<div class="header-search">
+	<div class="header-search__form">
+		{% if categories %}
+			<div class="header-search__category cat-id {{ hide_category_only_mobile ? 'hide-on-mobile' }}">
+				<button type="button" class="header-search__category-btn dropdown-toggle" data-toggle="dropdown"><span class="header-search__category-span">{{ text_search_all }}</span></button>
+				<input type="hidden" name="filter_category_id" value="" />
+				<ul class="dropdown-menu">
+					<li class="header-search__category-li" data-id=""><a>{{ text_search_all }}</a></li>
+					{% for category in categories %}
+						<li class="header-search__category-li" data-id="{{ category.category_id }}"><a>{{ category.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+		<input type="text" name="search" value="{{ search }}" placeholder="{{ text_search }}" aria-label="Search" class="header-search__input {{ hide_category_only_mobile ? 'hide-on-mobile' }} form-control" />
+		<button type="button" class="header-search__btn search-btn"><i class="fa fa-search"></i></button>
+	</div>
+	<div class="live-search" style="display:none"><ul class="live-search__ul"><li class="loading"></li></ul></div>
+</div>

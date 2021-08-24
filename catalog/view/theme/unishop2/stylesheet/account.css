@@ -1,0 +1,110 @@
+.uni-item:not(.product-thumb){background:#f7f7f7f7;border-radius:4px;box-shadow:none !important;transition:all ease-in-out .15s}
+.uni-item:not(.product-thumb):hover{background:#f2f2f2}
+
+.account-index__item{display:flex;flex-wrap:wrap;height:calc(100% - 20px);margin:0 0 20px;align-items:center;justify-content:center;text-align:center;line-height:normal;font-size:.95em;font-weight:500}
+.account-index__icon{width:100%;margin:0 0 15px;font-size:3.5em}
+.account-index__text{color:#666}
+
+.account-login__wrapper{display:flex;flex-wrap:wrap;height:100%}
+.account-login__heading{width:100%;margin:0 0 20px}
+.account-login__form-group{width:250px;max-width:100%}
+.account-login__forgotten{display:block;margin:10px 0;font-size:.95em}
+.account-login__btn{margin:auto 0 0}
+
+.account-forgotten__heading{margin-left:0}
+.account-forgotten__text{margin:15px 0;font-size:.95em}
+.account-forgotten__btn{margin:20px 0 0}
+
+.account-password__btn{margin:10px 0 0}
+
+.account-register__already{margin:15px 0 5px;font-size:.95em}
+.account-register__input{margin:0 0 5px}
+.account-register__customer-group-item:first-child{display:block;margin:7px 0 5px}
+.account-register__newsletter-item:first-child{display:block;margin:7px 0 5px}
+.account-register__agree{margin:0 0 10px}
+
+.account-wishlist{overflow:hidden;margin:0 -10px 30px}
+.account-wishlist .product-thumb{text-align:center}
+.account-wishlist p{padding:0 10px}
+.account-wishlist .price{justify-content:center;margin:10px 0 15px}
+.account-wishlist__delete{display:flex;align-items:center;justify-content:center;position:absolute;top:-5px;right:-5px;z-index:1;width:30px;height:30px;background:#f7f7f7;border:none;border-radius:100%;opacity:.9}
+
+.account-download{display:flex;margin-bottom:10px}
+.account-download > div {display:flex}
+.account-download__item{display:flex;flex-direction:column;width:100%;margin:0 0 20px;padding:15px}
+.account-download__name {display:block;margin:0 0 10px;font-weight:500;font-size:1.2em}
+.account-download__description{margin:auto 0 15px}
+.account-download__description-item{display:flex;align-items:flex-start;margin:0 0 5px}
+.account-download__description-div{position:relative;width:50%;min-width:50%}
+.account-download__description-div:first-child:after{position:absolute;left:0;right:10px;bottom:5px;content:'';border-bottom:dotted 1px #bbb}
+.account-download__description-span{position:relative;z-index:2;padding:0 10px 0 0;background:#f7f7f7}
+.account-download__btn {max-width:150px}
+
+.account-edit__btn{margin:10px 0 0}
+
+.account-address-list{}
+.account-address-list__buttons{margin:15px 0 0}
+.account-address-list__address-id {display:block;margin:0 0 10px;font-weight:500;font-size:1.2em}
+.account-address-list__customer-name{margin:0 0 10px;font-weight:500}
+
+.account-order-list{margin-bottom:10px}
+.account-order-list__item{margin:0 0 20px;padding:15px}
+.account-order-list__order-id {display:block;margin:0 0 10px;font-weight:500;font-size:1.2em}
+.account-order-list__name{margin:0 0 10px;font-weight:500}
+.account-order-list__description{margin:0 0 15px}
+.account-order-list__description-item{display:flex;align-items:flex-end;margin:0 0 5px}
+.account-order-list__description-div{position:relative;width:50%;min-width:50%}
+.account-order-list__description-div:first-child:after{position:absolute;left:0;right:10px;bottom:5px;content:'';border-bottom:dotted 1px #bbb}
+.account-order-list__description-span{position:relative;z-index:2;padding:0 10px 0 0;background:#f7f7f7}
+
+.account-order-info__description{margin:10px 0 20px}
+.account-order-info__description-item{display:flex;align-items:flex-end;margin:0 0 5px}
+.account-order-info__description-div{position:relative;width:50%;min-width:50%}
+.account-order-info__description-div:first-child:after{position:absolute;left:0;right:10px;bottom:5px;content:'';border-bottom:dotted 1px #bbb}
+.account-order-info__description-span{position:relative;z-index:2;padding:0 10px 0 0;background:#fff}
+.account-order-info__payment-address, .account-order-info__shipping-address{margin:0 0 20px}
+
+.account-order-info__products-wrap {margin:0 0 30px;border-top:solid 1px rgba(0, 0, 0, .05);box-shadow:0 5px 10px rgba(0, 0, 0, .1);border-radius:4px}
+.account-order-info__products-table{width:100%;margin:0}
+.account-order-info__products-heading {font-weight:500;background:#f7f7f7}
+.account-order-info__products-item{min-height:80px;height:80px;border-top:solid 1px #eee}
+.account-order-info__products-item:nth-child(odd){background:#fafafa}
+.account-order-info__products-name, .account-order-info__products-model, .account-order-info__products-quantity, .account-order-info__products-price, .account-order-info__products-total{padding:10px 15px;border-right:solid 1px #eee}
+.account-order-info__products-model, .account-order-info__products-quantity{width:100px;min-width:100px}
+.account-order-info__products-price, .account-order-info__products-total{width:150px;min-width:100px}
+.account-order-info__products-btn{padding:10px 15px}
+
+.account-order-info__totals{padding:15px 10px 10px;border-top:solid 1px #eee}
+.account-order-info__totals-item{display:flex;justify-content:flex-end;margin:0 0 5px}
+.account-order-info__totals-item:last-child{}
+.account-order-info__totals-text{min-width:80px;padding:0 0 0 10px;font-weight:500}
+
+.account-order-info__comment{margin:0 0 30px;padding:20px;background:#f7f7f7;border-radius:4px}
+
+.account-order-info__history-wrap {margin:0 0 20px;border-top:solid 1px rgba(0, 0, 0, .05);box-shadow:0 5px 10px rgba(0, 0, 0, .1);border-radius:4px}
+.account-order-info__history-table{width:100%;margin:0}
+.account-order-info__history-heading {font-weight:500;background:#f7f7f7}
+.account-order-info__history-item{height:40px;border-top:solid 1px #eee}
+.account-order-info__history-item:nth-child(odd){background:#fafafa}
+.account-order-info__history-date, .account-order-info__history-status, .account-order-info__history-comment{padding:10px 15px;border-right:solid 1px #eee}
+.account-order-info__history-date, .account-order-info__history-status{width:180px;min-width:100px}
+
+.account-reward__total{margin:0 0 20px;padding:20px;background:#f7f7f7;border-radius:4px}
+
+/*
+.account-reward__wrap {margin:0 0 20px;border-top:solid 1px rgba(0, 0, 0, .05);box-shadow:0 5px 10px rgba(0, 0, 0, .1);border-radius:4px}
+.account-reward__table{width:100%;margin:0}
+.account-reward__heading {font-weight:500;background:#f7f7f7}
+.account-reward__item{height:40px;border-top:solid 1px #eee}
+.account-reward__item:nth-child(odd){background:#fafafa}
+.account-reward__date, .account-reward__description, .account-reward__points{padding:10px 15px;border-right:solid 1px #eee}
+.account-order-info__history-date, .account-order-info__history-status{width:180px;min-width:100px}
+*/
+
+.account-reward{margin-bottom:10px}
+.account-reward__item{margin:0 0 20px;padding:15px}
+.account-reward__name {display:block;margin:0 0 10px;font-weight:500;font-size:1.2em}
+.account-reward__description-item{display:flex;align-items:flex-start;margin:0 0 5px}
+.account-reward__description-div{position:relative;width:50%;min-width:50%}
+.account-reward__description-div:first-child:after{position:absolute;left:0;right:10px;bottom:5px;content:'';border-bottom:dotted 1px #bbb}
+.account-reward__description-span{position:relative;z-index:2;padding:0 10px 0 0;background:#f7f7f7}

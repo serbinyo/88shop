@@ -1,0 +1,164 @@
+{{ header }}
+<div id="account-order" class="container">
+	<ul class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key+1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	{% if success %}
+		<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+	{% endif %}
+	{% if error_warning %}
+		<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+	{% endif %}
+	<div class="row">
+	{{ column_left }}
+	{% if column_left and column_right %}
+		{% set class = 'col-sm-4 col-md-6 col-lg-6 col-xxl-12' %}
+	{% elseif column_left or column_right %}
+		{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+	{% else %}
+		{% set class = 'col-sm-12' %}
+	{% endif %}
+    <div id="content" class="{{ class }}">
+		{{ content_top }}
+		<div class="heading-h1"><h1>{{ text_order_detail }} #{{ order_id }} - {{ date_added }}</h1></div>
+		<div class="account-order-info">
+			<div class="row row-flex">
+				<div class="col-xs-12 col-sm-6">
+					<!-- <div class="heading"><span>{{ text_order_detail }}</span></div> -->
+					<div class="account-order-info__description">
+						{% if invoice_no %}
+							<div class="account-order-info__description-item customer"><div class="account-order-info__description-div"><span class="account-order-info__description-span">{{ text_invoice_no }}</span></div>{{ invoice_no }}</div>
+						{% endif %}
+						<!-- <div class="account-order-info__description-item customer"><div class="account-order-info__description-div"><span class="account-order-info__description-span">{{ text_account_order_id }}</span></div>#{{ order_id }}</div>
+						<div class="account-order-info__description-item customer"><div class="account-order-info__description-div"><span class="account-order-info__description-span">{{ text_date_added }}</span></div>{{ date_added }}</div> -->
+						{% if payment_method %}
+							<div class="account-order-info__description-item customer"><div class="account-order-info__description-div"><span class="account-order-info__description-span">{{ text_payment_method }}</span></div>{{ payment_method }}</div>
+						{% endif %}
+						{% if shipping_method %}
+							<div class="account-order-info__description-item customer"><div class="account-order-info__description-div"><span class="account-order-info__description-span">{{ text_shipping_method }}</span></div>{{ shipping_method }}</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<div class="heading"><span>{{ text_payment_address }}</span></div>
+					<div class="account-order-info__payment-address">
+						{{ payment_address }}
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					{% if shipping_address %}
+						<div class="heading"><span>{{ text_shipping_address }}</span></div>
+						<div class="account-order-info__shipping-address">
+							{{ shipping_address }}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+			<div class="account-order-info__products-wrap">
+				<div class="table-responsive">
+					<table class="account-order-info__products-table">
+						<tr class="account-order-info__products-heading">
+							<td class="account-order-info__products-name text-left">{{ column_name }}</td>
+							<td class="account-order-info__products-model text-left">{{ column_model }}</td>
+							<td class="account-order-info__products-quantity text-right">{{ column_quantity }}</td>
+							<td class="account-order-info__products-price text-right">{{ column_price }}</td>
+							<td class="account-order-info__products-total text-right">{{ column_total }}</td>
+							{% if products %}
+								<td style="width: 20px;"></td>
+							{% endif %}
+						</tr>
+						{% for product in products %}
+							<tr class="account-order-info__products-item">
+								<td class="account-order-info__products-name text-left">
+									{{ product.name }}
+									{% for option in product.option %} <br />
+										&nbsp;<small> - {{ option.name }}: {{ option.value }}</small>
+									{% endfor %}
+								</td>
+								<td class="account-order-info__products-model text-left">{{ product.model }}</td>
+								<td class="account-order-info__products-quantity text-right">{{ product.quantity }}</td>
+								<td class="account-order-info__products-price text-right">{{ product.price }}</td>
+								<td class="account-order-info__products-total text-right">{{ product.total }}</td>
+								<td class="account-order-info__products-btn text-right" style="white-space: nowrap;">
+									{% if product.reorder %}
+										<button type="button" onclick="location('{{ product.reorder }}');" data-toggle="tooltip" title="{{ button_reorder }}" class="btn add_to_cart {{ product.cart_btn_class }}" data-pid="{{ product.product_id }}"><i class="{{ product.cart_btn_icon }}"></i><span class="hidden-sm hidden-md">{{ product.cart_btn_text }}</span></button>
+									{% endif %}
+									&nbsp;&nbsp;
+									<a href="{{ product.return }}" data-toggle="tooltip" title="{{ button_return }}" class="btn btn-danger"><i class="fa fa-reply"></i></a></td>
+							</tr>
+						{% endfor %}
+						{% for voucher in vouchers %}
+							<tr>
+								<td class="account-order-info__products-name text-left">{{ voucher.description }}</td>
+								<td class="account-order-info__products-model text-left"></td>
+								<td class="account-order-info__products-quantity text-right">1</td>
+								<td class="account-order-info__products-price text-right">{{ voucher.amount }}</td>
+								<td class="account-order-info__products-total text-right">{{ voucher.amount }}</td>
+								{% if products %}
+									<td></td>
+								{% endif %}
+							</tr>
+						{% endfor %}
+						<tr>
+							<td colspan="6">
+								<div class="account-order-info__totals">
+									{% for total in totals %}
+										<div class="account-order-info__totals-item">
+											<div class="account-order-info__totals-title">{{ total.title }}: </div>
+											<div class="account-order-info__totals-text">{{ total.text }}</div>
+										</div>
+									{% endfor %}
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			{% if comment %}
+				<div class="heading"><span>{{ text_comment }}</span></div>
+				<div class="account-order-info__comment">
+					{{ comment }}
+				</div>
+			{% endif %}
+			{% if histories %}
+				<div class="heading"><span>{{ text_history }}</span></div>
+				<div class="account-order-info__history-wrap">
+					<div class="table-responsive">
+						<table class="account-order-info__history-table">
+							<tr class="account-order-info__history-heading">
+								<td class="account-order-info__history-date">{{ column_date_added }}</td>
+								<td class="account-order-info__history-status">{{ column_status }}</td>
+								<td class="account-order-info__history-comment">{{ column_comment }}</td>
+							</tr>
+							{% for history in histories %}
+								<tr class="account-order-info__history-item">
+									<td class="account-order-info__history-date">{{ history.date_added }}</td>
+									<td class="account-order-info__history-status">{{ history.status }}</td>
+									<td class="account-order-info__history-comment">{{ history.comment }}</td>
+								</tr>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+			{% endif %}
+			<div class="buttons clearfix hidden">
+				<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+			</div>
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

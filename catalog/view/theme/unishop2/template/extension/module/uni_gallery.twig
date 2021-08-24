@@ -1,0 +1,112 @@
+{{header}}
+<div class="container">
+	<ul class="breadcrumb mobile {{ menu_expanded ? 'col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' }}">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key + 1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				{% if not hide_last_breadcrumb or (hide_last_breadcrumb and key == 1) %}<li>{{ breadcrumb.text }}</li>{% endif %}
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<div class="row">
+		{{column_left}}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-4 col-lg-6 col-xxl-12' %}			
+		{% elseif column_left or column_right %}
+			{% if 'product/gallery' in menu_schema and column_right %}
+				{% set class = 'col-sm-8 col-md-9 col-lg-6 col-xxl-12 col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' %}
+			{% else  %}
+				{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+			{% endif %}
+		{% else  %}
+			{% if 'product/gallery' in menu_schema %}
+				{% set class = 'col-sm-12 col-md-9 col-lg-9 col-xxl-16 col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' %}
+			{% else  %}
+				{% set class = 'col-sm-12' %}
+			{% endif %}
+		{% endif %}
+		<div id="content" class="{{class}}">
+			{{content_top}}
+			<div id="gallery">
+				{% if gallerys %}
+					{% for key, gallery in gallerys %}
+						<div class="heading"><span>{{gallery.name}}</span></div>
+						<div class="uni-module gallery gallery_{{key}}">
+							<div class="uni-module__wrapper">
+								{% for key, images in gallery.images %}
+									<div class="item">
+										<div class="image uni-item">
+											<a href="{{images.popup}}" title="{{images.title}}" data-caption="{{images.title}}" class="img_popup">
+												<img src="{{images.image}}" alt="{{images.title}}" title="{{images.title}}" class="img-responsive" />
+											</a>
+											{% if images.title %}
+												{% if images.link %}
+													<a href="{{images.link}}" class="name btn btn-primary">{{images.title}}</a>
+												{% else %}
+													<span class="name btn btn-primary">{{images.title}}</span>
+												{% endif %}
+											{% endif %}
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						<script type="text/javascript">
+							$('.gallery_{{key}}').uniModules({
+								type:'{{type_view is defined ? type_view : 'carousel'}}',
+								items:{0:{items:1},580:{items:3},720:{items:4},1050:{items:6}},
+								loop:{{gallery.images|length > 6 ? 'true' : 'false'}}
+							});
+							
+							$('.gallery_{{key}}').magnificPopup({
+								type:'image',
+								delegate: 'a.img_popup',
+								gallery: {
+									enabled:true
+								},
+								removalDelay:800,
+								callbacks:{
+									open:function() {
+										var $this = this;
+					
+										this.content.attr('class', 'mfp-figure {{uni_popup_img_effect_in}}');
+										$('html body').addClass('magnific-open');
+					
+										setTimeout(function() { 
+											$this.content.attr('class', 'mfp-figure');
+										}, 850);
+									},
+									beforeClose:function() {
+										this.content.attr('class', 'mfp-figure {{uni_popup_img_effect_out}}');
+										$('html body').removeClass('magnific-open');
+									}
+								},
+							});
+						</script>
+					{% endfor %}
+				{% endif %}
+			</div>
+			{{content_bottom}}
+		</div>
+		{{column_right}}
+	</div>
+</div>
+</script>
+<script type="application/ld+json">
+	{
+		"@context": "http://schema.org",
+		"@type": "BreadcrumbList",
+		"itemListElement": [
+		{% for i, breadcrumb in breadcrumbs %}
+			{
+			"@type": "ListItem",
+			"position": {{ i+1 }},
+			"name": "{{ i == 0 ? shop_name : breadcrumb.text|replace({'"':'', '&quot;':''}) }}",
+			"item": "{{ breadcrumb.href }}"
+			{{ i + 1 < breadcrumbs|length ? '},' : '}' }}
+		{% endfor %}
+		]
+	}
+</script>
+{{ footer }}

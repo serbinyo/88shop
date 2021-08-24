@@ -1,0 +1,42 @@
+{% if option.color %}
+	<div class="ocf-color" style="background-color: #{{ value.color }};"></div>
+{% endif %}
+
+{% if option.image %}
+	<div class="ocf-image" style="background-image: url({{ value.image }});"></div>
+{% endif %}
+
+{% if value.selected %}
+	<label id="v-{{ value.id }}" class="ocf-selected input" data-option-id="{{ option.option_id }}">
+		<span>
+			<input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="{{ value.params }}" checked="checked" class="ocf-target" autocomplete="off" />
+			
+			{{ value.name }}
+		</span>
+		{% if show_counter %}
+			<small class="badge"></small>
+		{% endif %}
+	</label>
+{% elseif value.count %}
+	<label id="v-{{ value.id }}" class="input" data-option-id="{{ option.option_id }}">
+		<span>
+			<input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="{{ value.params }}" class="ocf-target" autocomplete="off" />
+			
+			{{ value.name }}
+		</span>
+		{% if show_counter %}
+			<small class="badge">{{ value.count }}</small>
+		{% endif %}
+	</label>
+{% else %}
+	<label id="v-{{ value.id }}" class="disabled input" data-option-id="{{ option.option_id }}">
+		<span>
+			<input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="" disabled="disabled" class="ocf-target" autocomplete="off" />
+			
+			{{ value.name }}
+		</span>
+		{% if show_counter %}
+			<small class="badge">0</small>
+		{% endif %}
+	</label>
+{% endif %}

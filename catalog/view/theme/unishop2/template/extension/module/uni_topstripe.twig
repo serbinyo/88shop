@@ -1,0 +1,27 @@
+{% if topstripe %}
+	<div class="topstripe hidden">
+		<div class="container topstripe__container-{{ topstripe.image ? 'img' : 'text' }}">
+			{% if topstripe.image %}
+				<img src="{{ topstripe.image }}" class="topstripe__img img-responsive" />
+			{% endif %}
+			<span class="topstripe__text">{{ topstripe.text }}</span>
+			<i class="topstripe__close fas fa-times" title="{{ text_close }}"></i>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			if(!document.cookie.match('topstripeOffTime')) {
+				$('header').before($('.topstripe').removeClass('hidden'));
+			
+				setTimeout(function() {			
+					$('.topstripe .container').addClass('active');
+				}, 50);
+			
+				$('.topstripe__close').on('click', function() {
+					$.get('index.php?route=extension/module/uni_topstripe/apply');
+					$('.topstripe .container').removeClass('active')
+				});
+			}
+		});
+	</script>
+{% endif %}

@@ -1,0 +1,23 @@
+<div id="subscribe" class="subscribe">
+	<form name="subscribe" class="container">
+		<div class="row row-flex">
+			<div class="subscribe__info subscribe-info col-sm-12 col-md-5 col-lg-4">
+				{{ text_subscribe_info }}
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-7">
+				<div class="subscribe__block">
+					<div class="subscribe__inputs">
+						<input type="text" name="email" value="{{ customer_email }}" placeholder="{{ text_subscribe_mail_placeholder }}" aria-label="Email" class="subscribe__input subscribe__input-email form-control" />
+						<input type="password" name="password" value="" placeholder="{{ text_subscribe_pass_placeholder }}" aria-label="Password" disabled="disabled" autocomplete="on" class="subscribe__input subscribe__input-password form-control" />
+					</div>
+					<button type="button" class="subscribe__btn btn btn-lg btn-block" data-loading-text="{{ text_loading }}"><i class="fa fa-envelope hidden-sm"></i> <span>{{ button_subscribe }}</span></button>
+				</div>
+				{% if text_subscribe_agree %}
+					<label class="subscribe__agree input">
+						<input id="confirm" type="checkbox" name="confirm" value="1" /><span>{{ text_subscribe_agree }}</span>
+					</label>
+				{% endif %}
+			</div>
+		</div>
+	</form>
+</div>

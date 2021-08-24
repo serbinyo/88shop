@@ -1,0 +1,147 @@
+<div class="filter-default">
+	<div class="heading"><span>{{ heading_title }}</span></div>
+	{% for filter_group in filter_groups %}
+		<div class="filter-default__group">
+			<div class="filter-default__group-name">
+				{{ filter_group.name }} <sup></sup>
+				<span class="filter-default__pm">
+					<i class="fas fa-minus"></i>
+					<i class="fas fa-plus"></i>
+				</span>
+			</div>
+			<div id="filter-group{{ filter_group.filter_group_id }}">
+				{% for filter in filter_group.filter %}
+					<label class="filter-default__item input">
+						<input type="checkbox" name="filter[]" value="{{ filter.filter_id }}" {{ filter.filter_id in filter_category ? 'checked="checked"' }} />{{ filter.name }}
+					</label>
+				{% endfor %}
+			</div>
+		</div>
+	{% endfor %}
+	<hr />
+	<div class="text-right">
+		<button type="button" id="button-filter" class="btn btn-primary"><i class="fa fa-filter" aria-hidden="true"></i><span>{{ button_filter }}</span></button>
+	</div>
+</div>
+<script>
+	var filterGroups = $('.filter-default__group'),
+		filterGroupName = $('.filter-default__group-name'),
+		filterGroupPlusMinus = $('.filter-default__pm'),
+		filterGroupsShow = 5,
+		filterItemsShow = 10;
+	
+	filterGroups.each(function() {
+		var $this = $(this),
+			selectedItems = $(this).find('input[type="checkbox"]:checked').length;
+			
+		$this.find('input[type="checkbox"]').on('click', function() {
+			//$this.find('sup').html(' ('+$this.find('input[type="checkbox"]:checked').length+')');
+		});
+		
+		if(selectedItems) {
+			//$this.find('sup').html(' ('+selectedItems+')');
+		}
+	});
+	
+	var i = 1;
+	
+	filterGroupName.each(function() {
+		if(filterGroupsShow < i++) {
+			$(this).find(filterGroupPlusMinus).toggleClass('closed');
+			$(this).next().addClass('collapse');
+		} else {
+			$(this).next().addClass('collapse in');
+		}
+	});
+	
+	filterGroupName.on('click', function() {
+		$(this).find(filterGroupPlusMinus).toggleClass('closed');
+		$(this).next().collapse('toggle')
+	});
+
+$('#button-filter').on('click', function() {
+	filter = [];
+
+	$('input[name^=\'filter\']:checked').each(function(element) {
+		filter.push(this.value);
+	});
+	
+	var url = '{{ action }}&filter=' + filter.join(',');
+	
+	{% if ajax_filter %}
+	
+	let products = $('.products-block'),
+		pagination = $('.pagination'),
+		paginationText = $('.pagination-text');
+	
+	$.ajax({
+		url: url,
+		type: 'get',
+		dataType: 'html',
+		beforeSend: function() {
+			$('html body').append('<div class="full-width-loading"></div>');
+		},
+		complete: function() {
+			uniSelectView.init();
+			scroll_to('.products-block');
+			
+			$.each($('.product-thumb a'), function() {
+				$(this).attr('target', '_blank');
+			});
+		},
+		success: function(data) {
+			let result = [];
+			
+			result.product = $(data).find('.products-block').html();
+			result.pagination = $(data).find('.pagination').html();
+			result.paginationText = $(data).find('.pagination-text').html();
+		
+			if(typeof(result.product) == 'undefined') {
+				result.product = '{{ text_no_product }}';
+				result.pagination = '';
+			} else if (typeof(result.pagination) == 'undefined') {
+				result.pagination = '';
+			}
+			
+			window.history.pushState('', '', url);
+			
+			if(!pagination.length) paginationText.before('<div class="pagination"></div>');
+		
+			products.html(result.product);
+			pagination.html(result.pagination);
+			paginationText.html(result.paginationText);
+			
+			$('.full-width-loading').remove();
+		}
+	});
+	{% else %}
+		location = url;
+	{% endif %}
+});
+
+	function def_filter() {
+		if($(window).width() < 767) {
+			$('.filter-default').css('height', $(window).height());
+			
+			if(!$('.filter-default__icon').length) {
+				$('#column-left').after('<i class="filter-default__icon btn-default fas fa-filter"></i>');
+			}
+			
+			$('.filter-default__icon').on('click', function() {
+				$('#column-left, .filter-default__icon').toggleClass('show');
+			});
+			
+			$('.filter-default #button-filter, #content').on('click', function() {
+				$('#column-left, .filter-default__icon').removeClass('show');
+			});
+		} else {
+			$('.filter-default__icon').remove();
+		}
+	};
+	
+	def_filter();
+	
+	$(window).resize(function(){
+		def_filter();
+	});
+</script> 

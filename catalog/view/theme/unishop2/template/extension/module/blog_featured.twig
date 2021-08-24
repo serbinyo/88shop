@@ -1,0 +1,46 @@
+{% if articles %}
+	{% if heading_title %}<div class="heading"><span>{{ heading_title }}</span></div>{% endif %}
+	<div class="uni-module article-module blog-featured">
+		<div class="uni-module__wrapper">
+			{% for article in articles %}
+				<div class="article-module__item uni-item">
+					<div class="article-module__row row">
+						{% if article.thumb %}
+							<div class="article-module__image col-sm-5 col-lg-4 col-xxl-9">
+								<img src="{{ article.thumb }}" alt="{{ article.name }}" title="{{ article.name }}" data-href="{{ article.href }}" class="uni-href img-responsive" />
+							</div>
+						{% endif %}
+						<div class="article-module__description col-sm-7 col-lg-8 col-xxl-11">
+							<a class="article-module__name" href="{{ article.href }}" title="{{ article.name }}">{{ article.name }}</a>
+							<p class="article-module__text">
+								{{ article.description }}
+								<a title="{{ text_more }}" data-toggle="tooltip" data-href="{{ article.href }}" class="article-module__more uni-href">&rarr;</a>
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="article-module__category rating col-xs-5 col-sm-5 col-lg-4 col-xxl-9">
+							{% if article.rating >= 0 %}
+								{% for i in 1..5 %}
+									<i class="{{ article.rating < i ? 'far fa-star' : 'fa fa-star' }}"></i>
+								{% endfor %}
+							{% endif %}
+						</div>
+						<div class="article-module__posted posted">
+							<i class="fa fa-calendar"></i>{{ article.date_added }}
+							<i class="fa fa-eye"></i>{{ article.viewed }}
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<script>
+		$('.blog-featured').uniModules({
+			type:'{{ type_view is defined ? type_view : 'carousel' }}',
+			items: {0:{items:1},580:{items:2},720:{items:2},1050:{items:2},1400:{items:3}},
+			autoheight:['article-module__name', 'article-module__text'],
+			loop:{{ articles|length > 3 ? 'true' : 'false' }}
+		});
+	</script>
+{% endif %}

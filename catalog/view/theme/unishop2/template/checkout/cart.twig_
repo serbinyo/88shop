@@ -1,0 +1,170 @@
+{{ header }}
+<link href="catalog/view/theme/unishop2/stylesheet/checkout.css" rel="stylesheet" media="screen" />
+<div id="unicheckout" class="checkout_form container">        
+	<ul class="breadcrumb {{ menu_expanded ? 'col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' }}">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key + 1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	{% if attention %}
+		<div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ attention }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+	{% endif %}
+	{% if success %}
+		<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+	{% endif %}
+	{% if error_warning %}
+		<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+	{% endif %}
+	<div id="content">
+		<div class="heading-h1"><h1>{{ heading_title }}</h1></div>
+		<div id="unicart">
+			{% if error_warning %}
+	{% for error in error_warning %} 
+		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+	{% endfor %}
+{% endif %}
+{% if products or vouchers %}
+	<div class="checkout-cart__wrap">
+		<table class="checkout-cart__table table-responsive">
+			<tr class="checkout-cart__header">
+				<td class="checkout-cart__image text-center">{{ text_image }}</td>
+				<td class="checkout-cart__name text-left">{{ column_name }}</td>
+				<td class="checkout-cart__model text-left hidden-xs">{{ column_model }}</td>
+				<td class="checkout-cart__quantity text-left">{{ column_quantity }}</td>
+				<td class="checkout-cart__price text-right hidden-xs">{{ column_price }}</td>
+				<td class="checkout-cart__total text-right">{{ column_total }}</td>
+				<td class="checkout-cart__remove text-center"></td>
+			</tr>
+			{% for product in products %}
+				<tr class="checkout-cart__item">
+					<td class="checkout-cart__image text-center"><img src="{{ product.thumb }}" class="checkout-cart__image-img" title="{{ product.name }}" /></td>
+					<td class="checkout-cart__name text-left">
+						<a href="{{ product.href }}">{{ product.name }}</a>
+						{% if not product.stock %}<span class="text-danger">***</span>{% endif %}
+						{% for option in product.option %}
+							<br /><small>{{option.name}}: {{option.option_value}} {{option.value}}</small>
+						{% endfor %}
+						{% if product.reward %}
+							<br /><small>{{ product.reward }}</small>
+						{% endif %}
+						{% if product.recurring %}
+							<br /><span class="label label-info">{{ text_recurring_item }}</span> <small>{{ product.recurring }}</small>
+						{% endif %}
+					</td>
+					<td class="checkout-cart__model text-left hidden-xs">{{ product.model }}</td>
+					<td class="checkout-cart__quantity text-left">
+						<div class="qty-switch">
+							<input type="text" name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}" onchange="uniCartEdit('{{ product.cart_id }}', $(this).val());" size="1" class="qty-switch__input form-control" />
+							<div>
+								<i class="qty-switch__btn fa fa-plus btn-default" onclick="uniCartEdit('{{ product.cart_id }}', parseFloat($(this).parent().prev().val())+1, {{ product.product_id }});"></i>
+								<i class="qty-switch__btn fa fa-minus btn-default" onclick="uniCartEdit('{{ product.cart_id }}', parseFloat($(this).parent().prev().val())-1, {{ product.product_id }});"></i>
+							</div>
+						</div>
+					</td>
+					<td class="checkout-cart__price text-right hidden-xs">{{ product.price }}</td>
+					<td class="checkout-cart__total text-right">{{product.total}}</td>
+					<td class="checkout-cart__remove text-center"><i onclick="uniCartEdit('{{ product.cart_id }}', 0);" title="{{button_remove}}" class="checkout-cart__remove-icon fa fa-times"></i></td>
+				</tr>
+			{% endfor %}
+			{% for voucher in vouchers %}
+				<tr class="checkout-cart__item">
+					<td class="checkout-cart__image text-center"></td>
+					<td class="checkout-cart__name text-left">{{ voucher.description }}</td>
+					<td class="checkout-cart__model text-left hidden-xs"></td>
+					<td class="checkout-cart__quantity text-center">1</td>
+					<td class="checkout-cart__price text-right hidden-xs">{{ voucher.amount }}</td>
+					<td class="checkout-cart__total text-right">{{ voucher.amount }}</td>
+					<td class="checkout-cart__remove text-center"><i onclick="uniVoucherRemove('{{ voucher.key }}');" title="{{ button_remove }}" class="checkout-cart__remove-icon fa fa-times"></i></button></td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+	{% if coupon_status or voucher_status or reward_status %}
+		<div class="text-right">
+			<div class="checkout-cart__text-additional">{{ text_additional }}</div>
+			{% if reward_user %}
+				<div class="checkout-cart__text-reward">{{ entry_reward }}</div>
+			{% endif %}
+		</div>
+		{% if coupon_status %}
+			<div class="checkout-cart__coupon text-right">
+				<input type="text" name="coupon" value="{{ coupon }}" placeholder="{{ text_coupon }}" id="input-coupon" class="checkout-cart__coupon-input form-control" />
+				<button id="button-coupon" data-loading-text="{{ text_loading }}" class="checkout-cart__coupon-btn btn btn-default">{{ button_apply }}</button>
+			</div>
+		{% endif %}
+		{% if reward_status %}
+			<div class="checkout-cart__reward text-right">
+				<input type="text" name="reward" value="{{ reward }}" placeholder="{{ text_reward }}" id="input-reward" class="checkout-cart__reward-input form-control" />
+				<button id="button-reward" data-loading-text="{{ text_loading }}" class="checkout-cart__reward-btn btn btn-default">{{ button_apply }}</button>
+			</div>
+		{% endif %}
+		{% if voucher_status %}
+			<div class="checkout-cart__voucher text-right">
+				<input type="text" name="voucher" value="{{voucher}}" placeholder="{{ text_voucher }}" id="input-voucher" class="checkout-cart__voucher-input form-control" />
+				<button id="button-voucher" data-loading-text="{{ text_loading }}" class="checkout-cart__voucher-btn btn btn-default">{{ button_apply }}</button>
+			</div>
+		{% endif %}
+	{% endif %}
+	<div class="checkout-cart__totals">
+		{% if weight %}
+			<div class="checkout-cart__totals-item">
+				<div class="checkout-cart__totals-title">{{ text_product_weight }}</div>
+				<div class="checkout-cart__totals-text">{{ weight }}</div>
+			</div>
+		{% endif %}
+		{% for total in totals %}
+			<div class="checkout-cart__totals-item">
+				<div class="checkout-cart__totals-title">{{ total.title }}:</div>
+				<div class="checkout-cart__totals-text">{{ total.text }}</div>
+			</div>
+		{% endfor %}
+	</div>
+      <div class="buttons clearfix">
+      	<div class="pull-left"> <a href="{{ link_clearcart }}" class="btn btn-default" title="{{button_clearcart}}">{{button_clearcart}}</a></div>
+        <div class="pull-left"><a href="{{ continue }}" class="btn btn-default">{{ button_shopping }}</a></div>
+        <div class="pull-right"><a href="{{ checkout }}" class="btn btn-primary">{{ button_checkout }}</a></div>
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{% else %}
+	<script>
+		$('#content').load('index.php?route=checkout/cart #content > *');
+	</script>
+{% endif %}
+		</div>
+	</div>	
+</div>
+<script>
+function uniCartEdit(key, quantity, product_id) {
+	$.ajax({
+		url: 'index.php?route=checkout/cart/edit',
+		type: 'post',
+		data: 'quantity['+key+']='+quantity,
+		dataType: 'html',
+		beforeSend: function() {
+			$('input[name=\'quantity['+key+']\']').val(quantity)
+		},
+		success: function(json) {
+			$('#cart').load('index.php?route=common/cart/info #cart > *');
+			
+			if(typeof(product_id) != 'undefined' && quantity <= 0) {
+				uniReturnBtn(product_id);
+			}
+			
+			$('#unicart').load('index.php?route=checkout/cart #unicart > *');
+		}
+	});
+}
+</script>
+{{ footer }}		

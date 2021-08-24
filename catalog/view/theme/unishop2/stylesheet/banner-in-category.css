@@ -1,0 +1,8 @@
+.banner-in-category{position:relative;clear:both;overflow:hidden;margin:0 10px 20px;border-radius:4px;background:#f7f7f7;cursor:pointer}
+.banner-in-category__img{width:100%;/* object-fit:cover */}
+.banner-in-category__wrap{display:flex;align-items:center;justify-content:center;padding:25px}
+.banner-in-category__img + .banner-in-category__wrap{position:absolute;top:0;width:100%;height:100%}
+.banner-in-category__description{padding:0 25px 0 0;line-height:normal;font-size:1.65em;font-weight:500}
+.banner-in-category__description p{margin:0}
+.banner-in-category__btn{font-weight:500}
+.compact-view + .banner-in-category{margin:0 10px -1px !important;border-top:solid 1px #eee;border-radius:0}

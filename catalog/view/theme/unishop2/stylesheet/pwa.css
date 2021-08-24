@@ -1,0 +1,7 @@
+.pwa-notification .container{display:flex;align-items:center;justify-content:center;padding:15px;font-size:.9em;margin-top:-100%;transition:ease-in-out .3s}
+.pwa-notification .container.active{margin-top:0}
+.pwa-notification.other .chromium, .pwa-notification.other .pwa-notification__install{display:none}
+.pwa-notification.chromium .other{display:none}
+.pwa-notification__text, .pwa-notification__install{margin:0 15px 0 0}
+.pwa-notification__install{padding:3px 7px;border-radius:2px;cursor:pointer;white-space:nowrap}
+.pwa-notification__close{cursor:pointer;border-bottom:dotted 1px;white-space:nowrap}

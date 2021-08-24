@@ -1,0 +1,41 @@
+<div class="list-group-item ocfilter-option" id="option-{{ option.option_id }}">
+	<div class="ocf-option-name">
+		{{ option.name }}
+
+		{% if option.type == 'slide' or option.type == 'slide_dual' %}
+			<span id="left-value-{{ option.option_id }}">{{ option.slide_value_min_get }}</span>
+			{% if option.type == 'slide_dual' %}
+				-&nbsp;<span id="right-value-{{ option.option_id }}">{{ option.slide_value_max_get }}</span>
+			{% endif %}
+			{{ option.postfix }}
+		{% endif %}
+	</div>
+
+	<div class="ocf-option-values">
+		{% if option.type == 'slide' or option.type == 'slide_dual' %}
+			{% include 'unishop2/template/extension/module/ocfilter/filter_slider_item.twig' %}
+		{% else %}
+			{% if option.selectbox %}
+				<div class="dropdown">
+					<button class="btn btn-block btn-{{ (selecteds[option.option_id] is defined) ? 'warning' : 'default' }} dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+						<i class="pull-right fa fa-angle-down"></i>
+						<span class="pull-left text-left">
+						{% if selecteds[option.option_id] is defined %}
+							{% for value in selecteds[option.option_id].values %}
+								{{ value.name }}<br />
+							{% endfor %}
+						{% else %}
+							{{ text_any }}
+						{% endif %}
+						</span>
+					</button>
+					<div class="dropdown-menu">
+						{% include 'unishop2/template/extension/module/ocfilter/value_list.twig' %}
+					</div>
+				</div>
+			{% else %}
+				{% include 'unishop2/template/extension/module/ocfilter/value_list.twig' %}
+			{% endif %}
+		{% endif %}
+	</div>
+</div>

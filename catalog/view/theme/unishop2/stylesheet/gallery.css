@@ -1,0 +1,5 @@
+#gallery .item {margin:0 0 20px}
+#gallery .image {position:relative}
+#gallery .image .name{position:absolute;left:0;bottom:10px;height:auto;padding:5px 10px;line-height:1em;font-size:.9em;opacity:.85;white-space:normal;cursor:default;border-radius:0}
+#gallery .image .name:after{position:absolute;display:block;top:0;right:-5px;content:'';width:10px;height:100%;transform:skew(25deg);background:inherit}
+#gallery .owl-dots {padding:5px 0}

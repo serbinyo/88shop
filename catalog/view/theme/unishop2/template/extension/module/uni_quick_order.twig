@@ -1,0 +1,325 @@
+<div id="modal-quick-order" class="modal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{{ name }}</h4>
+			</div>
+			<div id="quick_order" class="modal-body quick-order product-block">
+				<div class="row">
+					<div class="quick-order__image col-xs-12 col-sm-4 col-md-5">
+						{% include 'unishop2/template/extension/module/uni_stickers.twig' %}
+						{% if thumb %}
+							<div class="quick-order__image-main uni-item">
+								<img src="{{ thumb }}" title="{{ name }}" alt="{{ name }}" class="quick-order__img img-responsive" />
+							</div>
+						{% endif %}
+						{% if images or options %}
+							<div class="quick-order__image-additional owl-carousel">
+								<img src="{{ small }}" data-image="{{ thumb }}" alt="" class="quick-order__image-additional-img img-responsive selected" />
+								{% for image in images %}
+									<img src="{{ image.small }}" data-image="{{ image.thumb }}" alt="" class="quick-order__image-additional-img img-responsive" />
+								{% endfor %}
+							</div>
+						{% endif %}
+					</div>
+					<div class="quick-order__product col-xs-12 col-sm-8 col-md-7">
+						<div class="product-data">
+							{% if show_model %}
+								<div class="product-data__item model"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_model }}</span></div> {{ model }}</div>
+							{% endif %}
+							{% if sku %}
+								<div class="product-data__item sku"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_sku }}:</span></div> {{ sku }}</div>
+							{% endif %}
+							{% if show_manuf and manufacturer %}
+								<div class="product-data__item manufacturer"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_manufacturer }}</span></div><a href="{{ manufacturers }}">{{ manufacturer }}</a></div>
+							{% endif %}
+							{% if location %}
+								<div class="product-data__item location"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_location }}:</span></div> {{ location }}</div>
+							{% endif %}
+							{% if reward and show_reward == 1 or show_reward == 3 %}
+								<div class="product-data__item reward"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_reward }}</span></div> {{ reward }}</div>
+							{% endif %}
+							{% if points and show_reward == 2 or show_reward == 3 %}
+								<div class="product-data__item points"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_points }}</span></div> {{ points }}</div>
+							{% endif %}
+							{% if upc %}
+								<div class="product-data__item upc"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_upc }}:</span></div> {{ upc }}</div>
+							{% endif %}
+							{% if ean %}
+								<div class="product-data__item ean"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_ean }}:</span></div> {{ ean }}</div>
+							{% endif %}
+							{% if jan %}
+								<div class="product-data__item jan"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_jan }}:</span></div> {{ jan }}</div>
+							{% endif %}
+							{% if isbn %}
+								<div class="product-data__item isbn"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_isbn }}:</span></div> {{ isbn }}</div>
+							{% endif %}
+							{% if mpn %}
+								<div class="product-data__item mpn"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_mpn }}:</span></div> {{ mpn }}</div>
+							{% endif %}
+							{% if not product.quantity_indicator %}
+								<div class="product-data__item stock"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_stock }}</span></div> {{ stock }}</div>
+							{% endif %}
+							{% if show_length == 1 %}
+								{% if length %}<div class="product-data__item length"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_length }}</span></div> {{ length }}</div>{% endif %}
+								{% if weight %}<div class="product-data__item weight"><div class="product-data__item-div"><span class="product-data__item-span">{{ text_weight }}</span></div> {{ weight }}</div>{% endif %}
+							{% endif %}
+						</div>
+						{% if product.quantity_indicator %}
+							<hr />
+							{% include 'unishop2/template/extension/module/uni_quantity_indicator.twig' %}
+						{% endif %}
+						{% if price %}
+							<hr />
+							<div class="quick-order__price price" data-price="{{ price_value }}" data-special="{{ special_value }}" data-discount="{{ discounts_value }}">
+								{% if special %}
+									<span class="price-old">{{price}}</span> <span class="price-new">{{special}}</span>
+								{% else %}
+									{{price}}
+								{% endif %}
+							</div>
+							{% if discounts %}
+								<div class="quick-order__discount">
+									{% for discount in discounts %}
+										<div class="quick-order__discount-item">{{discount.quantity}} {{text_discount}} {{discount.price}}</div>
+									{% endfor %}
+								</div>
+							{% endif %}
+						{% endif %}
+						{% if options %}
+							<hr />
+							<div class="quick-order__option option row">
+								{% for option in options %}
+									{% if option.type == 'select' %}
+										<div class="option__group col-xs-12 col-md-6">
+											<label class="option__group-name" for="input-option{{ option.product_option_id }}">{{ option.required ? '*' }} {{ option.name }}:</label>
+											<select name="option[{{ option.product_option_id }}]" id="input-option{{ option.product_option_id }}" class="option__select form-control">
+												<option value="">{{ text_select }}</option>
+												{% for option_value in option.product_option_value %}
+													<option value="{{ option_value.product_option_value_id }}" data-name="{{ option.name~': '~option_value.name }}" data-prefix="{{ option_value.price_prefix }}" data-price="{{ option_value.price_value }}">
+														{{ option_value.name }} {{ option_value.price ? '(' ~ option_value.price_prefix ~ '' ~ option_value.price ~ ')' }}
+													</option>
+												{% endfor %}
+											</select>
+										</div>
+									{% endif %}
+									{% if option.type == 'radio' or option.type == 'checkbox' %}
+										<div class="option__group col-xs-12">
+											<label class="option__group-name">{{ option.required ? '*' }} {{ option.name }}:</label>
+											<div id="input-option{{ option.product_option_id }}">
+												{% for option_value in option.product_option_value %}
+													<label class="option__item">
+														{% if option.type == 'radio' %}
+															<input type="radio" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}" data-name="{{ option.name~': '~option_value.name }}" data-prefix="{{ option_value.price_prefix }}" data-price="{{ option_value.price_value }}" class="hidden" />
+														{% else %}
+															<input type="checkbox" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" data-name="{{ option.name~': '~option_value.name }}" data-prefix="{{option_value.price_prefix}}" data-price="{{option_value.price_value}}" class="hidden" />
+														{% endif %}
+														{% if option_value.image %}
+															<img src="{{ option_value.image }}" alt="{{ option_value.name }} {{ option_value.price ? option_value.price_prefix ~ '' ~ option_value.price }}" data-type="quick-order" data-thumb="{{ option_value.small }}" data-full="{{ option_value.full }}" class="option__img" />
+														{% else %}
+															<span class="option__name" {{ option_value.price ? 'data-toggle="tooltip" title="'~option_value.price_prefix~' '~option_value.price~'"' }}>{{ option_value.name }}</span>
+														{% endif %}
+													</label>
+												{% endfor %}
+											</div>
+										</div>
+									{% endif %}
+									{% if option.type == 'text' %}
+										<div class="form-group col-xs-12">
+											<label class="option__group-name" for="input-option{{option.product_option_id}}">{{ option.required ? '*' }} {{ option.name }}</label>
+											<input type="text" name="option[{{option.product_option_id}}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="form-control" data-name="{{option.name}}" />
+										</div>
+									{% endif %}
+									{% if option.type == 'textarea' %}
+										<div class="form-group col-xs-12">
+											<label class="option__group-name" for="input-option{{option.product_option_id}}">{{ option.required ? '*' }} {{ option.name }}</label>
+											<textarea name="option[{{option.product_option_id}}]" rows="5" placeholder="{{ option.name }}" id="input-option{{option.product_option_id}}" class="form-control" data-name="{{option.name}}">{{option.value}}</textarea>
+										</div>
+									{% endif %}
+									{% if option.type == 'file' %}
+										<div class="form-group col-xs-12">
+											<label class="option__group-name">{{ option.required ? '*' }} {{option.name}}</label>
+											<button type="button" id="button-upload{{option.product_option_id}}" data-loading-text="{{text_loading}}" class="btn btn-default btn-block"><i class="fa fa-upload"></i> {{button_upload}}</button>
+											<input type="hidden" name="option[{{option.product_option_id}}]" value="" id="input-option{{option.product_option_id}}" data-name="{{option.name}}" />
+										</div>
+									{% endif %}
+									{% if option.type == 'date' %}
+										<div class="form-group col-xs-12">
+											<label class="option__group-name" for="input-option{{option.product_option_id}}">{{ option.required ? '*' }} {{ option.name }}</label>
+											<div class="input-group date">
+												<input type="text" name="option[{{option.product_option_id}}]" value="{{option.value}}" data-date-format="YYYY-MM-DD" data-locale="{{datepicker}}" id="input-option{{option.product_option_id}}" class="form-control" data-name="{{option.name}}" />
+												<span class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button></span>
+											</div>
+										</div>
+									{% endif %}
+									{% if option.type == 'datetime' %}
+										<div class="form-group col-xs-12">
+											<label class="option__group-name" for="input-option{{ option.product_option_id }}">{{ option.required ? '*' }} {{ option.name }}</label>
+											<div class="input-group datetime">
+												<input type="text" name="option[{{option.product_option_id}}]" value="{{option.value}}" data-date-format="YYYY-MM-DD HH:mm" data-locale="{{datepicker}}" id="input-option{{option.product_option_id}}" class="form-control" data-name="{{option.name}}" />
+												<span class="input-group-btn"><button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button></span>
+											</div>
+										</div>
+									{% endif %}
+									{% if option.type == 'time' %}
+										<div class="form-group col-xs-12">
+											<label class="option__group-name" for="input-option{{ option.product_option_id }}">{{ option.required ? '*' }} {{ option.name }}</label>
+											<div class="input-group time">
+												<input type="text" name="option[{{option.product_option_id}}]" value="{{option.value}}" data-date-format="HH:mm" id="input-option{{option.product_option_id}}" class="form-control" data-name="{{option.name}}" />
+												<span class="input-group-btn"><button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button></span>
+											</div>
+										</div>
+									{% endif %}
+								{% endfor %}
+							</div>
+						{% endif %}
+					</div>
+				</div>
+				{% if not product_page %} 
+					<div style="margin:0 0 20px"></div>
+					{% if description and attribute_groups %}
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#quick-order__description" data-toggle="tab">{{ text_description }}</a></li>
+							<li><a href="#quick-order__attribute" data-toggle="tab">{{ text_attributes }}</a></li>
+						</ul>
+					{% endif %}
+					<div class="tab-content">
+						{% if description %}
+							<div id="quick-order__description" class="tab-pane quick-order__description active">
+								{{ description }}
+								<a href="{{ href }}" title="" class="quick-order__more">{{ text_more }}</a>
+							</div>
+						{% endif %}
+						{% if attribute_groups %}
+							<div id="quick-order__attribute" class="tab-pane quick-order__attribute product-data {{ description is empty ? 'active' }}">
+								{% for attribute in attribute_groups %}
+									<div class="product-data__item"><div class="product-data__item-div"><span class="product-data__item-span">{{ attribute.name }}</span></div> {{ attribute.text }}</div>
+								{% endfor %}	
+							</div>
+						{% endif %}
+					</div>
+					<div style="margin:0 0 30px"></div>
+				{% endif %}
+				<h4 class="heading"><span>{{ text_contact_data }}</span></h4>
+				<form class="quick-order__form row-flex">
+					<input type="text" name="firstname" class="quick-order__input form-control" placeholder="{{ name_text }}*" value="{{ firstname }}" />
+					<input type="text" name="phone" class="quick-order__input quick-order__phone form-control " placeholder="{{ phone_text }}*" value="{{ telephone }}" />
+					{% if mail %}
+						<input type="text" name="email" class="quick-order__input form-control" placeholder="{{ mail_text }}" value="{{ email }}" />
+					{% endif %}
+					{% if delivery %}
+						<input type="text" name="address" class="quick-order__input form-control" placeholder="{{ delivery_text }}" value="{{ address }}" />
+					{% endif %}
+					{% if comment %}
+						<input type="text" name="comment" class="quick-order__input form-control" placeholder="{{ comment_text }}" />
+					{% endif %}
+				</form>
+				<input type="hidden" name="comment2" value="" />
+				<script>
+					$(function() {	
+						var q = $('.quick-order__input').length;
+						if(q%2) {
+							$('.quick-order__input:last-child').addClass('full-width');
+						}
+					});
+				</script>
+				{{ captcha }}
+				{% if text_agree %}
+					<div class="quick-order__agree">
+						<label class="input"><input id="confirm" type="checkbox" name="confirm" value="1" /><span>{{ text_agree }}</span></label>
+					</div>
+				{% endif %}
+				<div class="quick-order__cart">
+					<input type="hidden" name="product_id" value="{{ product_id }}" />
+					<div class="qty-switch">
+						<input type="text" name="quantity" value="{{ minimum }}" data-minimum="{{ minimum }}" id="input-quantity" class="qty-switch__input form-control" />
+						<div>
+							<i class="qty-switch__btn fa fa-plus btn-default"></i>
+							<i class="qty-switch__btn fa fa-minus btn-default"></i>
+						</div>
+					</div>
+					<button type="button" onclick="uniQuickOrderAdd()" data-loading-text="{{ text_loading }}" class="add_to_cart btn btn-xl"><i class="{{ cart_btn_icon }}"></i> <span>{{ text_order_button }}</span></button>
+				</div>
+				{% if minimum > 1 %}<div class="quick-order__minimum"><i class="fa fa-info-circle"></i> {{ text_minimum }}</div>{% endif %}
+				<input type="hidden" name="currency" value="{{currency}}" />
+				<input type="hidden" name="goal_id" value="{{goal_id}}" />
+				{% if options %}
+					{% for option in options %}
+						{% if option.type == 'date' or option.type == 'datetime' or option.type == 'time' %}
+							<link type="text/css" href="catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
+							<script src="catalog/view/javascript/jquery/datetimepicker/moment/moment.min.js" type="text/javascript"></script>
+							<script src="catalog/view/javascript/jquery/datetimepicker/moment/moment-with-locales.min.js" type="text/javascript"></script>
+							<script src="catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+							<style>.bootstrap-datetimepicker-widget {z-index: 9999999999!important;position:absolute !important}</style>
+							<script>
+								$('.date').datetimepicker({
+									pickTime: false
+								});
+								$('.datetime').datetimepicker({
+									pickDate: true,
+									pickTime: true
+								});
+								$('.time').datetimepicker({
+									pickDate: false
+								});
+							</script>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+				<script>
+				$(function() {
+					let qty = $('#content .product-block').find('input[name="quantity"]').val();
+					
+					if(typeof(qty) == 'undefined') {
+						$('.product-thumb__add-to-cart').each(function() {
+							if($(this).data('pid') == {{ product_id }}) {
+								qty = $(this).prev().find('input[name="quantity"]').val();
+							}
+						});
+					}
+					
+					if(typeof(qty) != 'undefined' && qty > 1) {
+						$('.quick-order').find('input[name="quantity"]').val(qty);
+					}
+				
+					setTimeout(function() { 
+						$('.quick-order__image-additional').owlCarousel({
+							items:4,
+							dots: false,
+							mouseDrag: false,
+							loop: false,
+							nav: true,
+							navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
+						});
+					}, 210);
+				
+					$('.quick-order__image-additional img').on('mouseover', function() {
+						$('.quick-order__img').attr('src', $(this).attr('data-image'))
+						$('.quick-order__image-additional img').addClass('selected').not($(this)).removeClass('selected');
+					});
+					
+					{% if change_opt_img_q %}		
+						$('.quick-order input[type="radio"] + .option__img').on('click', function() {
+							$('.quick-order__img').attr('src', $(this).attr('data-thumb'));
+						});
+					{% endif %}
+				});
+				
+				{% if special_timer %}
+					$('.quick-order__image-main').uniTimer({
+						date      :'{{ special_timer }}',
+						texts     :['{{ text_special_day }}','{{ text_special_hour }}','{{ text_special_min }}','{{ text_special_sec }}'],
+						hideText  :false,
+						hideIsNull:false
+					});
+				{% endif %}
+				
+				$('body').on('focus', '.quick-order__phone', function(){
+					$(this).mask('{{ mask_telephone}}');
+				});
+				</script>
+			</div>
+		</div>
+	</div>
+</div>

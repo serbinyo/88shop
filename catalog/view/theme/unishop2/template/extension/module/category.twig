@@ -1,0 +1,30 @@
+<div id="category-module" class="list-group">
+	{% for category in categories %}
+		<a href="{{ category.href }}" class="list-group__a list-group-item {{ category.category_id == category_id ? 'active show' }}">
+			{{ category.name }}
+			{% if category.children %}
+				<span class="list-group__pm {{ category.category_id == category_id ? 'show' }}">
+					<i class="fas fa-minus"></i>
+					<i class="fas fa-plus"></i>
+				</span>
+			{% endif %}
+		</a> 
+		{% if category.children %}
+			<div class="list-group__children collapse {{ category.category_id == category_id ? 'in' }}">
+				{% for child in category.children %}
+					<a href="{{ child.href }}" class="list-group__children-a list-group-item {{ child.category_id == child_id ? 'active' }}">{{ child.name }}</a> 
+				{% endfor %}
+			</div>
+		{% endif %}
+	{% endfor %}
+</div>
+<script>
+	$(function() {
+		$('#category-module span').on('click', function(e){
+			e.preventDefault();
+			$(this).toggleClass('show');
+			$(this).parent().toggleClass('show');
+			$(this).parent().next().collapse('toggle');
+		});
+	});
+</script>

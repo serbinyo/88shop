@@ -1,0 +1,7 @@
+{% if product.attributes %}
+	<div class="product-thumb__attribute product-thumb__description attribute">
+		{% for attribute in product.attributes %}
+			{{ attribute.name ? attribute.name ~ ':' }} <span class="product-thumb__attribute-value">{{ attribute.text }}</span>
+		{% endfor %}
+	</div>
+{% endif %}

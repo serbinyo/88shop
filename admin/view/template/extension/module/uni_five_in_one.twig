@@ -1,0 +1,418 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<br />
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+							{% if error_name %}<div class="text-danger">{{ error_name }}</div>{% endif %}
+						</div>
+					</div> 
+					<div class="form-group" id="main-div">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_store }}</label>
+						<div class="col-sm-10">
+							<ul class="nav nav-tabs">
+								{% for store in stores %}
+									<li id="tab-{{ store.store_id }}"><a href="#store-{{ store.store_id }}" data-toggle="tab">{{ store.name }}</a></li>
+								{% endfor %}
+							</ul>
+							<div class="tab-content">
+								{% for store in stores %}
+								
+									{% set store_id = store.store_id %}
+								
+									<div id="store-{{ store.store_id }}" class="tab-pane">
+										<ul class="nav nav-tabs">
+											{% for key, tab_name in tab_names[store_id] %}
+												<li id="tab-{{ store_id }}-{{ key }}"><a href="#{{ store_id }}-{{ key }}" data-toggle="tab">{{ tab_name.title ? tab_name.title : tab_name }}</a></li>
+											{% endfor %}
+										</ul>
+										<div class="tab-content">
+											{% for key, tab_name in tab_names[store_id] %}
+												<div id="{{ store_id }}-{{ key }}" class="tab-pane">
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-product">{{ entry_title }}</label>
+														<div class="col-sm-10">
+															<ul class="nav nav-tabs">
+																{% for lang in languages %}
+																	<li><a href="#{{ store_id }}-{{ key }}-title-{{ lang.language_id }}" data-toggle="tab" style="padding:2px 10px 5px"><img src="language/{{ lang.code }}/{{ lang.code }}.png" title="{{ lang.name }}" /></a></li>
+																{% endfor %}
+															</ul>
+															<div class="tab-content">
+															{% set names = ['latest', 'special', 'bestseller', 'popular', 'featured'] %}
+																{% for lang in languages %}
+																	<div id="{{ store_id }}-{{ key }}-title-{{ lang.language_id }}" class="tab-pane">
+																		<input type="text" name="set[{{ store_id }}][{{ key }}][title][{{ lang.language_id }}]" value="{{ module[store_id][key].title[lang.language_id] }}" {% if lang.code == lang_code and (key not in names) %}oninput="setTabName({{ store_id }}, '{{ key }}', this)"{% endif %} placeholder="Пример: Каталог" class="form-control" />
+																	</div>
+																{% endfor %}
+															</div>
+														</div>
+													</div>
+													{% if key != 'latest' and key != 'special' and key != 'bestseller' and key != 'popular' %}
+														<div class="form-group">
+															<label class="col-sm-2 control-label" for="input-product">{{ entry_product }}</label>
+															<div class="col-sm-10">
+																<input type="text" name="product_name" value="" placeholder="" id="input-product" class="form-control" />
+																<br />
+																<div id="{{ store_id }}-{{ key }}-product" class="well well-sm" style="height:150px; overflow: auto;">
+																	{% for product in module[store_id][key].products %}
+																		<div id="{{ store_id }}-{{ key }}-product{{ product.product_id }}"><i class="fa fa-minus-circle"></i> {{ product.name }}
+																			<input type="hidden" name="set[{{ store_id }}][{{ key }}][product][]" value="{{ product.product_id }}" />
+																		</div>
+																	{% endfor %}
+																</div>
+																<script>
+																	$(function() {
+																		getProduct({{ store_id }}, '{{ key }}');
+																	});
+																</script>
+															</div>
+														</div>
+														
+														<div class="form-group">
+															<label class="col-sm-2 control-label" for="input-product">{{ entry_category }}</label>
+															<div class="col-sm-10">
+																<input type="text" name="set[{{ store_id }}][{{ key }}][category_name]" value="{{ module[store_id][key].category_name }}" placeholder="" class="form-control" />
+																<input type="hidden" name="set[{{ store_id }}][{{ key }}][category_id]" value="{{ module[store_id][key].category_id }}" />
+																<!--
+																<br />
+																<div id="{{ store_id }}-{{ key }}-category" class="well well-sm" style="height:150px; overflow: auto;">
+																	{% for category in module[store_id][key].categories %}
+																		<div id="{{ store_id }}-{{ key }}-category-{{ product.product_id }}"><i class="fa fa-minus-circle"></i> {{ category.name }}
+																			<input type="hidden" name="set[{{ store_id }}][{{ key }}][category][]" value="{{ category.category_id }}" />
+																		</div>
+																	{% endfor %}
+																</div>
+																-->
+																<script>
+																	$(function() {
+																		getCategory({{ store_id }}, '{{ key }}');
+																	});
+																</script>
+															</div>
+														</div>
+													{% endif %}
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-limit">{{ entry_limit }}</label>
+														<div class="col-sm-10">
+															<input type="text" name="set[{{ store_id }}][{{ key }}][limit]" value="{{ module[store_id][key].limit ? module[store_id][key].limit : 5 }}" placeholder="{{ entry_limit }}" id="input-limit" class="form-control" />
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-limit">{{ entry_thumb }}</label>
+														<div class="col-sm-10">
+															<div class="input-group">
+																<input type="text" name="set[{{ store_id }}][{{ key }}][thumb_width]" value="{{ module[store_id][key].thumb_width ? module[store_id][key].thumb_width : 220 }}" class="form-control" style="width:50% !important; text-align:center;">
+																<input type="text" name="set[{{ store_id }}][{{ key }}][thumb_height]" value="{{ module[store_id][key].thumb_height ? module[store_id][key].thumb_height : 200 }}" class="form-control" style="width:50% !important; text-align:center;">
+																<span class="input-group-addon">пикс.</span>
+															</div>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-limit">{{ entry_type }}</label>
+														<div class="col-sm-10">
+															<label><input type="checkbox" name="set[{{ store_id }}][{{ key }}][type]" value="1" {{ module[store_id][key].type ? 'checked="checked"' }} /><span></span></label>
+														</div>
+													</div>
+													{# if key == 'latest' or key == 'special' or key == 'bestseller' or key == 'popular' #}
+													{# if key != 'featured' #}
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-limit">{{ entry_qty }}</label>
+														<div class="col-sm-10">
+															<label><input type="checkbox" name="set[{{ store_id }}][{{ key }}][qty]" value="1" {{ module[store_id][key].qty ? 'checked="checked"' }} /><span></span></label>
+														</div>
+													</div>
+													{# endif #}
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-limit">{{ entry_sort }}</label>
+														<div class="col-sm-10">
+															<input type="text" name="set[{{ store_id }}][{{ key }}][sort_order]" value="{{ module[store_id][key].sort_order ? module[store_id][key].sort_order : 1 }}" class="form-control">
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-sm-2 control-label" for="input-status">{{ entry_status_tab }}</label>
+														<div class="col-sm-10">
+															<label><input type="checkbox" name="set[{{ store_id }}][{{ key }}][status]" value="1" {{ module[store_id][key].status ? 'checked="checked"' }} /><span></span></label>
+														</div>
+													</div>
+													{% if key != 'latest' and key != 'special' and key != 'bestseller' and key != 'featured' and key != 'popular' %}
+														<div class="form-group">
+															<label class="col-sm-2 control-label"></label>
+															<div class="col-sm-10">
+																<a class="btn btn-xs btn-danger" onclick="removeTab({{ store_id }}, '{{ key }}')">{{ button_remove_tab }}</a>
+															</div>
+														</div>
+													{% endif %}
+													<input type="hidden" name="tabs[{{ store_id }}][{{ key }}][title]" value="{{ tab_name.title ? tab_name.title : tab_name }}" class="tab-name" />										
+												</div>
+											{% endfor %}
+											<div class="form-group" style="margin:-10px 0 -5px">
+											<hr style="margin:-10px 0 15px" />
+												<label class="col-sm-2 control-label">
+													<a class="btn btn-xs btn-success" onclick="addNewTab({{ store_id }});">{{ button_add_tab }}</a>
+												</label>
+												<div class="col-sm-10"></div>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<select name="status" class="form-control">
+								<option value="1" {{ status ? 'selected="selected"' }}>{{ text_enabled }}</option>
+								<option value="0" {{ status == 0 ? 'selected="selected"' }}>{{ text_disabled }}</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<style>
+		.col-sm-10 .col-sm-2.control-label {padding-top:0}
+		.tab-pane .form-group {margin:0 -15px 0 0}
+	</style>
+	<script>
+		$(document).ready(function() {
+			$('.nav-tabs').each(function() {
+				$(this).find('li:first a').tab('show');
+			});
+		});
+		
+		function addNewTab(store_id) {
+			var block = $('html body').find('#store-'+store_id);
+			
+			var d = [];
+			
+			block.find('> .nav li').each(function(){
+				d.push(Number($(this).attr('id').replace(/\D+/g,"")));
+			});
+			
+			var t = Math.max.apply(Math, d), items = t+1, tab_name = 'additional'+items;
+			
+			block.find('> .nav > .active, > .tab-content > .active').removeClass('active');
+			
+			block.find('> .nav').append('<li id="tab-'+store_id+'-'+tab_name+'" class="active"><a href="#'+store_id+'-'+tab_name+'" class="additional" data-toggle="tab">{{ entry_tab_additional }}</a></li>')
+
+			html = '<div id="'+store_id+'-'+tab_name+'" class="tab-pane active">';
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-product">{{ entry_title }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<ul class="nav nav-tabs">';
+			{% for lang in languages %}
+			html += '<li><a href="#'+store_id+'-'+tab_name+'-title-{{ lang.language_id }}" data-toggle="tab" style="padding:2px 10px 5px"><img src="language/{{ lang.code }}/{{ lang.code }}.png" title="{{ lang.name }}" /></a></li>';
+			{% endfor %}
+			html += '</ul>';
+			html += '<div class="tab-content">';
+			{% for lang in languages %}
+			html += '<div id="'+store_id+'-'+tab_name+'-title-{{ lang.language_id }}" class="tab-pane">';
+			html += '<input type="text" name="set['+store_id+']['+tab_name+'][title][{{ lang.language_id }}]" value="" {% if lang.code == lang_code %}oninput="setTabName('+store_id+', \''+tab_name+'\', this)"{% endif %} placeholder="Пример: Каталог" class="form-control" />';
+			html += '</div>';
+			{% endfor %}
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-product">{{ entry_product }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<input type="text" name="product_name" value="" placeholder="{{ entry_product }}" id="input-product" class="form-control" />';
+			html += '<br />';
+			html += '<div id="'+store_id+'-'+tab_name+'-product" class="well well-sm" style="height: 150px; overflow: auto;">';
+			html += '</div>';
+			html += '<script>';
+			html += '$(function() {';
+			html += 'getProduct('+store_id+', \''+tab_name+'\');';
+			html += '});';
+			html += '<\/script>';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-product">{{ entry_category }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<input type="text" name="set['+store_id+']['+tab_name+'][category_name]" value="" placeholder="" class="form-control" />';
+			html += '<input type="hidden" name="set['+store_id+']['+tab_name+'][category_id]" value="" />';
+			html += '<script>';
+			html += '$(function() {';
+			html += 'getCategory('+store_id+', "'+tab_name+'");';
+			html += '});';
+			html += '<\/script>';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-limit">{{ entry_limit }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<input type="text" name="set['+store_id+']['+tab_name+'][limit]" value="5" placeholder="{{ entry_limit }}" id="input-limit" class="form-control" />';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-limit">{{ entry_thumb }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<div class="input-group">';
+			html += '<input type="text" name="set['+store_id+']['+tab_name+'][thumb_width]" value="220" class="form-control" style="width:50% !important; text-align:center;">';
+			html += '<input type="text" name="set['+store_id+']['+tab_name+'][thumb_height]" value="200" class="form-control" style="width:50% !important; text-align:center;">';
+			html += '<span class="input-group-addon">пикс.</span>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-limit">{{ entry_type }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<label><input type="checkbox" name="set['+store_id+']['+tab_name+'][type]" value="1" /><span></span></label>';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-limit">{{ entry_qty }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<label><input type="checkbox" name="set['+store_id+']['+tab_name+'][qty]" value="1" /><span></span></label>';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-limit">{{ entry_sort }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<input type="text" name="set['+store_id+']['+tab_name+'][sort_order]" value="1" class="form-control">';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label" for="input-status">{{ entry_status_tab }}</label>';
+			html += '<div class="col-sm-10">';
+			html += '<label><input type="checkbox" name="set['+store_id+']['+tab_name+'][status]" value="1" /><span></span></label>';
+			html += '</div>';
+			html += '</div>';
+			
+			html += '<div class="form-group">';
+			html += '<label class="col-sm-2 control-label"></label>';
+			html += '<div class="col-sm-10">';
+			html += '<a class="btn btn-xs btn-danger" onclick="removeTab('+store_id+', \''+tab_name+'\')">{{ button_remove_tab }}</a>';
+			html += '</div>';
+			html += '</div>';
+			html += '<input type="hidden" name="tabs['+store_id+']['+tab_name+'][title]" value="" class="tab-name" />';
+			html += '</div>';
+			
+			block.find('> .tab-content > .form-group').before(html);
+			
+			block.find(' > .tab-content > .active').each(function() {
+				$(this).find('li:first a').tab('show');
+			});
+		}
+		
+		function setTabName(store_id, tab_name, data) {
+		
+			var this_text = $(data).val(), tab_li = $('#tab-'+store_id+'-'+tab_name), tab_div = $('#'+store_id+'-'+tab_name);
+			
+			tab_li.find('a').text(this_text)
+			tab_div.find('input[type=\'hidden\'].tab-name').val(this_text);
+		}
+		
+		function removeTab(store_id, tab_name) {
+			var tab_li = $('#tab-'+store_id+'-'+tab_name), tab_div = $('#'+store_id+'-'+tab_name);
+			
+			tab_li.prev().find('a').tab('show');
+			
+			$('html, body').animate({scrollTop: tab_li.prev().offset().top-100}, 400);
+			
+			tab_li.remove();
+			tab_div.remove();
+		}
+		
+		function getProduct(store_id, tab_name) {
+		
+			var module_name = store_id+'-'+tab_name;
+		
+			var new_block = $('#'+module_name), new_input = new_block.find('input[name=\'product_name\']');
+		
+			new_input.autocomplete({
+				source: function(request, response) {
+					$.ajax({
+						url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name='+encodeURIComponent(request),
+						dataType: 'json',
+						success: function(json) {
+							response($.map(json, function(item) {
+								return {label: item['name'], value: item['product_id']}
+							}));
+						}
+					});
+				},
+				select: function(item) {
+					new_input.val('');
+		
+					$('#'+module_name+'-product'+item['value']).remove();
+		
+					$('#'+module_name+'-product').append('<div id="'+module_name+'-product'+item['value']+'"><i class="fa fa-minus-circle"></i>'+item['label']+'<input type="hidden" name="set['+store_id+']['+tab_name+'][product][]" value="'+item['value']+'" /></div>');	
+				}
+			});
+	
+			$('#'+module_name+'-product').delegate('.fa-minus-circle', 'click', function() {
+				$(this).parent().remove();
+			});
+		}
+		
+		function getCategory(store_id, tab_name) {
+			let name = 'set['+store_id+']['+tab_name+'][category_name]';
+			let id = 'set['+store_id+']['+tab_name+'][category_id]';
+		
+			$('input[name=\''+name+'\']').autocomplete({
+				source: function(request, response) {
+					$.ajax({
+						url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name='+encodeURIComponent(request),
+						dataType: 'json',
+						success: function(json) {
+							response($.map(json, function(item) {
+								return {label: item['name'], value: item['category_id']}
+							}));
+						}
+					});
+				},
+				select: function(item) {
+					$('input[name=\''+name+'\']').val(item['label']);
+					$('input[name=\''+id+'\']').val(item['value']);
+				}
+			});
+	
+			$('input[name=\''+name+'\']').on('input', function() {
+				if($(this).val() == '') {
+					$('input[name=\''+id+'\']').val('');
+				}
+			});
+		}
+	</script>
+</div>
+{{ footer }}

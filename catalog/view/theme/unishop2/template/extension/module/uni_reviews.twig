@@ -1,0 +1,46 @@
+{% if reviews %}
+	<div class="heading"><span>{{ heading_title }}</span></div>
+	<div class="uni-module review-module">
+		<div class="uni-module__wrapper row-flex">
+			{% for review in reviews %}
+				<div class="review-module__item uni-item">
+					<div class="review-module__row">
+						<div class="review-module__image">
+							<img src="{{ review.thumb }}" loading="lazy" alt="{{ review.name }}" title="{{ review.name }}" data-href="{{ review.href }}" class="uni-href img-responsive" width="{{ img_width }}" height="{{ img_height }}" />
+						</div>
+						<div class="review-module__description">
+							<a class="review-module__name" href="{{ review.href }}">{{ review.name }}</a>
+							<div class="review-module__text">
+								{{ review.description }}
+								{% if show_all_button %}
+									<a title="{{ text_all_reviews }}" data-toggle="tooltip" data-href="{{ review.link_all_reviews }}" class="review-module__more uni-href">&rarr;</a>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="review-module__row">
+						{% if review.rating %}
+							<div class="review-module__rating rating">
+								{% for i in 1..5 %}<i class="{{ review.rating < i ? 'far fa-star' : 'fa fa-star' }}"></i>{% endfor %}
+							</div>
+						{% endif %}
+						<div class="review-module__posted posted">
+							<i class="fa fa-calendar"></i>{{ review.date_added }}
+							<i class="fa fa-user"></i><span class="author">{{ review.author }}</span>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<script>
+		$(function() {
+			$('.review-module').uniModules({
+				type:'{{ type_view ? type_view : 'carousel' }}',
+				items: {0:{items:1},580:{items:2},720:{items:2},1050:{items:3},1400:{items:4}},
+				loop: {{ reviews|length > 4 ? 'true' : 'false' }},
+				//autoheight:['review-module__name', 'review-module__text']
+			});
+		});
+	</script>
+{% endif %}

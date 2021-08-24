@@ -1,0 +1,23 @@
+.live-search{z-index:999;position:relative}
+.live-search__ul{position:absolute;width:100%;max-height:80vh;overflow-y:auto;list-style:none;padding:0 0px;background:#fff;border-radius:3px;border:solid 1px rgba(0, 0, 0, .12);box-shadow:0 6px 12px rgba(0, 0, 0, .2)}
+.live-search__section{padding:8px;text-align:center;color:#888;font-weight:500;border-bottom:solid 1px rgba(0, 0, 0, .1)}
+.live-search__category{padding:10px 12px;font-size:.9em;font-weight:500;border-bottom:solid 1px rgba(0, 0, 0, .1);cursor:pointer}
+.live-search__category:hover{background:rgba(0, 0, 0, .05)}
+.live-search__item{display:flex;align-items:center;padding:10px 5px;cursor:pointer}
+.live-search__item:hover{background:rgba(0, 0, 0, .05)}
+.live-search__item + li{border-top:solid 1px rgba(0, 0, 0, .1)}
+.live-search__image{padding:0 10px;text-align:center}
+.live-search__wrapper{width:100%;padding:0 10px}
+.live-search__name{margin:0 0 5px;font-size:.95em;font-weight:500}
+.live-search__description{color:#888;font-size:.85em;font-weight:400}
+.live-search__rating{display:block;margin:3px 0 0}
+.live-search__price{flex-wrap:wrap;width:100px;white-space:nowrap}
+.live-search__price span{display:block;margin:0 0 5px !important}
+.live-search__more{justify-content:center;font-size:.9em;font-weight:500;line-height:30px;background:#f7f7f7}
+.live-search__loading{height:34px}
+.live-search__loading:before{position:absolute;top:50%;left:50%;display:block;width:20px;height:20px;margin:-10px auto auto -10px;content:'';border:solid 3px;border-color:#f6846a #f6846a transparent;border-radius:100%;animation:spin 1s infinite linear}
+
+@media (max-width:768px){
+    .live-search__ul{max-height:65vh}
+    .live-search__description {display:none}
+}

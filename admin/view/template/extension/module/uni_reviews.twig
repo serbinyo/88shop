@@ -1,0 +1,143 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="uni-reviews" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1><br />
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="uni-reviews" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">* {{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+							{% if error_name %}<div class="text-danger">{{ error_name }}</div>{% endif %}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">* {{ entry_title }}</label>
+						<div class="col-sm-10">
+							<ul class="nav nav-tabs" style="margin-bottom:10px">
+								{% for lang in languages %}
+									<li><a href="#uni-viewed-module-title-{{ lang.language_id }}" data-toggle="tab" style="padding:2px 10px 5px"><img src="language/{{ lang.code }}/{{ lang.code }}.png" title="{{ lang.name }}" /></a></li>
+								{% endfor %}
+							</ul>
+							<div class="tab-content">
+								{% for lang in languages %}
+									<div id="uni-viewed-module-title-{{ lang.language_id }}" class="tab-pane">
+										<input type="text" name="title[{{ lang.language_id }}]" value="{{ title[lang.language_id] }}" placeholder="Пример: Последние отзывы" class="form-control" />
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">* {{ entry_order_type }}</label>
+						<div class="col-sm-10">
+							<select name="order_type" id="input-order-type" class="form-control">
+								<option value="last" {{ order_type == 'last' ? 'selected' }} >{{ text_order_last }}</option>
+								<option value="random" {{ order_type == 'random' ? 'selected' }} >{{ text_order_random }}</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_image }}</label>
+						<div class="col-sm-10">
+							<div class="input-group" style="width:250px">
+								<input type="text" name="image_width" value="{{ image_width ? image_width : 100 }}" class="form-control" style="width:50% !important; text-align:center;" />
+								<input type="text" name="image_height" value="{{ image_height ? image_height : 100 }}" class="form-control" style="width:50% !important; text-align:center;" />
+								<span class="input-group-addon">пикс.</span>
+								{% if error_image %}<span class="error">{{ error_image }}</span>{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">* {{ entry_text_limit }}</label>
+						<div class="col-sm-10">
+							<div class="input-group" style="width:250px">
+								<input type="text" name="text_limit" value="{{ text_limit }}" class="form-control" />
+								<span class="input-group-addon">симв.</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_category_sensitive }}</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<label><input type="checkbox" name="category_sensitive" value="1" {{ category_sensitive ? 'checked="checked"' }} /><span></span></label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_show_all_button }}</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<label><input type="checkbox" name="show_all_button" value="1" {{ show_all_button ? 'checked="checked"' }} /><span></span></label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_show_all_button_link }}</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<label><input type="checkbox" name="show_all_button_link" value="1" {{ show_all_button_link ? 'checked="checked"' }} /><span></span></label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">* {{ entry_limit }}</label>
+						<div class="col-sm-10">
+							<div class="input-group" style="width:250px">
+								<input type="text" name="limit" value="{{ limit ? limit : 10 }}" class="form-control" />
+								<span class="input-group-addon">шт.</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_view_type }}</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<label><input type="checkbox" name="view_type" value="1" {{ view_type ? 'checked="checked"' }} /><span></span></label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<select name="status" id="input-status" class="form-control">
+								<option value="1" {{ status ? 'selected="selected"' }}>{{ text_enabled }}</option>
+								<option value="0" {{ status == 0 ? 'selected="selected"' }}>{{ text_disabled }}</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.nav-tabs').each(function() {
+			$(this).find('li:first a').tab('show');
+		});
+	});
+</script>
+{{ footer }}

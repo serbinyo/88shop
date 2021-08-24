@@ -1,0 +1,27 @@
+{% if product_banners %}
+	<div class="product-banner row row-flex">
+		{% if product_banner_position == 1 %}
+			{% set class = 'col-xs-6 col-sm-4 col-md-4 col-lg-12' %}
+		{% elseif product_banner_position == 2 %}
+			{% set class = 'col-xs-6 col-sm-6 col-md-6 col-lg-4' %}
+		{% else %}
+			{% set class = 'col-xs-6 col-sm-4 col-md-2 col-lg-2' %}
+		{% endif %}
+		{% for banner in product_banners %}
+			<div class="{{ class }} {{banner.hide ? 'hidden-xs'}}">
+				{% if banner.link %}
+					<div class="product-banner__item link uni-href" {% if banner.link_popup %}onclick="uniBannerLink('{{ banner.link }}')"{% else %}data-href="{{ banner.link }}"{% endif %}>
+				{% else %}
+					<div class="product-banner__item">
+				{% endif %}
+				{% if banner.icon %}
+					<i class="product-banner__icon {{ banner.icon }} fa-fw"></i>
+				{% endif %}
+				<div class="product-banner__text">
+					<span class="product-banner__text-span {{banner.link ? 'link' }}">{{ banner.text }}</span>
+				</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endif %}

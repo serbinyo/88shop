@@ -1,0 +1,61 @@
+.fly-menu{display:block !important;z-index:1065;position:fixed;left:0;right:0;top:-100%;background:#fff;box-shadow:0 4px 10px rgba(0, 0, 0, .2);transition:top ease-in-out .4s}
+.fly-menu.show{top:0}
+.fly-menu .row{display:flex;height:48px;align-items:center}
+.fly-menu__block{position:relative;width:55px;height:34px;border-radius:4px;cursor:pointer}
+.fly-menu__icon{width:100%;text-align:center;line-height:33px;font-size:1.3em}
+.fly-menu__account.show .fly-menu__account-dropdown{display:block;top:calc(100% + 8px);left:auto;right:0;margin:0}
+.fly-menu__cart.show .fly-menu__cart-dropdown{display:block;top:calc(100% + 8px);right:0 !important;margin:0}
+.fly-menu__total{position:absolute;right:0;bottom:0;padding:0 5px;font-size:.7em;border-radius:4px 0 4px 0}
+
+@media (min-width:993px){
+    .fly-menu__menu{flex:0 0 auto}
+    .fly-menu__menu .menu{min-height:auto}
+    .fly-menu__menu .menu__header {float:left;position:relative;height:34px;border-radius:4px;min-width:180px}
+    .fly-menu__menu .menu__header:before{position:absolute;z-index:2;left:0;bottom:-7px;width:100%;height:10px;content:''}
+    .fly-menu .menu__header-title{padding-right:20px}
+    .fly-menu .menu__collapse{top:41px}
+    .fly-menu .menu {background:none}
+    .fly-menu .menu__level-1-li:first-child{border-top:solid 1px rgba(0, 0, 0, .1)}
+	.fly-menu .menu__level-1-li {display:block !important}
+    .fly-menu .menu__additional{display:none !important}
+    .fly-menu__product{display:flex;align-items:center;overflow:hidden;width:100%}
+    .fly-menu__product-name{width:100%;margin:0 10px;padding:0;font-size:1.3em;font-weight:500;overflow:hidden}
+    .fly-menu__product-name span{position:relative;white-space:nowrap}
+    .fly-menu__product-price{padding:0 25px;white-space:nowrap;font-size:1.4em}
+    .fly-menu__product-price span + span{margin:0 0 0 10px}
+    .fly-menu__product .price .price-tax{display:none}
+    .fly-menu__product-btn{height:32px}
+    .fly-menu__search {flex:1;position:relative;left:0;z-index:999;margin:0 10px 0;padding:0 0 0 5px}
+    .fly-menu .live-search{top:5px}
+    .fly-menu__phone{flex:0 0 auto;padding:0 30px;font-size:1.3em;font-weight:500}
+    .fly-menu__account {flex:0 0 auto;margin:0 15px 0 0}
+    .fly-menu__cart {flex:0 0 auto;margin:0 10px 0 0}
+	.fly-menu__block.show {box-shadow:inset 0 0 0 128px rgba(0, 0, 0, .05)}
+}
+
+@media (max-width:992px){
+	.fly-menu .row{height:46px;margin:0 -20px}
+	.fly-menu__block{margin:0 3px}
+	.fly-menu__block:first-child{margin-left:10px}
+	.fly-menu__block:last-child{margin-right:10px}
+	.fly-menu__block.item-6{width:16.666666%}
+	.fly-menu__block.item-5{width:20%}
+	.fly-menu__block.item-4{width:25%}
+	.fly-menu__block.show {box-shadow:inset 0 0 0 128px rgba(0, 0, 0, .05)}
+	.fly-menu__icon{font-size:1.2em}
+	.fly-menu__search-m .header-search {display:none;position:fixed;z-index:-1;top:47px;left:15px;right:15px;width:auto;border-radius:4px;box-shadow: 0 6px 12px rgba(0, 0, 0, .18)}
+	.fly-menu__search-m.show .header-search {display:block}
+	.fly-menu__search-m.show .header-search__input, .fly-menu__search-m.show .header-search__category-btn{height:40px}
+	.fly-menu__search-m .live-search__ul{position:relative;z-index:-1;max-height:calc(75vh);margin:0}
+	.fly-menu__icon-compare{transform:rotate(90deg)}
+	.fly-menu__telephone {padding:0}
+	.fly-menu__telephone.show .fly-menu__telephone-dropdown{display:block;top:100%;right:0;margin:0;border-radius:0 0 4px 4px}
+	.fly-menu__telephone-dropdown a {font-size:1em !important}
+    .fly-menu .fly-menu__cart-dropdown{width:calc(100vw - 10px);max-width:500px}
+
+    .fly-menu.bottom{top:auto;bottom:0;border-bottom:solid 1px #ccc;box-shadow:0 -4px 10px rgba(0, 0, 0, .2)}
+    .fly-menu.bottom .fly-menu__search-m.show .header-search {top:0;left:-1px;right:-1px;border-radius:0}
+    .fly-menu.bottom .fly-menu__account-dropdown {top:-8px;transform:translateY(-100%);box-shadow: 0 -6px 12px rgba(0, 0, 0, .18)}
+    .fly-menu.bottom .fly-menu__cart-dropdown {top:-8px;left:auto;transform:translateY(-100%);box-shadow: 0 -6px 12px rgba(0, 0, 0, .18)}
+    .fly-menu-open header, .fly-menu-open main, .fly-menu-open footer{filter:blur(2px);transition:.1s}
+}

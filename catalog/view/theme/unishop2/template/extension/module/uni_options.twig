@@ -1,0 +1,37 @@
+<div class="product-thumb__option option">
+	{% if product.options %}
+	{% for option in product.options %}
+		{% if option.type == 'checkbox' or option.type == 'select' or option.type == 'radio' or option.type == 'image' %}
+			<div class="input-option{{ option.product_option_id }} option__group">
+				<label class="option__group-name">{{ option.required ? '*' }} {{ option.name }}:</label>
+				{% if option['type'] == 'select' %}
+					<select name="option[{{ option.product_option_id }}]" class="option__select form-control">
+						<option value="">{{text_select}}</option>
+						{% for option_value in option.product_option_value %}
+							<option value="{{ option_value.product_option_value_id }}" data-prefix="{{ option_value.price_prefix }}" data-price="{{ option_value.price_value }}">{{ option_value.name }} {{ option_value.price ? '('~option_value.price_prefix~''~option_value.price~')' }}</option>
+						{% endfor %}
+					</select>
+					<div class="clearfix"></div>
+				{% endif %}
+				{% if option.type == 'checkbox' or option.type == 'radio' or option.type == 'image' %}
+					{% for option_value in option.product_option_value %}
+						<label class="option__item">
+							{% if option.type == 'checkbox' %}
+								<input type="checkbox" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" class="option-value-{{ option_value.product_option_value_id }} hidden" data-prefix="{{ option_value.price_prefix }}" data-price="{{ option_value.price_value }}" />
+							{% endif %}
+							{% if option.type == 'radio' %}
+								<input type="radio" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}" class="option-value-{{ option_value.product_option_value_id }} hidden" data-prefix="{{ option_value.price_prefix }}" data-price="{{ option_value.price_value }}" />
+							{% endif %}
+							{% if option_value.image %}
+									<img src="{{ option_value.image }}" alt="{{ option_value.name }} {{ option_value.price ? option_value.price_prefix ~ '' ~ option_value.price }}" loading="lazy" data-type="module" data-thumb="{{ option_value.small }}" class="option__img" />					
+							{% else %}
+								<span class="option__name" {{ option_value.price ? 'data-toggle="tooltip" title="'~option_value.price_prefix~' '~option_value.price~'"' }}>{{ option_value.name }}</span>
+							{% endif %}
+						</label>
+					{% endfor %}
+				{% endif %}
+			</div>
+		{% endif %}
+	{% endfor %}
+	{% endif %}
+</div>

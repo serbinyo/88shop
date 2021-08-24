@@ -1,0 +1,39 @@
+{{ header }}
+<div id="account-forgotten" class="container">
+	<ul class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key+1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	{% if error_warning %}
+		<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+	{% endif %}
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-9' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">
+			{{ content_top }}
+			<div class="account-forgotten uni-form">
+				<h3 class="account-forgotten__heading uni-form__heading">{{ heading_title }}</h3>
+				<div class="account-forgotten__text">{{ text_email }}</div>
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+					<input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+					<button type="submit" class="account-forgotten__btn btn btn-primary">{{ button_continue }}</button>
+				</form>
+			</div>
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

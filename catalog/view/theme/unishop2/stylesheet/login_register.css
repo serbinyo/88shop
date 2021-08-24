@@ -1,0 +1,23 @@
+.modal-login__input {margin:0 0 15px}
+.modal-login__btn {margin:5px 0 15px}
+.modal-login__links {display:flex;justify-content:space-between;font-size:.9em}
+.modal-login__link {border-bottom:dotted 1px}
+
+.modal-register__input {margin:0 0 15px}
+.modal-register__customer-group {margin:0 0 15px}
+.modal-register__customer-group-heading {margin:10px 0;font-size:.9em}
+.modal-register__customer-group-item {display:block;margin:0 0 5px;font-size:.9em}
+.modal-register__heading {margin:10px 0 7px;font-size:.9em}
+.modal-register__item {font-size:.9em}
+.modal-register .form-group {margin:0 0 15px}
+.modal-register__newsletter {margin:0 0 15px}
+.modal-register__agree {margin:0 0 10px;font-size:.9em}
+.modal-register__btn {margin:5px 0 0}
+.modal-register__links {margin:15px 0 0px;font-size:.9em}
+.modal-register__link {border-bottom:dotted 1px}
+
+
+.modal-register .captcha {display:flex;align-items:center;padding:0;margin:10px -10px}
+.modal-register .captcha > * {width:auto}
+.modal-register .captcha__label {display:none}
+.modal-register .captcha__input{max-width:110px}

@@ -1,0 +1,120 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<a onclick="$('#form').submit();" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></a>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-danger"><i class="fa fa-reply"></i></a>
+				<a href="{{ news_list }}" data-toggle="tooltip" title="{{ button_news_list }}" class="btn btn-primary"><i class="fa fa-list"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1><br />
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading"><h3 class="panel-title"><i class="fa fa-pencil"></i> {{ heading_title }}</h3></div>
+			<div class="panel-body">	
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" name="uni_newsform" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">* {{ entry_module_name }}</label>
+						<div class="col-sm-10"><input type="text" name="name" value="{{ name }}" class="form-control" /></div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">* {{ entry_module_customtitle }}</label>
+						<div class="col-sm-10">
+							<ul class="nav nav-tabs" style="margin-bottom:10px">
+								{% for lang in languages %}
+									<li><a href="#uni-news-module-title-{{ lang.language_id }}" data-toggle="tab" style="padding:2px 10px 5px"><img src="language/{{ lang.code }}/{{ lang.code }}.png" title="{{ lang.name }}" /></a></li>
+								{% endfor %}
+							</ul>
+							<div class="tab-content">
+								{% for lang in languages %}
+									<div id="uni-news-module-title-{{ lang.language_id }}" class="tab-pane">
+										<input type="text" name="title[{{ lang.language_id }}]" value="{{ title[lang.language_id] }}" placeholder="Пример: Наши новости" class="form-control" />
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">* {{ entry_module_category }}</label>
+						<div class="col-sm-10">
+							<div class="well well-sm" style="height:200px;overflow:auto;">
+								{% for key, category in categories %} 
+									<label style="display:block;margin:0 0 5px"><input type="radio" name="category" value="{{ category.category_id }}" {{ category.category_id == category_selected ? 'checked="checked"' }} /> <span></span>{{ category.name }}</label>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_module_subcategory }}</label>
+						<div class="col-sm-10">
+							<label><input type="checkbox" name="sub_category" value="1" {{ sub_category ? 'checked="checked"' }} class="form-control" /><span></span></label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">* {{ entry_module_thumb }}</label>
+						<div class="col-sm-10">
+							<div class="input-group" style="width:250px">
+								<input type="text" name="thumb_width" value="{{ thumb_width ? thumb_width : 320 }}" class="form-control" style="width:50% !important; text-align:center;" />
+								<input type="text" name="thumb_height" value="{{ thumb_height ? thumb_height : 240 }}" class="form-control" style="width:50% !important; text-align:center;" />
+								<span class="input-group-addon">пикс.</span>
+								{% if error_newspage_thumb %}<span class="error">{{ error_newspage_thumb }}</span>{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">* {{ entry_module_numchars }}</label>
+						<div class="col-sm-10">
+							<div class="input-group" style="width:250px">
+								<input type="text" name="numchars" value="{{ numchars ? numchars : 100 }}" class="form-control" />
+								<span class="input-group-addon">симв.</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">* {{ entry_module_limit }}</label>
+						<div class="col-sm-10">
+							<div class="input-group" style="width:250px">
+								<input type="text" name="limit" value="{{ limit ? limit : 10 }}" class="form-control" />
+								<span class="input-group-addon">шт.</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_module_view_type }}</label>
+						<div class="col-sm-10">
+							<label><input type="checkbox" name="view_type" value="1" {{ view_type ? 'checked="checked"' }} class="form-control" /><span></span></label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_module_status }}</label>
+						<div class="col-sm-10">
+							<select name="status" class="form-control">
+								<option value="1" {{ status ? 'selected="selected"' }}>{{ text_enabled }}</option>
+								<option value="0" {{ status == 0 ? 'selected="selected"' }}>{{ text_disabled }}</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.nav-tabs').each(function() {
+			$(this).find('li:first a').tab('show');
+		});
+	});
+</script>
+{{ footer }}

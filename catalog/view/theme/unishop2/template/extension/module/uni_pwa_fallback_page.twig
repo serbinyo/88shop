@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="ru">
+<head>
+<title>{{ result.title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="{{ result.icon }}" rel="icon" />
+<link href="catalog/view/theme/unishop2/stylesheet/stylesheet.css" rel="stylesheet" media="screen" />
+<link href="catalog/view/theme/unishop2/stylesheet/{{ result.font }}.css" rel="stylesheet" media="screen" />
+<style>
+	body{height:100%;margin:0;line-height:1.4em;font-size:14px}
+	.fallback-page{display:flex;height:100%;align-items:center;justify-content:center;flex-wrap:wrap;margin:0 20px;color:#666;text-align:center}
+	.fallback-page > div {max-width:400px}
+	.fallback-page__img{display:block;max-width:70%;margin:0 auto}
+	.fallback-page__btn {display:inline-block}
+	{{ result.style }}
+</style>
+</head>
+<body>
+<div class="fallback-page">
+	<div>
+		<img src="{{ result.image }}" class="fallback-page__img" />
+		<div class="fallback-page__description">{{ result.description }}</div>
+		<br />
+		<a onclick="window.location.reload();" class="fallback-page__btn btn btn-lg btn-primary">{{ button_continue }}</a>
+		<br />
+		<br />
+		<a onclick="window.history.back();">{{ button_back }}</a>
+	</div>
+</div>
+</body>
+</html>

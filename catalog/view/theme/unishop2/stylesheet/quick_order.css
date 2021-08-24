@@ -1,0 +1,42 @@
+.quick-order__image{position:relative}
+.quick-order .sticker {top:10px;left:6px}
+.quick-order__image-main {position:relative;margin:0 0 20px}
+.quick-order__image-additional{margin:0 -5px 20px}
+.quick-order__image-additional img{padding:4px;border:solid 1px #ddd;background:#fff;border-radius:3px;cursor:pointer}
+.quick-order__image-additional .owl-item{padding:0 5px}
+.quick-order__image-additional .owl-nav button{width:28px;height:28px;line-height:28px;text-align:center;font-size:1em;background:rgba(255, 255, 255, 1);border:solid 1px rgba(0, 0, 0, .15);border-radius:100%}
+.quick-order__image-additional .owl-nav button:not(.disabled) {opacity:1}
+.quick-order__image-additional .owl-nav {left:-4px;right:-4px}
+.quick-order__attribute{margin:0 0 15px}
+.quick-order__description{margin:0 0 15px}
+.quick-order__more{text-decoration:underline}
+.quick-order__option{margin:0 -10px 10px}
+.quick-order .qty-switch {margin:0 15px 0 0}
+.quick-order .qty-switch__input {width:40px;height:38px}
+.quick-order .qty-switch__btn{width:25px;height:19px;line-height:18px}
+.quick-order .uni-timer {position:absolute;left:0;right:0;bottom:0;border-radius:0 0 4px 4px;transition:opacity ease-in-out .15s}
+.quick-order__image:hover .uni-timer {opacity:0}
+.quick-order__cart {display:flex;justify-content:center}
+.quick-order__price{margin:20px 0;font-size:1.8em}
+.quick-order__discount{display:flex;margin:-5px 0 0;font-size:.8em;color:#888}
+.quick-order__discount-item{margin:0 10px 0 0}
+.quick-order__minimum{margin:10px 0 0;font-size:.8em;color:#888;text-align:center}
+.quick-order .option__name{height:28px;line-height:26px;padding:0 10px}
+.quick-order .option__select{height:28px}
+.quick-order .option__img {width:30px}
+.quick-order__agree{margin:0 0 20px;font-size:.95em}
+.quick-order__agree > label {justify-content:center}
+.quick-order__input {width:calc(50% - 7.5px);margin:0 0 15px}
+.quick-order__input:nth-child(odd) {margin:0 15px 15px 0}
+.quick-order__input.full-width{width:100%;margin:0 0 10px}
+
+.quick-order .captcha {display:flex;align-items:center;justify-content:center;padding:0;margin:10px -10px}
+.quick-order .captcha > * {width:auto}
+.quick-order .captcha__label {display:none}
+.quick-order .captcha__input{max-width:110px}
+.quick-order .g-recaptcha {transform-origin:center !important}
+
+.quick-order .product-data__item{display:flex;align-items:flex-start;margin:0 0 3px;font-size:.95em}
+.quick-order .product-data__item-div{position:relative;width:50%;min-width:50%}
+.quick-order .product-data__item-div:first-child:after{position:absolute;left:0;right:10px;bottom:5px;content:'';border-bottom:dotted 1px #bbb}
+.quick-order .product-data__item-span{position:relative;z-index:2;padding:0 10px 0 0;background:#fff}

@@ -1,0 +1,25 @@
+.category-wall__item {position:relative;width:100%;margin:0 0 20px !important;padding:0}
+.category-wall__image{display:block;position:relative;overflow:hidden}
+.category-wall__image.child{border-bottom:solid 1px rgba(0, 0, 0, .07);box-shadow:0 5px 5px -2px rgba(0, 0, 0, .06)}
+.category-wall__ul {margin:0;list-style:none}
+.category-wall__ul{padding:12px 15px 35px}
+.category-wall__ul.child-empty{padding:20px}
+.category-wall__li{margin:0 0 7px;font-size:.9em}
+.category-wall__li:last-child{margin:0}
+.category-wall__li a {display:flex}
+.category-wall__li a:before{margin:1px 7px 0 0;content:"\2022";color:#aaa}
+.category-wall__title {margin:0 0 7px;padding:0 0 10px;line-height:1em;font-size:1.1em;font-weight:500;border-bottom:solid 1px rgba(0, 0, 0, .08)}
+.category-wall__title.child-empty{margin:0;padding:0;text-align:center;border:none}
+.category-wall__more {position:absolute;bottom:15px}
+.category-wall__more span {font-size:.85em;text-decoration:underline}
+.category-wall__more:after {content:"\2192\A0";padding:0 0 0 10px}
+
+.category-wall__item.type2 {display:flex;padding:15px}
+.category-wall__image.type2{flex:0 0 40%;border:none;box-shadow:none}
+.category-wall__ul.type2{width:100%;padding:0 0 20px 15px}
+.category-wall__title.type2{text-align:left}
+.category-wall__more.type2{}
+
+@media (max-width:575px){
+    .category-wall__image.childs.type2{flex:0 0 33%}
+}

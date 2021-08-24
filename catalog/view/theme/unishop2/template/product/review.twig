@@ -1,0 +1,51 @@
+<div>
+{% if reviews %}
+	<div class="review-list">
+		{% for review in reviews %}
+			<div class="review-list__item uni-item row">
+				<div class="col-xs-12 col-sm-2 col-xxl-3">
+					<div class="review-list__rating rating"> 
+						{% for i in 1..5 %}
+							<i class="{{ review.rating < i ? 'far' : 'fa' }} fa-star"></i>
+						{% endfor %}
+					</div>
+					<div class="review-list__name"><i class="review-list__icon fa fa-user"></i>{{ review.author }}</div>
+					<div class="review-list__date"><i class="review-list__icon fa fa-calendar"></i>{{ review.date_added }}</div>
+				</div>
+				<div class="col-xs-12 col-sm-10 col-xxl-17">
+					{% if review.plus %}
+						<div class="review-list__plus">
+							<div class="review-list__plus-heading"><i class="review-list__icon fa fa-plus"></i>{{ text_review_plus }}</div>
+							{{ review.plus }}
+						</div>
+					{% endif %}
+					{% if review.minus %}
+						<div class="review-list__minus">
+							<div class="review-list__minus-heading"><i class="review-list__icon fa fa-minus"></i>{{ text_review_minus }}</div>
+							{{ review.minus }}
+						</div>
+					{% endif %}
+					<div class="review-list__comment">
+						{% if review.plus or review.minus %}
+							<div class="review-list__comment-heading"><i class="review-list__icon fa fa-comment"></i>{{ text_review_comment }}</div>
+						{% endif %}
+						{{ review.text }}
+					</div>
+					{% if review.admin_reply %} 
+						<div class="review-list__reply">
+							<div class="review-list__reply-heading"><i class="review-list__reply-icon fa fa-reply"></i>{{ text_admin_reply }}</div>
+							{{ review.admin_reply }}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% else %}
+	<p>{{ text_no_reviews }}</p>
+{% endif %}
+<div class="review-pagination text-center">
+	{% if pagination %}<button class="show-more-review btn btn-lg btn-default"><i class="fa fa-sync-alt"></i><span>{{ button_show_more_reviews }}</span></button>{% endif %}
+	{{ pagination }}
+</div>
+</div>

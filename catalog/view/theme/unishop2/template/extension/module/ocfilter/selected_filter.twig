@@ -1,0 +1,15 @@
+{% if selecteds %}
+	<div class="list-group-item selected-options">
+		{% for option in selecteds %}
+		<div class="ocfilter-option">
+			<span>{{ option.name }}:</span>
+			{% for value in option.values %}
+				<button type="button" onclick="location = '{{ value.href }}';" class="btn btn-xs btn-default"><i class="fa fa-times"></i> {{ value.name }}</button>
+			{% endfor %}
+		</div>
+		{% endfor %}
+		{% if selecteds|length > 1 or selecteds|first.values|length > 1 %}
+			<button type="button" onclick="location = '{{ link}}';" class="btn btn-block btn-default" style="border-radius: 0;"><i class="fa fa-times-circle"></i> {{ text_cancel_all }}</button>
+		{% endif %}
+	</div>
+{% endif %}

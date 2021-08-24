@@ -1,0 +1,154 @@
+</main>
+{{ topstripe }}
+{{ pwa_notification }}
+{{ notification }}
+<footer class="footer">
+	{{ subscribe }}
+	<div class="container">
+		<div class="row">
+			<div class="footer__column col-sm-6 col-md-3">
+				<h5 class="footer__column-heading" data-toggle="collapse" data-target=".footer__column-ul-1" onclick="$(this).toggleClass('open')">
+					{{ footer_column[1].icon ? '<i class="footer__column-icon fa-fw '~footer_column[1].icon~'"></i>' }} 
+					{{ footer_column[1].heading }}
+					<i class="fas fa-chevron-down visible-xs"></i>
+				</h5>
+				<ul class="footer__column-ul footer__column-ul-1 collapse list-unstyled">
+					{% if informations %}
+						{% for information in informations %}
+							<li class="footer__column-li"><a href="{{ information.href }}" class="footer__column-a">{{ information.title }}</a></li>
+						{% endfor %}
+					{% endif %}
+					{% if footerlinks.1 %}
+						{% for footerlink in footerlinks.1 %}
+							<li class="footer__column-li"><a href="{{ footerlink.link }}" class="footer__column-a">{{ footerlink.title }}</a></li>
+						{% endfor %}
+					{% endif %}
+				</ul>
+			</div>
+			<div class="footer__column col-sm-6 col-md-3">
+				<h5 class="footer__column-heading" data-toggle="collapse" data-target=".footer__column-ul-2" onclick="$(this).toggleClass('open')">
+					{{ footer_column[2].icon ? '<i class="footer__column-icon fa-fw '~footer_column[2].icon~'"></i>' }}
+					{{ footer_column[2].heading }}
+					<i class="fas fa-chevron-down visible-xs"></i>
+				</h5>
+				{% if footerlinks.2 %}
+					<ul class="footer__column-ul footer__column-ul-2 collapse list-unstyled">
+						{% for footerlink in footerlinks.2 %}
+							<li class="footer__column-li"><a href="{{ footerlink.link }}" class="footer__column-a">{{ footerlink.title }}</a></li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+			<div class="clearfix visible-sm"></div>
+			<div class="footer__column col-sm-6 col-md-3">
+				<h5 class="footer__column-heading" data-toggle="collapse" data-target=".footer__column-ul-3" onclick="$(this).toggleClass('open')">
+					{{ footer_column[3].icon ? '<i class="footer__column-icon fa-fw '~footer_column[3].icon~'"></i>' }}
+					{{ footer_column[3].heading }}
+					<i class="fas fa-chevron-down visible-xs"></i>
+				</h5>
+				{% if footerlinks.3 %}
+					<ul class="footer__column-ul footer__column-ul-3 collapse list-unstyled">
+						{% for footerlink in footerlinks.3 %}
+							<li class="footer__column-li"><a href="{{ footerlink.link }}" class="footer__column-a">{{ footerlink.title }}</a></li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+			<div class="footer__column col-sm-6 col-md-3">
+				<h5 class="footer__column-heading footer__column-heading-addr">{{ text_footer_our_contacts }}</h5>
+				<ul class="footer__column-ul footer__column-contacts list-unstyled">
+					{% for phone in footer_phone %}
+						<li class="footer__column-li footer__column-li-addr"><i class="footer__column-li-addr-icon {{ phone.icon }}"></i><a class="footer__column-a uni-href" data-href="{{ phone.href }}">{{ phone.number }}</a></li>
+					{% endfor %}
+					{% if footer_mail %}<li class="footer__column-li footer__column-li-addr"><i class="footer__column-li-addr-icon fa fa-envelope fa-fw"></i><a class="footer__column-a uni-href" data-href="mailto:{{ footer_mail }}">{{ footer_mail }}</a></li>{% endif %}
+				</ul>
+				<h5 class="footer__column-heading footer__column-heading-addr">{{ text_footer_our_address }}</h5>
+				<ul class="footer__column-ul footer__column-contacts list-unstyled">
+					{% if footer_address %}<li class="footer__column-li footer__column-li-addr"><i class="footer__column-li-addr-icon fa fa-map-marker fa-fw"></i>{{ footer_address}}</li>{% endif %}
+					{% if footer_open %}<li class="footer__column-li footer__column-li-addr"><i class="footer__column-li-addr-icon fa fa-clock fa-fw"></i>{{ footer_open }}</li>{% endif %}
+				</ul>
+				{% if footerlinks.4 %}
+					<h5 class="footer__column-heading" data-toggle="collapse" data-target=".footer__column-ul-4" onclick="$(this).toggleClass('open')">
+						{{ footer_column[4].icon ? '<i class="footer__column-icon fa-fw '~footer_column[4].icon~'"></i>' }}
+						{{ footer_column[4].heading }}
+						<i class="fas fa-chevron-down visible-xs"></i>
+					</h5>
+					<ul class="footer__column-ul footer__column-ul-4 collapse list-unstyled">
+						{% for footerlink in footerlinks.4 %}
+							<li class="footer__column-li"><a href="{{ footerlink.link }}" class="footer__column-a">{{ footerlink.title }}</a></li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+			{% if footer_text %}
+				<div class="col-sm-12 hidden-xs">
+					<div class="footer__text">{{ footer_text }}</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+	<div class="footer__socials-payments">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12 col-md-6">
+					<div class="footer__media">
+						{% if socials %}
+							{% for social in socials %}
+								<i class="footer__socials-icon uni-href fab {{social.icon}}" data-href="{{ social.link }}" data-target="_blank"></i>
+							{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<div class="visible-xs visible-sm" style="height:15px"></div>
+					<div class="footer__payments">
+						{% for icon in payment_icons %}
+							{% if 'catalog' in icon %}
+								<img src="image/{{icon}}" class="footer__payments-icon" />
+							{% else %}
+								<div class="footer__payments-icon {{ icon }}"></div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="fly-block">
+	{% if wishlist %}
+		<div class="fly-block__item fly-block__wishlist uni-href" data-href="{{ wishlist.href }}" title="{{ text_fly_wishlist }}" data-toggle="tooltip" data-products="{{ wishlist.products }}">
+			<i class="fas fa-heart fly-block__wishlist-icon"></i><span class="fly-block__total fly-block__wishlist-total">{{ wishlist.total }}</span>
+		</div>
+	{% endif %}
+	{% if compare %}
+		<div class="fly-block__item fly-block__compare uni-href" data-href="{{ compare.href }}" title="{{ text_fly_compare }}" data-toggle="tooltip" data-products="{{ compare.products }}">
+			<i class="fas fa-align-right fly-block__compare-icon"></i><span class="fly-block__total fly-block__compare-total">{{ compare.total }}</span>
+		</div>
+	{% endif %}
+	{% if show_fly_callback %}
+		<div class="fly-block__item fly-block__callback" onclick="uniRequestOpen(['mail', 'phone', 'comment'])" {{ fly_callback_text ? 'title="'~fly_callback_text~'" data-toggle="tooltip"' }}>
+			<i class="fa fa-phone fly-block__callback-icon"></i>
+		</div>
+	{% endif %}
+	<div class="fly-block__item fly-block__scrollup">
+		<i class="fa fa-chevron-up fly-block__scrollup-icon" onclick="uniScrollTo('body')" aria-hidden="true"></i>
+	</div>
+	<script>
+		$(window).scroll(function(){		
+			$(this).scrollTop() > 190 ? $('.fly-block__scrollup').addClass('visible') : $('.fly-block__scrollup').removeClass('visible');
+		});
+	</script>
+</div>
+<script>var uniJsVars = JSON.parse(atob('{{ js_vars }}'));</script>
+{% if scripts_delayed %}
+	<script>
+		setTimeout(function() {
+			{% for script in scripts_delayed %}
+				$.getScript('{{ script }}');
+			{% endfor %}
+		}, {{ scripts_delayed_time*1000 }});
+	</script>
+{% endif %}
+</body>
+</html>

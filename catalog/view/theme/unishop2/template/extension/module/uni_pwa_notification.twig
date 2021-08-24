@@ -1,0 +1,10 @@
+{% if notification %}
+	<div class="pwa-notification hidden">
+		<div class="container">
+			<span class="pwa-notification__text chromium">{{ notification.text_chromium }}</span>
+			<span class="pwa-notification__text other">{{ notification.text_other }}</span>
+			<span class="pwa-notification__install">{{ notification.text_install }}</span>
+			<span class="pwa-notification__close">{{ notification.text_close }}</span>
+		</div>
+	</div>
+{% endif %}

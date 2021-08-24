@@ -1,0 +1,467 @@
+{{ header }}
+<div id="unicheckout" class="checkout_form container">        
+	<ul class="breadcrumb {{ menu_expanded ? 'col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' }}">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key + 1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<div id="content">
+		<div class="heading-h1"><h1>{{ text_checkout }}</h1></div>
+		<div class="row">
+			<div class="col-md-9 col-lg-9">
+				<div id="unicart">
+					{{ cart }}
+				</div>
+				{% if show_popup_login %}
+					<div class="checkout-login">{{ text_register2 }} &nbsp;<a onclick="uniLoginOpen();" class="checkout-login__link">{{ text_login2 }}</a></div>
+				{% endif %}
+				<form id="unicheckout__form" class="unicheckout__form row">
+					<div class="col-md-6">
+						<div class="unicheckout__user">
+							<div class="heading"><span>{{ text_your_details }}</span></div>
+							<div class="user_data checkout-customer">
+								<div class="row-flex">
+									<input type="text" name="firstname" value="{{ firstname }}" placeholder="{{ name_text }}" class="checkout-customer__input form-control" />
+									<input type="text" name="lastname" value="{{ lastname }}" placeholder="{{ lastname_text }}" class="checkout-customer__input form-control {{ show_lastname is empty ? 'hidden' }}" />
+									<input type="email" name="email" value="{{ email }}" placeholder="{{ email_text }}" class="checkout-customer__input form-control {{ show_email is empty ? 'hidden' }}" />
+									<input type="tel" name="telephone" value="{{ telephone }}" placeholder="{{ phone_text }}" class="checkout-customer__input form-control {{ show_phone is empty ? 'hidden' }}" />
+								</div>
+								<input type="hidden" name="fax" value="" />
+							</div>
+							
+							<script>if($('.checkout-customer__input').not('.hidden').length%2) $('.checkout-customer__input').not('.hidden').last().addClass('full-width');</script>
+							
+							<div class="checkout-customer__register {{ show_email is empty or checkout_passgen ? 'hidden' }}">	
+								{% if customer_id is empty %}	
+									<div class="{{ checkout_guest is empty ? 'hidden' }}">
+										<label class="checkout-customer__register-label input show-register-form" data-toggle="collapse" data-target=".checkout-customer__group-pass">
+											<input type="checkbox" name="add-new-customer" value="1" id="register_user" {{ checkout_guest is empty ? 'checked="checked"' }} /><span>{{ text_register3 }}</span>
+										</label>
+									</div>    
+									<div class="checkout-customer__group-pass {{ checkout_guest ? 'collapse'}}">
+										{% if customer_groups %}
+											<div class="checkout-customer__group">
+												<label class="control-label">{{ entry_customer_group }}:</label>
+												<div>
+													{% for customer_group in customer_groups %}
+														<label class="checkout-customer__group-item input">
+															<input type="radio" name="customer_group_id" value="{{ customer_group.customer_group_id }}" id="{{customer_group.customer_group_id}}" {{ customer_group.customer_group_id == customer_group_id ? 'checked="checked"' }} />{{ customer_group.name }}
+														</label>
+													{% endfor %}
+												</div>
+											</div>
+										{% endif %}
+										<div class="form-group required">
+											<input type="password" name="password" value="" placeholder="{{ password_text }}" class="form-control" />
+										</div>
+										{% if show_password_confirm %}	
+											<div class="form-group required">
+												<input type="password" name="password-confirm" value="" placeholder="{{ password_confirm_text }}" class="form-control" />
+											</div>
+										{% endif %}
+									</div>
+								{% endif %}
+							</div>
+						</div>
+						<div class="unicheckout__custom-field">
+							{{ custom_fields }}
+						</div>
+						<div class="unicheckout__address payment-address">
+							{{ address }}		
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<div class="unicheckout__shipping">
+							{{ shipping_method }}
+						</div>							
+						<div class="unicheckout__payment">						    
+							{{ payment_method }}
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="unicheckout__comment">
+							<div class="heading"><span>{{ text_comment2 }}</span></div>
+							<textarea name="comment" rows="3" class="checkout-comment form-control">{{ comment }}</textarea>
+						</div>
+					</div>
+				</form>
+				<div id="confirm" class="row">
+					<div class="col-xs-12 payment"></div>
+				</div>
+			</div>
+			{{ totals }}
+		</div>
+	</div>			
+    {{ content_bottom }}
+</div>
+<script>
+$('body').on('change', 'input[name=\'shipping_method\'], input[name=\'payment_method\'], .payment-address input[type=\'text\'], .payment-address input[type=\'radio\'], .payment-address input[type=\'checkbox\'], .payment-address textarea, select[name=\'address_id\']', function() {
+	uniCheckoutUpdate();
+});
+
+$('body').on('change', '.checkout-customer__group-item', function() {
+	uniCustomFieldUpdate();
+});
+
+$.ajaxSetup({cache: false});
+
+$('body').on('click', '#confirm_checkout', function() {
+	var data = $('.checkout_form input[type=\'text\'], .checkout_form input[type=\'tel\'], .checkout_form input[type=\'email\'], .checkout_form input[type=\'date\'], .checkout_form input[type=\'datetime-local\'], .checkout_form input[type=\'time\'], .checkout_form input[type=\'password\'], .checkout_form input[type=\'hidden\'], .checkout_form input[type=\'checkbox\']:checked, .checkout_form input[type=\'radio\']:checked, .checkout_form textarea, .checkout_form select').serialize();
+	
+	var form = '#unicheckout';
+	
+    $.ajax({
+        url: 'index.php?route=checkout/uni_checkout/validate',
+        type: 'post',
+        data: data,
+        dataType: 'json',
+        beforeSend: function() {
+			$('#confirm_checkout').button('loading');
+		},  
+        complete: function() {
+			if($('.payment').html() == '') {
+				$('#confirm_checkout').button('reset');
+			}
+        },          
+        success: function(json) {
+			$('#unicheckout .text-danger').remove();
+                        
+            if (json['error']) {
+				for (i in json['error']) {
+					form_error(form, i, json['error'][i]);
+				}
+				
+				uniFlyAlert('danger', json['error']);
+				
+				if(json['error']['minimum']) {
+				
+					var alert_minimum = json['error']['minimum']+'<button type="button" class="close" data-dismiss="alert">×</button>';
+				
+					if($('#unicart .alert').length) {
+						$('#unicart .alert').html(alert_minimum);
+					} else {
+						$('#unicart').prepend('<div class="alert alert-danger">'+alert_minimum+'</div>');
+					}
+				}
+				
+				if($('#unicart .alert').length) {
+					uniScrollTo('#unicart .alert');
+				}
+				
+				if($('.input-warning').length) {
+					uniScrollTo('.input-warning:first');
+				}
+            }
+			
+			$('.payment').html('');
+			
+			var hideButtonConfirm = false;
+			
+			if (json['success']) {
+				$('.payment').html(json['success']['payment']);
+				$('.payment .btn-primary').addClass('btn-lg');
+				
+				dataLayer.push({
+					'ecommerce':{
+						'currencyCode':'{{ currency }}',
+						'purchase':{
+							'actionField':{
+								'id': json['success']['order_id'],
+								'goal_id': '{{ metric_taget_id }}'
+							},
+							'products': json['success']['products']
+						}
+					}
+				});
+				
+				if (typeof(gtag) === 'function') {
+					gtag('event', 'purchase', {'transaction_id': json['success']['order_id'], 'currency': '{{ currency }}', 'items': json['success']['products']});
+				}
+				
+				{% if metric_id and metric_target %}
+					if (typeof(ym) === 'function') {
+						ym({{ metric_id }}, 'reachGoal', '{{ metric_target }}');
+					} else {
+						new Function('yaCounter{{ metric_id }}.reachGoal(\''+{{ metric_target }}+'\')')();
+					}
+				{% endif %}
+					
+				{% if analytic_category and analytic_action %}
+					if (typeof(gtag) === 'function') {
+						gtag('event', '{{ analytic_action }}', {'event_category': '{{ analytic_category }}'});
+					} else if (typeof(ga) === 'function') {
+						ga('send', 'event', '{{ analytic_category }}', '{{ analytic_action }}');
+					}
+				{% endif %}
+				
+				if (!$('.payment h2, .payment p, .payment form, .payment input[type=\'radio\'], .payment input[type=\'checkbox\'], .payment select').length) {
+					$('.payment').css('display', 'none');
+					
+					setTimeout(function() { 
+						$('.payment #button-confirm, .payment input[type=\'button\'], .payment input[type=\'submit\'], .payment button, .payment a, .payment .btn-primary').click();
+					}, 300);
+					
+					if($('.payment a').length) {
+						$('.payment a')[0].click();
+					}
+				} else {
+					hideButtonConfirm = true;
+				}
+				
+				if ($('.payment form').length && $('.payment form').attr('action')) {
+				
+					let form_action = $('.payment form').attr('action');
+				
+					if(/paypal|robokassa|wayforpay|tinkoff/i.test(form_action)) {
+						$('.payment').css('display', 'none');
+						$('.payment .btn-primary').click();
+					}
+				} else {
+					hideButtonConfirm = true;
+				}
+				
+				if(hideButtonConfirm) {
+					$('#confirm_checkout').hide();
+					uniScrollTo('#confirm .payment');
+				}
+			}
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    }); 
+});  
+
+$('body').on('focus', '#unicheckout input[name=\'telephone\']', function(){
+	$(this).mask('{{ mask_telephone }}');
+});
+
+$('body').on('click', '#ll_cdek_map .btn.btn-block', function() {
+	setTimeout(function() {
+		uniCheckoutUpdate();
+	}, 200);
+});
+
+$('body').on('click', '#button-coupon', function() {
+	
+	var form = '#unicheckout';
+
+	$.ajax({
+		url: 'index.php?route=extension/total/coupon/coupon',
+		type: 'post',
+		data: 'coupon=' + encodeURIComponent($('input[name=\'coupon\']').val()),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-coupon').button('loading');
+		},
+		complete: function() {
+			$('#button-coupon').button('reset');
+		},
+		success: function(json) {
+			$('.text-danger').remove();
+
+			if (json['error']) {
+				form_error(form, 'coupon');
+				uniFlyAlert('danger', json['error']);
+			}
+
+			if (json['redirect']) {
+				uniCheckoutUpdate();
+				uniFlyAlert('success', '{{ text_coupon_success }}');
+			}
+		}
+	});
+});
+$('body').on('click', '#button-reward', function() {
+
+	var form = '#unicheckout';
+
+	$.ajax({
+		url: 'index.php?route=extension/total/reward/reward',
+		type: 'post',
+		data: 'reward=' + encodeURIComponent($('input[name=\'reward\']').val()),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-reward').button('loading');
+		},
+		complete: function() {
+			$('#button-reward').button('reset');
+		},
+		success: function(json) {
+			$('.text-danger').remove();
+
+			if (json['error']) {
+				form_error(form, 'reward');
+				uniFlyAlert('danger', json['error']);
+			}
+
+			if (json['redirect']) {
+				uniCheckoutUpdate();
+				uniFlyAlert('success', '{{ text_reward_success }}');
+			}
+		}
+	});
+});
+$('body').on('click', '#button-voucher', function() {
+
+	var form = '#unicheckout';
+
+	$.ajax({
+		url: 'index.php?route=extension/total/voucher/voucher',
+		type: 'post',
+		data: 'voucher=' + encodeURIComponent($('input[name=\'voucher\']').val()),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-voucher').button('loading');
+		},
+		complete: function() {
+			$('#button-voucher').button('reset');
+		},
+		success: function(json) {
+			$('.text-danger').remove();
+
+			if (json['error']) {
+				form_error(form, 'voucher');
+				uniFlyAlert('danger', json['error']);
+			}
+
+			if (json['redirect']) {
+				uniCheckoutUpdate();
+				uniFlyAlert('success', '{{ text_voucher_success }}');
+			}
+		}
+	});
+});
+
+function uniVoucherRemove(key) {
+	$.ajax({
+		url: $('base').attr('href')+'index.php?route=checkout/cart/remove',
+		type: 'post',
+		data: 'key='+key,
+		dataType: 'json',
+		success: function(json) {
+			$('#cart').load('index.php?route=common/cart/info #cart > *');
+			uniCheckoutUpdate();
+		},
+	    error: function(xhr, ajaxOptions, thrownError) {
+	         alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+	    }
+	});
+}
+
+function uniCheckoutUpdate() {
+
+	$('#confirm_checkout').show();
+
+	let status = $('.preloader:visible').length ? true : false, data = $('.payment-address input, .payment-address textarea, .payment-address select').serialize();
+	
+	if(!status) {
+		$.ajax({
+			url: $('base').attr('href')+'index.php?route=checkout/uni_checkout/addressRender',
+			type: 'post',
+			cache: false,
+			data: data,
+			dataType: 'html',
+			beforeSend: function() {
+				$('html body').append('<div class="preloader"></div>');
+			},
+			success: function(html) {
+				$('.unicheckout__address').html(html);
+			
+				uniShippingUpdate();
+			}
+		});
+	}
+}
+
+function uniShippingUpdate() {
+
+	let data = $('.shipping-method input[type=\'radio\']:checked').serialize();
+
+	$.ajax({
+		url: $('base').attr('href')+'index.php?route=checkout/uni_checkout/shippingRender',
+		type: 'post',
+		cache: false,
+		data: data,
+		dataType: 'html',
+		success: function(html) {
+			$('.unicheckout__shipping').html(html);
+			
+			uniPaymentUpdate();
+		}
+	});
+}
+
+function uniPaymentUpdate() {
+
+	let data = $('.payment-method input[type=\'radio\']:checked').serialize();
+
+	$.ajax({
+		url: $('base').attr('href')+'index.php?route=checkout/uni_checkout/paymentRender',
+		type: 'post',
+		cache: false,
+		data: data,
+		dataType: 'html',
+		success: function(html) {
+			$('.unicheckout__payment').html(html);
+			
+			//setTimeout(function() { 
+				uniCartUpdate();
+			//}, 300);
+		}
+	});
+}
+
+function uniCartUpdate() {
+
+	let data = '';
+
+	$.ajax({
+		url: $('base').attr('href')+'index.php?route=checkout/uni_checkout/cartRender',
+		type: 'post',
+		cache: false,
+		data: data,
+		dataType: 'html',
+		success: function(html) {
+			$('#unicart').html(html);
+			
+			$('.total_checkout h3 span span').html($('.checkout-cart__totals-text:last').text());
+			
+			$('.payment').html('');
+			$('#confirm_checkout').button('reset');
+			
+			uniTotalsUpdate();
+		}
+	});
+}
+
+function uniCustomFieldUpdate() {
+
+	let data = $('.checkout-customer__group input[type=\'radio\']:checked').serialize();
+
+	$.ajax({
+		url: $('base').attr('href')+'index.php?route=checkout/uni_checkout/customFieldRenderAccount',
+		type: 'post',
+		cache: false,
+		data: data,
+		dataType: 'html',
+		success: function(html) {
+			$('.unicheckout__custom-field').html(html);
+		}
+	});
+}
+
+function uniTotalsUpdate() {
+	$.get($('base').attr('href')+'index.php?route=checkout/uni_checkout/totalsRender', function(data) {
+		$('.checkout-sticky__wrapper').html($(data).find('.checkout-sticky__wrapper').html());
+		
+		$('.preloader').remove();
+	});
+}
+
+</script>
+{{ footer }}

@@ -1,0 +1,183 @@
+{{header}}
+{{column_left}}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="button" onclick="$('#form-news-setting').submit();" class="save btn btn-primary" data-toggle="tooltip" title="{{button_save}}" data-loading-text="<i class='fa fa-spinner'></i>"><i class="fa fa-save"></i></button>
+			</div>
+			<h1>{{heading_title}}</h1><br />
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{breadcrumb.href}}">{{breadcrumb.text}}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{error_warning}}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{success}}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-list"></i> {{text_setting}}</h3>
+			</div>
+			<div class="panel-body">
+				<div class="sett tab-content-new" style="margin:0 0 20px; background:#fcfcfc;">
+					<form method="post" enctype="multipart/form-data" id="form-news-setting">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#tab-setting" data-toggle="tab">{{head_category_settings}}</a></li>
+							<li><a href="#tab-setting2" data-toggle="tab">{{head_news_settings}}</a></li>
+							<li><a href="#tab-setting3" data-toggle="tab">{{head_related_products}}</a></li>
+							<li><a href="#tab-setting4" data-toggle="tab">{{head_sitemap}}</a></li>
+						</ul>
+						<div id="module" class="tab-content">
+							<div id="tab-setting" class="tab-pane active">
+								<div class="col-sm-2">{{entry_subcategory_column}}</div>
+								<div class="col-sm-10">
+								{% set columns = {6:2, 4:3, 3:4, 2:6} %}
+								<div style="float:left">
+									<div class="input-group">
+										<span class="input-group-addon">Десктоп:</span>
+										<select name="uni_news[subcategory_column][]" class="form-control" style="width:55px;">
+										{% for key, column in columns %}
+											<option value="col-lg-{{key}}" {{'col-lg-' ~ key in uni_news.subcategory_column ? 'selected="selected"'}}>{{column}}</option>
+										{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div style="float:left;margin:0 0 0 5px">
+									<div class="input-group">
+										<span class="input-group-addon">Ноутбук:</span>
+										<select name="uni_news[subcategory_column][]" class="form-control" style="width:55px;">
+										{% for key, column in columns %}
+											<option value="col-md-{{key}}" {{'col-md-' ~ key in uni_news.subcategory_column ? 'selected="selected"'}}>{{column}}</option>
+										{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div style="float:left;margin:0 0 0 5px">
+									<div class="input-group">
+										<span class="input-group-addon">Планшет:</span>
+										<select name="uni_news[subcategory_column][]" class="form-control" style="width:55px;">
+										{% for key, column in columns %}
+											<option value="col-sm-{{key}}" {{'col-sm-' ~ key in uni_news.subcategory_column ? 'selected="selected"'}}>{{column}}</option>
+										{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div style="float:left;margin:0 0 0 5px">
+									<div class="input-group">
+										<span class="input-group-addon">Смартфон:</span>
+										<select name="uni_news[subcategory_column][]" class="form-control" style="width:55px;">
+										{% for key, column in columns %}
+											<option value="col-xs-{{key}}" {{'col-xs-' ~ key in uni_news.subcategory_column ? 'selected="selected"'}}>{{column}}</option>
+										{% endfor %}
+										</select>
+									</div>
+								</div>
+								</div>
+								<hr />
+								<div class="col-sm-2">{{entry_subcategory}}</div>
+								<div class="col-sm-10"><label><input type="checkbox" name="uni_news[subcategory]" value="1" {{uni_news.subcategory ? 'checked="checked"'}} /><span></span></label></div>
+								<hr />
+								<div class="col-sm-2">* {{ entry_newslist_thumb }}</div>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<input type="text" name="uni_news[image_width]" value="{{uni_news.image_width ? uni_news.image_width : 480}}" class="form-control" style="width:50px !important; text-align:center;" />
+										<input type="text" name="uni_news[image_height]" value="{{uni_news.image_height ? uni_news.image_height : 360}}" class="form-control" style="width:50px !important; text-align:center;" /> 
+										<span>пикс.</span>
+										{% if error_newspage_thumb %}<span class="error">{{lang.error_newspage_thumb}}</span>{% endif %}
+									</div>
+								</div>
+								<hr />
+								<div class="col-sm-2">* {{entry_headline_chars}}</div>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<input type="text" name="uni_news[chars]" value="{{uni_news.chars ? uni_news.chars : 300}}" class="form-control" style="width:50px !important; text-align:center;" />
+										<span>симв.</span>
+										{% if error_numchars %}<span class="error">{{lang.error_numchars}}</span>{% endif %}
+									</div>
+								</div>
+							</div>
+							<div id="tab-setting2" class="tab-pane">
+								<div class="col-sm-2">{{entry_newspage_image}}</div>
+								<div class="col-sm-10"><label><input type="checkbox" name="uni_news[image]" value="1" {{uni_news.image ? 'checked="checked"'}} /><span></span></label></div>
+								<hr />
+								<div class="col-sm-2">* {{entry_newspage_thumb}}</div>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<input type="text" name="uni_news[thumb_width]" value="{{uni_news.thumb_width ? uni_news.thumb_width : 320}}" class="form-control" style="width:50px !important; text-align:center;" />
+										<input type="text" name="uni_news[thumb_height]" value="{{uni_news.thumb_height ? uni_news.thumb_height : 240}}" class="form-control" style="width:50px !important; text-align:center;" /> 
+										<span>пикс.</span>
+										{% if error_newspage_thumb %}<span class="error">{{lang.error_newspage_thumb}}</span>{% endif %}
+									</div>
+								</div>
+								<hr />
+								<div class="col-sm-2">* {{entry_newspage_popup}}</div>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<input type="text" name="uni_news[popup_width]" value="{{uni_news.popup_width ? uni_news.popup_width : 800}}" class="form-control" style="width:50px !important; text-align:center;" />
+										<input type="text" name="uni_news[popup_height]" value="{{uni_news.popup_height ? uni_news.popup_height : 600}}" class="form-control" style="width:50px !important; text-align:center;" /> 
+										<span>пикс.</span>
+										{% if error_newspage_popup %}<span class="error">{{lang.error_newspage_popup}}</span>{% endif %}
+									</div>
+								</div>
+								<hr />
+								<div class="col-sm-2">{{entry_newspage_addthis}}</div>
+								<div class="col-sm-10"><label><input type="checkbox" name="uni_news[addthis]" value="1" {{uni_news.addthis ? 'checked="checked"'}} /><span></span></label></div>
+							</div>
+							<div id="tab-setting3" class="tab-pane">
+								<div class="col-sm-2">* {{entry_related_products}}</div>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs">
+									{% for lang in languages %}
+										<li><a href="#related-product-title-{{lang.language_id}}" data-toggle="tab"><img src="language/{{lang.code}}/{{lang.code}}.png" title="{{lang.name}}" /></a></li>
+									{% endfor %}
+									</ul>
+									<div class="tab-content">
+									{% for lang in languages %}
+										<div id="related-product-title-{{lang.language_id}}" class="tab-pane">
+											<input type="text" name="uni_news[related_product_title][{{lang.language_id}}]" value="{{ uni_news.related_product_title[lang.language_id] ? uni_news.related_product_title[lang.language_id] : text_related_products }}" class="form-control" />
+										</div>
+									{% endfor %}
+									</div>
+								</div>
+								<hr />
+								<div class="col-sm-2">{{entry_related_product_type_view}}</div>
+								<div class="col-sm-10"><label><input type="checkbox" name="uni_news[related_product_type_view]" value="1" {{uni_news.related_product_type_view ? 'checked="checked"'}} /><span></span></label></div>
+							</div>
+							<div id="tab-setting4" class="tab-pane">
+								<div class="col-sm-2">{{entry_sitemap}}</div>
+								<div class="col-sm-10"><label><input type="checkbox" name="uni_news[sitemap]" value="1" {{uni_news.sitemap ? 'checked="checked"'}} /><span></span></label></div>
+								<hr />
+								<div class="col-sm-2">{{entry_sitemap_address}}</div>
+								<div class="col-sm-10">
+									<ul class="list-unstyled">
+										{% for sitemap in sitemaps %}
+											<li>
+												<div style="padding:0 0 5px;font-weight:600">{{ sitemap.name }}</div>
+												<input type="text" class="form-control" readonly value="{{ sitemap.url }}" style="width:600px; max-width:100%" />
+												<br />
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="container clearfix"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$('.nav-tabs').each(function() {
+	$(this).find('li:first a').tab('show');
+});
+</script>
+{{footer}}
