@@ -1,0 +1,28 @@
+.review-module__item{display:flex;flex-direction:column;margin:0 0 20px}
+.review-module__row {display:flex}
+.review-module__row:last-of-type{margin-top:auto}
+
+.review-module__image{flex:0 0 30%;margin:0 0 10px;cursor:pointer}
+.review-module__name{display:block;margin:0 0 8px;line-height:normal;font-size:.95em;font-weight:500}
+.review-module__description{padding:0 0 0 15px}
+.review-module__text{margin:auto 0 15px;font-size:.9em;word-wrap:break-word}
+.review-module__rating{display:flex;flex:0 0 30%;align-items:center;justify-content:center;font-size:.85em}
+.review-module__posted {width:100%;padding:0 0 0 15px;font-size:.85em;color:#888}
+.review-module__posted .fa {margin:0 10px 0 0}
+.review-module__posted .fa-user {margin:0 10px 0 15px}
+.review-module__posted .author{display:inline-block;vertical-align:top;overflow:hidden;max-width:30%;white-space:nowrap;text-overflow:ellipsis}
+#column-left .review-module__image, #column-left .review-module__description {width:100%}
+#column-right .review-module__image, #column-right .review-module__description {width:100%}
+
+.reviews-page .sorts-block {justify-content:flex-end}
+.reviews-page select.form-control {margin:0}
+.reviews-page .products-block{display:flex;flex-wrap:wrap}
+.reviews-page .product-layout {display:flex;flex-wrap:wrap}
+
+.reviews-page .product-thumb-2 {display:flex;flex-direction:column;height:calc(100% - 20px);margin:0 0 20px}
+.reviews-page .product-thumb__caption {display:flex;flex-direction:column;flex:1 0 0;height:100%}
+.reviews-page .product-thumb__name{margin-bottom:0}
+.reviews-page .product-thumb__name:after{display:block;content:'';height:10px}
+.reviews-page__description {display:block !important;margin-bottom:auto;padding:10px 0 15px}
+.reviews-page__author, .reviews-page__date{font-size:.85em}
+.reviews-page__author{padding:0 0 5px}

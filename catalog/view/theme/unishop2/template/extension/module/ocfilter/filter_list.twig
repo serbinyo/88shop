@@ -1,0 +1,25 @@
+{% if show_options_limit > 0 and options|length > show_options_limit %}
+	{% set hidden_options = options[show_options_limit:] %}
+	{% set visibled_options = options[:show_options_limit] %}
+{% else %}
+	{% set hidden_options = [] %}
+	{% set visibled_options = options %}
+{% endif %}
+
+{% for option in visibled_options %}
+	{% include 'unishop2/template/extension/module/ocfilter/filter_item.twig' %}
+{% endfor %}
+
+{% if hidden_options|length > 0 %}
+	{% if show_options %}
+		{% set class = 'collapse in' %}
+	{% else %}
+		{% set class = 'collapse' %}
+	{% endif %}
+	<div class="{{ class }}" id="ocfilter-hidden-options">
+		{% for option in hidden_options %}
+			{% include 'unishop2/template/extension/module/ocfilter/filter_item.twig' %}
+		{% endfor %}
+	</div>
+	<button type="button" class="btn btn-default btn-block" data-toggle="collapse" data-target="#ocfilter-hidden-options" aria-expanded="false"><i class="fa"></i></button>
+{% endif %}

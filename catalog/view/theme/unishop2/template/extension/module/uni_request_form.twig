@@ -1,0 +1,57 @@
+<div id="modal-request-form" class="modal">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{{ reason ? reason : text_callback }}</h4>
+			</div>
+			<div id="callback" class="modal-request modal-body">
+				<form name="callback-form">
+					<input type="text" name="name" value="{{ customer_firstname }}" placeholder="{{ name_text }}" class="modal-request__input form-control"/>
+					{% if show_phone %}
+						<input type="tel" name="phone" value="{{ customer_telephone }}" placeholder="{{ phone_text }}" class="modal-request__input modal-request__phone form-control" />
+					{% endif %}
+					{% if show_email %}
+						<input type="email" name="mail" value="{{ customer_email }}" placeholder="{{ mail_text }}" class="modal-request__input modal-request__mail form-control {{ reason is empty ? 'hidden' }}" {{ reason is empty ? 'disabled' }} />
+					{% endif %}
+					{% if show_comment %}
+						<textarea name="comment" placeholder="{{ comment_text }}" class="modal-request__input modal-request__comment form-control {{ reason is empty ? 'hidden' }}" {{ reason is empty ? 'disabled' }}></textarea>
+					{% endif %}
+					<input type="hidden" name="type" value="{{ reason ? reason : text_callback }}" />
+					<input type="hidden" name="form-name" value="callback" />
+					{% if product_id %}<input type="hidden" name="product_id" value="{{ product_id }}" />{% endif %}
+					{% if not reason %}
+						{% if show_reason1 %}
+							<label class="modal-request__label modal-request__reason1 input"><input type="radio" name="reason" value="{{ text_reason1 }}" checked="checked" />{{ text_reason1 }}</label>
+						{% endif %}
+						{% if show_reason2 %}
+							<label class="modal-request__label modal-request__reason2 input"><input type="radio" name="reason" value="{{ text_reason2 }}" />{{ text_reason2 }}</label>
+						{% endif %}
+						{% if show_reason3 %}
+							<label class=" modal-request__label modal-request__reason3 input"><input type="radio" name="reason" value="{{ text_reason3 }}" />{{ text_reason3 }}</label>
+						{% endif %}
+					{% endif %}
+					{{ captcha }}
+					{% if text_agree %}
+						<label class="modal-request__agree input"><input type="checkbox" name="confirm" value="1" /><span>{{ text_agree }}</span></label>
+					{% endif %}
+				</form>
+				<button type="button" class="modal-request__btn btn btn-primary btn-lg" data-loading-text="{{ text_loading }}" onclick="uniRequestSend()">{{ text_send }}</button>
+				<script>
+					$(function() {
+						$('.modal-request__reason1, .modal-request__reason2').on('click', function() {
+							$('.modal-request__mail, .modal-request__comment').addClass('hidden').attr('disabled', true);
+						});
+
+						$('.modal-request__reason3').on('click', function() {
+							$('.modal-request__mail, .modal-request__comment').removeClass('hidden').attr('disabled', false);
+						});
+					});
+					$('body').on('focus', '.modal-request__phone', function(){
+						$(this).mask('{{ mask_telephone }}');
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+</div>

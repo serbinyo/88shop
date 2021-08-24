@@ -1,0 +1,12 @@
+.mfp-bg{opacity:0 !important;transition:all ease-in-out .3s}
+.mfp-bg.mfp-ready{opacity:.6 !important}
+.mfp-bg.mfp-removing{opacity:0 !important}
+.mfp-arrow{opacity:0 !important;transition:all ease-in-out .3s}
+.mfp-ready .mfp-arrow{opacity:.5 !important}
+.mfp-removing .mfp-arrow{opacity:0 !important}
+.mfp-figure{background:#fff;border-radius:10px}
+.mfp-figure:after{display:none !important}
+.mfp-close{color:#555 !important;right:10px !important}
+.mfp-bottom-bar{position:relative !important;display:flex;align-items:center;justify-content:space-between;padding:15px}
+.mfp-bottom-bar .mfp-title{max-width:90%;padding:0 !important;color:#888}
+.mfp-bottom-bar .mfp-counter{position:relative;color:#555}

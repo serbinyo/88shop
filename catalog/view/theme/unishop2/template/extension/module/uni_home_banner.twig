@@ -1,0 +1,30 @@
+{% if home_banners %}
+	{% if home_banners|length == 4 %}
+		{% set class = 'col-sm-6 col-md-3' %}
+	{% elseif home_banners|length == 3 %}
+		{% set class = 'col-sm-4 col-md-4' %}
+	{% elseif home_banners|length == 2 %}
+		{% set class = 'col-sm-6 col-md-6' %}
+	{% elseif home_banners|length == 1 %}
+		{% set class = 'col-sm-12 col-md-12' %}			
+	{% endif %}
+	<div class="home-banner row row-flex {{ hide_parent ? 'hidden-xs' }}">
+		{% for key, home_banner in home_banners %}
+			<div class="col-xs-12 {{ class }} {{home_banner.hide ? 'hidden-xs'}}">
+				{% if home_banner.link %}
+					<div class="home-banner__item link" {% if home_banner.link_popup %}onclick="uniBannerLink('{{home_banner.link}}')"{% else %}onclick="location='{{home_banner.link}}'"{% endif %}>
+				{% else %}
+					<div class="home-banner__item">
+				{% endif %}
+				{% if home_banner.icon %}
+					<i class="home-banner__icon {{ home_banner.icon }} fa-fw"></i>
+				{% endif %}
+				<div class="home-banner__text">
+					<div class="home-banner__text-1 {{ home_banner.link ? 'link' }}">{{home_banner.text}}</div>
+					{{ home_banner.text1 }}
+				</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endif %} 

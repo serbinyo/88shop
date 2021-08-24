@@ -1,0 +1,61 @@
+{{ header }}
+<div id="account-order" class="container">
+	<ul class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key+1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-6 col-lg-6 col-xxl-12' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">{{ content_top }}
+			<div class="heading-h1"><h1>{{ heading_title }}</h1></div>
+			{% if orders %}
+				{% if column_left and column_right %}
+					{% set class = 'col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xxl-6-1' %}
+				{% elseif column_left or column_right %}
+					{% set class = 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xxl-6-1' %}
+				{% else %}
+					{% set class = 'col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xxl-6-1' %}
+				{% endif %}
+				<div class="account-order-list row row-flex">
+					{% for order in orders %}
+						<div class="{{ class }}">
+							<div class="account-order-list__item uni-item">
+								<a href="{{ order.view }}" class="account-order-list__order-id"># {{ order.order_id }}</a>
+								<div class="account-order-list__name">{{ order.name }}</div>
+								<div class="account-order-list__description">
+									<div class="account-order-list__description-item size"><div class="account-order-list__description-div"><span class="account-order-list__description-span">{{ column_product }}</span></div>{{ order.products }}</div>
+									<div class="account-order-list__description-item date-added"><div class="account-order-list__description-div"><span class="account-order-list__description-span">{{ column_total }}</span></div>{{ order.total }}</div>
+									<div class="account-order-list__description-item date-added"><div class="account-order-list__description-div"><span class="account-order-list__description-span">{{ column_date_added }}</span></div>{{ order.date_added }}</div>
+									<div class="account-order-list__description-item date-added"><div class="account-order-list__description-div"><span class="account-order-list__description-span">{{ column_status }}</span></div><span style="font-weight:500">{{ order.status }}</span></div>
+								</div>
+								<a href="{{ order.view }}" class="account-order-list__btn btn btn-primary" title="{{ button_view }}"><i class="fas fa-eye"></i><span>{{ button_view }}</span></a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				{{ pagination }}
+			    <div class="pagination-text">{{ results }}</div>
+			{% else %}
+				<div class="div-text-empty">{{ text_empty }}</div>
+			{% endif %}
+			<div class="buttons clearfix hidden">
+				<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+			</div>
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

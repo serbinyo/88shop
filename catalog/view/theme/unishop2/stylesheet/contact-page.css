@@ -1,0 +1,22 @@
+.contact-page__heading{margin:0 -5px 15px;color:#666}
+.contact-page__form .captcha__title{width:16.666666%;text-align:right}
+.contact-page__form .captcha__wrapper{width:40%}
+.contact-page__btn {margin:10px 0 0}
+
+.contact-list__address {margin:0 0 15px;font-size:1.1em}
+.contact-list__address .contact-list__item:nth-child(odd){margin:0 0 5px;font-weight:500;font-size:1.1em}
+.contact-list__address .contact-list__item:nth-child(even) {color:#888}
+.contact-list__address .contact-list__item:nth-child(even):not(:last-child){margin:0 0 15px}
+
+.contact-list {margin:0 0 15px;font-size:1.1em}
+.contact-list .contact-list__item {display:flex;align-items:center}
+.contact-list .contact-list__item:first-child{margin:0 0 5px;font-weight:500;font-size:1.1em}
+.contact-list .contact-list__item:not(:first-child){margin:0 0 3px;color:#888;cursor:pointer}
+.contact-list .contact-list__item:not(:first-child):hover span{text-decoration:underline}
+.contact-list .contact-list__icon{margin:0 5px 0 0}
+
+.contact-locations{margin-bottom:40px}
+.contact-locations__ul{list-style:none;padding:0;margin:0}
+.contact-locations__li:nth-child(odd){font-weight:500}
+.contact-locations__li:nth-child(even){color:#888}
+.contact-locations__li:nth-child(even):not(:last-child){margin:0 0 10px}

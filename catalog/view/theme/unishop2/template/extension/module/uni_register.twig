@@ -1,0 +1,246 @@
+{% if show_register %}
+	<div id="modal-register-form" class="modal">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">{{ text_register }}</h4>
+				</div>
+				<div id="popup_register" class="modal-register modal-body">
+					<form class="popup_register">
+						{% if show_firstname %}
+							<input type="text" name="firstname" value="" placeholder="{{ entry_firstname }}" class="modal-register__input form-control" />
+						{% endif %}
+						{% if show_lastname %}
+							<input type="text" name="lastname" value="" placeholder="{{ entry_lastname }}" class="modal-register__input form-control" />
+						{% endif %}
+						{% if show_telephone %}
+							<input type="text" name="telephone" value="" placeholder="{{ entry_telephone }}" class="modal-register__input modal-register__phone form-control" />
+						{% endif %}
+						<input type="text" name="email" value="" placeholder="{{ entry_email }}" class="modal-register__input form-control" />
+						<input type="password" name="password" value="" placeholder="{{ entry_password }}" class="modal-register__input form-control" />
+						{% if show_confirm %}
+							<input type="password" name="confirm" value="" placeholder="{{ entry_confirm }}" class="modal-register__input form-control" />
+						{% endif %}
+						<div class="modal-register__customer-group {{ customer_groups is empty ? 'hidden' }}">
+							<div class="modal-register__heading">{{ entry_customer_group }}</div>
+							{% for customer_group in customer_groups %}
+								<label class="modal-register__item input">
+									<input type="radio" name="customer_group_id" value="{{ customer_group.customer_group_id }}" {{ customer_group.customer_group_id == customer_group_id ? 'checked="checked"' }} />
+									{{ customer_group.name }}
+								</label>
+							{% endfor %}
+						</div>
+						
+						<div class="modal-register__custom-field">
+						{% for custom_field in custom_fields %}
+							{% if custom_field.type == 'select' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									<select name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" class="form-control">
+										<option value="">{{ text_select }}</option>
+										{% for custom_field_value in custom_field.custom_field_value %}
+											{% if register_custom_field[custom_field.location][custom_field.custom_field_id] and custom_field_value.custom_field_value_id == register_custom_field[custom_field.custom_field_id] %}
+												<option value="{{ custom_field_value.custom_field_value_id }}" selected="selected">{{ custom_field_value.name }}</option>
+											{% else %}
+												<option value="{{ custom_field_value.custom_field_value_id }}">{{ custom_field_value.name }}</option>
+											{% endif %}
+										{% endfor %}
+									</select>
+								</div>
+							{% endif %}
+							{% if custom_field.type == 'radio' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									{% for custom_field_value in custom_field.custom_field_value %}
+										<label class="modal-register__item input">
+											<input type="radio" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field_value.custom_field_value_id }}" />
+											{{ custom_field_value.name }}
+										</label>
+									{% endfor %}
+								</div>
+							{% endif %}
+							{% if custom_field.type == 'checkbox' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									{% for custom_field_value in custom_field.custom_field_value %}
+										<label class="modal-register__item input">
+											<input type="checkbox" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" value="{{ custom_field_value.custom_field_value_id }}" />
+											{{ custom_field_value.name }}
+										</label>
+									{% endfor %}
+								</div>
+							{% endif %}
+							{% if custom_field.type == 'text' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									<input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if register_custom_field[custom_field.custom_field_id] %}{{ register_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control" />
+								</div>
+							{% endif %}
+							{% if custom_field.type == 'textarea' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									<textarea name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" rows="5" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control">{% if register_custom_field[custom_field.custom_field_id] %}{{ register_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}</textarea>
+								</div>
+							{% endif %}
+							{% if custom_field.type == 'file' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									<button type="button" id="button-custom-field{{ custom_field.custom_field_id }}" data-loading-text="{{ text_loading }}" class="btn btn-default"><i class="fa fa-upload"></i> {{ button_upload }}</button>
+									<input type="hidden" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if register_custom_field[custom_field.custom_field_id] %}  {{ register_custom_field[custom_field.custom_field_id] }} {% endif %}" />
+								</div>
+							{% endif %}
+							{% if custom_field.type == 'date' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									<div class="input-group date">
+										<input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if register_custom_field[custom_field.custom_field_id] %}{{ register_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="YYYY-MM-DD" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control" />
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+										</span>
+									</div>
+								</div>
+							{% endif %}
+							{% if custom_field.type == 'time' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									<div class="input-group time">
+										<input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if register_custom_field[custom_field.custom_field_id] %}{{ register_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="HH:mm" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control" />
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+										</span>
+									</div>
+								</div>
+							{% endif %}
+							{% if custom_field.type == 'time' %}
+								<div id="custom-field{{ custom_field.custom_field_id }}" class="form-group custom-field" data-sort="{{ custom_field.sort_order }}">
+									<div class="modal-register__heading">{{ custom_field.name }}</div>
+									<div class="input-group datetime">
+										<input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if register_custom_field[custom_field.custom_field_id] %}{{ register_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="YYYY-MM-DD HH:mm" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control" />
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+										</span>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+						</div>
+						
+						{% if show_newsletter %}
+							<div class="modal-register__newsletter">
+								<div class="modal-register__heading">{{ entry_newsletter }}</div>
+								<label class="modal-register__item input">
+									<input type="radio" name="newsletter" value="1" checked="checked" />{{ text_yes }}
+								</label>
+								<label class="modal-register__item input">
+									<input type="radio" name="newsletter" value="0" />{{ text_no }}
+								</label>
+							</div>
+						{% endif %}
+						{{ captcha }}
+						{% if text_agree %}
+							<label class="modal-register__agree input"><input id="agree" type="checkbox" name="agree" value="1" /><span>{{ text_agree }}</span></label>
+						{% endif %}
+						<input type="hidden" name="pass-c" value="" />
+					</form>
+					<button class="modal-register__btn btn btn-lg btn-primary" onclick="uniRegisterSend();" data-loading-text="{{ text_loading }}">{{ text_register2 }}</button>
+					{% if show_login_link %}
+						<div class="modal-register__links">
+							{{ text_register3 }} 
+							{% if show_login %}
+								<a data-dismiss="modal" onclick="uniLoginOpen();" class="modal-register__link">{{ text_login3 }}</a>
+							{% else %}
+								<a href="{{ login_link }}" class="modal-register__link">{{ text_login3 }}</a>
+							{% endif %}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<script>
+			$('body').on('focus', '.modal-register__phone', function(){
+				$(this).mask('{{ mask_telephone }}');
+			});
+		</script>
+		<script>
+			$('.modal-register input[name=\'customer_group_id\']').on('change', function() {
+				$.ajax({
+					url: 'index.php?route=account/register/customfield&customer_group_id=' + this.value,
+					dataType: 'json',
+					success: function(json) {
+						$('.modal-register .custom-field').hide();
+						$('.modal-register .custom-field').removeClass('required');
+
+						for (i = 0; i < json.length; i++) {
+							custom_field = json[i];
+
+							$('.modal-register  #custom-field' + custom_field['custom_field_id']).show();
+
+							if (custom_field['required']) {
+								$('.modal-register #custom-field' + custom_field['custom_field_id']).addClass('required');
+							}
+						}
+					},
+					error: function(xhr, ajaxOptions, thrownError) {
+						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+					}
+				});
+			});
+
+			$('input[name=\'customer_group_id\']:checked').trigger('change');
+		</script>
+		<script>
+			$('button[id^=\'button-custom-field\']').on('click', function() {
+				var element = this;
+
+				$('#form-upload').remove();
+
+				$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+				$('#form-upload input[name=\'file\']').trigger('click');
+
+				if (typeof timer != 'undefined') {
+					clearInterval(timer);
+				}
+
+				timer = setInterval(function() {
+					if ($('#form-upload input[name=\'file\']').val() != '') {
+						clearInterval(timer);
+
+						$.ajax({
+							url: 'index.php?route=tool/upload',
+							type: 'post',
+							dataType: 'json',
+							data: new FormData($('#form-upload')[0]),
+							cache: false,
+							contentType: false,
+							processData: false,
+							beforeSend: function() {
+								$(element).button('loading');
+							},
+							complete: function() {
+								$(element).button('reset');
+							},
+							success: function(json) {
+								$(element).parent().find('.text-danger').remove();
+
+								if (json['error']) {
+									$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+								}
+
+								if (json['success']) {
+									alert(json['success']);
+
+									$(element).parent().find('input').val(json['code']);
+								}
+							},
+							error: function(xhr, ajaxOptions, thrownError) {
+								alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+							}
+						});
+					}
+				}, 500);
+			});
+		</script> 
+	</div>
+{% endif %}

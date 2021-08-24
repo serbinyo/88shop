@@ -1,0 +1,187 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<br />
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="form-group" style="padding-top:0;">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" class="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_module_title }}</label>
+						<div class="col-sm-10">
+							<ul class="nav nav-tabs">
+								{% for lang in languages %}
+									<li><a href="#module-title-{{ lang.language_id }}" data-toggle="tab" style="padding:2px 10px 5px"><img src="language/{{ lang.code }}/{{ lang.code }}.png" title="{{ lang.name }}" /></a></li>
+								{% endfor %}
+							</ul>
+							<div class="tab-content">
+								{% for lang in languages %}
+									<div id="module-title-{{ lang.language_id }}" class="tab-pane">
+										<input type="text" name="title[{{ lang.language_id }}]" value="{{ title[lang.language_id] }}" placeholder="Пример: Каталог" class="form-control" />
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_category_list }}</label>
+						<div class="col-sm-10">
+							<ul class="nav nav-tabs">
+								{% for store in stores %}
+									<li {{ store.store_id == 0 ? 'class="active"' }}>
+										<a href="#store-{{ store.store_id }}" data-toggle="tab">{{ store.name }}</a>
+									</li>
+								{% endfor %}
+							</ul>
+							<div class="tab-content">
+								{% for store in stores %}
+									<div id="store-{{ store.store_id }}" class="tab-pane {{ store.store_id == 0 ? 'active' }}">
+										<div class="well well-sm" style="height:400px;overflow:auto;">
+											{% for key, category in categories[store.store_id] %} 
+												<label><input type="checkbox" name="categories[{{ store.store_id }}][{{ category.category_id }}][p]" value="{{ category.category_id }}" {{ category.category_id in categories_selected[store.store_id][category.category_id] ? 'checked="checked"' }} /> <span>{{ category.name }}</span></label><br />
+												{% for child in category.childs %} 
+													<label><input type="checkbox" name="categories[{{ store.store_id }}][{{ category.category_id }}][]" value="{{ child.child_id }}" {{ child.child_id in categories_selected[store.store_id][category.category_id] ? 'checked="checked"' }} /> <span style="font-weight:400">-- {{ child.name }}</span></label><br />
+												{% endfor %}
+												<div style="margin:0 0 5px"></div>
+											{% endfor %}
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_image }}</label>
+						<div class="col-sm-10">
+							<div class="input-group" style="width:250px">
+								<input type="text" name="image_width" value="{{ image_width }}" class="form-control" style="width:50% !important; text-align:center;" />
+								<input type="text" name="image_height" value="{{ image_height }}" class="form-control" style="width:50% !important; text-align:center;" />
+								<span class="input-group-addon">пикс.</span>
+								{% if error_image %}<span class="error">{{ error_image }}</span>{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_type }}</label>
+						<div class="col-sm-10">
+							{% set typeArr = {1: text_type_1, 2: text_type_2} %}
+							<select name="type" class="form-control">
+								{% for key, t in typeArr %}
+									<option value="{{ key }}" {{ key == type ? 'selected="selected"' }}>{{ t }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_show_column }}</label>
+						<div class="col-sm-10">
+							{% set columnsHD = [1, 2, 3, 4, 6] %}
+							{% set columnsFHD = [3, 4, 5, 6, 8, 10] %}
+							<div style="display:table-cell;padding:5px 5px 0 0">
+								<div class="input-group">
+									<span class="input-group-addon">Десктоп FullHD:</span>
+									<select name="columns[]" class="form-control" style="width:70px;">
+									{% for column in columnsFHD %}
+										<option value="{{ column }}" {{ column in columns.0 ? 'selected="selected"' }}>{{ column }}</option>
+									{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div style="display:table-cell;padding:5px 5px 0 0">
+								<div class="input-group">
+									<span class="input-group-addon">Десктоп:</span>
+									<select name="columns[]" class="form-control" style="width:55px;">
+									{% for column in columnsHD %}
+										<option value="{{ column }}" {{ column == columns.1 ? 'selected="selected"' }}>{{ column }}</option>
+									{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div style="display:table-cell;padding:5px 5px 0 0">
+								<div class="input-group">
+									<span class="input-group-addon">Ноутбук:</span>
+									<select name="columns[]" class="form-control" style="width:55px;">
+									{% for column in columnsHD %}
+										<option value="{{ column }}" {{ column in columns.2 ? 'selected="selected"' }}>{{ column }}</option>
+									{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div style="display:table-cell;padding:5px 5px 0 0">
+								<div class="input-group">
+									<span class="input-group-addon">Планшет:</span>
+									<select name="columns[]" class="form-control" style="width:55px;">
+									{% for column in columnsHD %}
+										<option value="{{ column }}" {{ column in columns.3 ? 'selected="selected"' }}>{{ column }}</option>
+									{% endfor %}
+									</select>
+								</div>
+							</div>
+							<div style="display:table-cell;padding:5px 5px 0 0">
+								<div class="input-group">
+									<span class="input-group-addon">Смартфон:</span>
+									<select name="columns[]" class="form-control" style="width:55px;">
+									{% for column in columnsHD %}
+										<option value="{{ column }}" {{ column in columns.4 ? 'selected="selected"' }}>{{ column }}</option>
+									{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{ entry_module_view_type }}</label>
+						<div class="col-sm-10">
+							<label><input type="checkbox" name="view_type" value="1" {{ view_type ? 'checked="checked"' }} class="form-control" /><span></span></label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }} </label>
+						<div class="col-sm-10">
+							<select name="status" id="input-status" class="form-control">
+								<option value="1" {{ status ? 'selected="selected"' }}>{{ text_enabled }}</option>
+								<option value="0" {{ status == 0 ? 'selected="selected"' }}>{{ text_disabled }}</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function() {
+		$('.nav-tabs').each(function() {
+			$(this).find('li:first a').tab('show');
+		});
+	});
+</script>
+{{ footer }}

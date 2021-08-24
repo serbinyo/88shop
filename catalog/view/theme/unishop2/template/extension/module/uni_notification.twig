@@ -1,0 +1,74 @@
+{% if status %}
+	<div id="uni-notification" class="notification {{ status == 1 ? 'fixed' : 'modal' }} hidden">
+		{% if status == 1 %}
+			<div class="container">
+				<div class="notification__wrapper fixed">
+					<div class="notification__text fixed">{{ text }}</div>
+					<div class="notification__buttons">
+						{% if cancel_show %}
+							<button class="notification__button btn btn-sm cancel">{{ cancel_text }}</button>
+						{% endif %}
+						<button class="notification__button btn btn-sm btn-primary">{{ apply_text }}</button>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="notification__wrapper">
+							<div class="notification__text">{{ text }}</div>
+							<div class="notification__buttons">
+								{% if cancel_show %}
+									<button class="notification__button btn btn-sm btn-default">{{ cancel_text }}</button>
+								{% endif %}
+								<button class="notification__button btn btn-sm btn-primary">{{ apply_text }}</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+	<script>
+	$(function() {	
+		let uni_notification = $('#uni-notification');
+		
+		if(!document.cookie.match('notificationOffTime')) {
+			uni_notification.removeClass('hidden');
+	
+			{% if status == 2 %}
+				uni_notification.modal({
+					keyboard: false,
+					backdrop: 'static',
+				});
+				
+				uni_notification.addClass(uniJsVars.popup_effect_in).modal('show')
+			{% endif %}
+		
+			$('.notification__button.btn-primary').on('click', function() {
+				$.get('index.php?route=extension/module/uni_notification/apply');
+				notificationClose();
+			});
+		
+			$('.notification__button.btn-default, .notification__button.cancel').on('click', function() {
+				{% if cancel_close %}
+					window.close();
+				{% else %}
+					notificationClose();
+				{% endif %}
+			});
+		
+			function notificationClose() {
+				{% if status == 1 %}
+					uni_notification.fadeOut('fast', function() {
+						uni_notification.remove();
+					});
+				{% else %}
+					uni_notification.modal('hide');
+				{% endif %}
+			}
+		}
+	});
+	</script>
+{% endif %}

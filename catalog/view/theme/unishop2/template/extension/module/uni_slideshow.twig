@@ -1,0 +1,83 @@
+<div id="uni-slideshow-{{ module }}" class="uni-slideshow row-flex {{ hide ? 'hidden-xs' }}">
+	{% if not fullwidth %}
+		{% for banner in banners %}
+			<div class="uni-slideshow__item" style="height:{{ height }}px">
+				<div class="uni-slideshow__image {{ banner.title or banner.text or banner.button ? 'col-sm-6' : 'col-sm-12' }}">
+					{{ banner.link ? '<a href="'~banner.link~'">' }}
+					<img 
+						src="{{ banner.image }}"
+						alt="{{ banner.title }}" 
+						class="uni-slideshow__img img-responsive"
+						width="{{ width }}"
+						height="{{ height }}" 
+						loading="lazy"
+					/>
+					{{ banner.link ? '</a>' }}
+				</div>
+				{% if banner.title or banner.text or banner.button %}
+					<div class="uni-slideshow__description col-sm-6">
+						<div class="uni-slideshow__title">{{ banner.title }}</div>
+						<div class="uni-slideshow__text">{{ banner.text }}</div>
+						<button class="uni-slideshow__btn uni-href btn" data-href="{{ banner.link }}">{{ banner.button }}</button>
+					</div>
+				{% endif %}
+			</div>
+		{% endfor %}
+	{% else %}
+		{% for banner in banners %}
+			<div class="uni-slideshow__item fullwidth" style="height:{{ height }}px">
+				<div class="uni-slideshow__image fullwidth">
+					{{ banner.link ? '<a href="'~banner.link~'">' }}
+					<img
+						srcset="{{ banner.images }}"
+						sizes="(max-width:996px) calc(100vw - 30px), (max-width:1200px) 700px, (max-width:1600px) 850px, 1400px" 
+						src="{{ banner.image }}" 
+						alt="{{ banner.title }}" 
+						class="uni-slideshow__img fullwidth img-responsive"
+						width="{{ width }}"
+						height="{{ height }}"
+					/>
+					{{ banner.link ? '</a>' }}
+				</div>
+				{% if banner.title or banner.text or banner.button %}
+					<div class="uni-slideshow__description fullwidth col-sm-7">
+						<div class="uni-slideshow__title fullwidth">{{ banner.title }}</div>
+						<div class="uni-slideshow__text fullwidth">{{ banner.text }}</div>
+						<button class="uni-slideshow__btn uni-href btn fullwidth" data-href="{{ banner.link }}">{{ banner.button }}</button>
+					</div>
+				{% endif %}
+			</div>
+		{% endfor %}
+	{% endif %}
+</div>
+<script>
+var hide = {{ hide ? 'true' : 'false' }};
+
+if(!hide || hide && $(window).width() > 767) {
+	$(function() {
+		let column = ($('#column-left, #column-right').is(':visible')) ? true : false;
+		
+		if(!column) {
+			$('.uni-slideshow__item').removeAttr('style')
+		}
+	});
+
+	$('#uni-slideshow-{{ module }}').addClass('owl-carousel').owlCarousel({
+		items:1,
+		autoplay:true,
+		animateIn:'{{ effect_in }}',
+		animateOut:'{{ effect_out }}',
+		autoplayTimeout:{{ delay > 0 ? delay*1000 : 5000 }},
+		autoplayHoverPause:true,
+		mouseDrag:{{ banners|length > 1 ? 'true' : 'false' }},
+		nav:true,
+		loop:true,
+		//lazyLoad:true,
+		navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
+	});
+	
+	//if($(window).width() < 768) {
+	//	uniAutoHeight('.uni-slideshow__description');
+	//}
+}
+</script>

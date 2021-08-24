@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Oops</title>
+    <style>
+		.error-not-found{margin:0 0 40px;text-align:center;color:#888}
+		.error-not-found__404{font-size:12em;color:#fff;text-shadow:0 0 15px #ccc}
+    </style>    
+  </head>
+  <body>
+		<div class="error-not-found">
+			<div class="error-not-found__404">404</div>
+			<a>Кликните, чтобы перезагрузить страницу</a>
+		</div>
+    <script>
+      document.querySelector('a').addEventListener('click', () => {
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>

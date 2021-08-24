@@ -1,0 +1,25 @@
+.modal-request__input{margin:0 0 15px}
+.modal-request__label{margin:0 0 5px;font-size:.95em}
+.modal-request__agree{font-size:.9em}
+.modal-request__btn {margin:10px 0 0}
+.modal-request .captcha {display:flex;align-items:center;padding:0;margin:15px -10px}
+.modal-request .captcha > * {width:auto}
+.modal-request .captcha__label {display:none}
+.modal-request .captcha__input{max-width:110px}
+
+.question-info {display:flex;flex-wrap:wrap;align-items:center;margin:0 0 20px;padding:10px 15px;font-weight:500;background:#f7f7f7;border-radius:4px}
+.question-info > div {margin:0 30px 0 0}
+
+.question-form {margin:0 0 30px}
+.question-form .captcha__title{width:16.6666666666%;padding-top:7px;text-align:right}
+.question-form .captcha__wrapper{width:70%}
+
+.question-list__item{margin:0 0 20px;padding:10px 0 0 5px}
+.question-list__name{margin:0 0 10px}
+.question-list__date{margin:0 0 10px;font-size:.9em;color:#888}
+.question-list__icon{width:15px;margin:0 5px 0 0}
+.question-list__reply{margin:15px 0 15px 0;padding:10px 15px;border-left:solid 2px #f00;background:rgba(0, 0, 0, .025)}
+.question-list__reply-heading{margin:0 0 5px;padding:0 0 5px;color:#f00;font-size:.9em;font-weight:500;border-bottom:solid 1px rgba(0, 0, 0, .1)}
+.question-list__reply-icon{margin:0 5px 0 0;transform:rotate(180deg);font-size:.85em}
+.question-list__hr {margin:0 0 15px;border-top:solid 2px rgba(0, 0, 0, .1)}
+.question-pagination {margin-bottom:20px}

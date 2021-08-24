@@ -1,0 +1,147 @@
+{% if categories or headerlinks2 %}
+	{% set one_line = 0 %}
+	{% set two_line = 0 %}
+	<div class="menu-wrapper col-xs-12 col-sm-6 {{ menu_type == 1 ? 'col-md-3 col-lg-3 col-xxl-4' : 'col-md-12' }}">
+		<nav id="menu" class="menu {{ menu_type == 1 ? ' menu1' : ' menu2' }}">
+			<div class="menu__header" data-toggle="collapse" data-target=".main-menu__collapse">
+				<span class="menu__header-title">{{ text_menu }}</span>
+				<i class="menu__header-icon fa fa-bars"></i>
+				<i class="menu-close menu__header-icon fas fa-times visible-xs visible-sm"></i>
+			</div>
+			<ul class="menu__collapse collapse main-menu__collapse">
+				{% for category in categories %}
+					<li class="menu__level-1-li {{ category.children ? 'has-children' }} {{ separator ? 'menu__separator' }}">
+						<a class="menu__level-1-a {{ category.children ? ' chevron ' }} {{ category.disabled ? ' disabled ' }}" {{ category.disabled is empty ? 'href="'~category.href~'"' }}>
+							{% if 'fa-' in category.icon %}
+								<span class="menu__level-1-icon"><i class="{{ category.icon }} fa-fw"></i></span>
+							{% elseif category.icon %}
+								<span class="menu__level-1-icon"><img src="image/{{ category.icon }}" alt="{{ category.name }}" /></span>
+							{% endif %}
+							{{ category.name }}
+						</a>
+						{% if category.children %}
+							{% set column = category.column > 4 ? 4 : category.column %}
+							
+							{% if category.banner.html or category.banner.img %}
+							
+								{% if category.column == 2 or column == 3  %}
+									{% set column = column + 1 %}
+								{% endif %}
+								
+								{% set class = 'col-md-'~12/(column - 1) %}
+							{% else %}
+								{% set class = 'col-md-'~12/column %}
+							{% endif %}
+						
+							<span class="menu__pm menu__level-1-pm visible-xs visible-sm"><i class="fa fa-plus"></i><i class="fa fa-minus"></i></span>
+							<div class="menu__level-2 {{ category.banner.html or category.banner.img ? 'has-banner' }}  column-{{ column }}">
+								
+								{{ category.banner.html or category.banner.img ? '<div class="menu__level-2-wrap">' }}
+							
+								{% for child in category.children %}
+									<div class="menu__level-2-ul {{ child.image ? ' has-image ' }} {{ class }}">
+										{% if child.image %}<img src="{{ child.image }}" loading="lazy" alt="{{ child.name }}" class="menu__level-2-img" />{% endif %}
+										<a class="menu__level-2-a {{ child.children ? 'has-children' }} {{ child.disabled ? 'disabled' }}" {{ child.disabled is empty ? 'href="'~child.href~'"' }}>{{ child.name }}</a>
+										{% if child.children %}
+											<span class="menu__pm menu__level-2-pm visible-xs visible-sm"><i class="fa fa-plus"></i><i class="fa fa-minus"></i></span>
+											<div class="menu__level-3">
+												<ul class="menu__level-3-ul">
+													{% for child in child.children %}
+														<li class="menu__level-3-li">
+															<a class="menu__level-3-a {{ child.disabled ? 'disabled' }}" {{ child.disabled is empty ? 'href="'~child.href~'"' }}>{{ child.name }}</a>
+														</li>
+													{% endfor %}
+													{% if child.more %}
+														<li class="menu__level-3-li">
+															<a class="menu__level-3-a menu__more uni-href" data-href="{{ child.href }}"><span class="menu__more-span">{{ text_all_categories }} ({{ child.more }})</span></a>
+														</li>
+													{% endif %}
+												</ul>
+											</div>
+										{% endif %}
+									</div>
+								{% endfor %}
+								
+								{% if category.banner.html or category.banner.img %}
+									</div>
+									<div class="menu__banner">
+										{% if category.banner.html %}
+											{{ category.banner.html }}
+										{% elseif category.banner.img %}
+											<img src="image/{{ category.banner.img }}" alt="" class="uni-href img-responsive" data-href="{{ category.banner.href }}" />
+										{% endif %}
+									</div>
+								{% endif %}
+							</div>
+						{% endif %}
+					</li>
+					{% if category.name|length <= 50 %}
+						{% set one_line = one_line+1 %}
+					{% else %}
+						{% set two_line = two_line+1 %}
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</nav>
+	</div>
+	<div class="menu-open visible-xs visible-sm">
+		<span class="menu-open__title {{ show_title_on_mobile ? 'show-on-mobile' }}">{{ text_menu }}</span>
+		<i class="menu-open__icon fas fa-bars"></i>
+	</div>
+	{% if menu_type == 1 and menu_expanded %}
+		{% set total = (((one_line * 45) + (two_line * 65)) + (home ? 0 : -25)) %}
+		<script>
+		var style = '<style>';
+			style += '@media (min-width:992px) {';
+			style += '#column-left {margin-top:{{ total }}px}';
+			style += 'header .menu1 {border-radius:4px 0 0 0}'; 
+			style += 'header .menu1 .menu__collapse {display:block !important}}</style>';
+		$('head').append(style);
+		</script>
+	{% endif %}
+	{% if menu_type == 1 %}
+		<div class="col-xs-12 col-md-9 col-lg-9 col-xxl-16 hidden-xs hidden-sm">
+			<nav id="menu2" class="menu menu2 menu-right">
+				<ul class="menu__collapse">
+					{% for headerlink in headerlinks2 %}
+						<li class="menu__level-1-li {{ headerlink.children ? 'has-children' }}">
+							<a class="menu__level-1-a {{ headerlink.children ? 'chevron' }} {{ headerlink.disabled ? 'disabled' }}" {{ headerlink.disabled is empty ? 'href="'~headerlink.href~'"' }}>
+								{% if 'fa-' in headerlink.icon %}
+									<span class="menu__level-1-icon"><i class="{{ headerlink.icon }} fa-fw"></i></span>
+								{% elseif headerlink.icon %}
+									<span class="menu__level-1-icon"><img src="image/{{ headerlink.icon }}" alt="" /></span>
+								{% endif %}
+								{{ headerlink.name }}
+							</a>
+							{% if headerlink.children %}
+								<span class="menu__pm menu__level-1-pm visible-xs visible-sm"><i class="fa fa-plus"></i><i class="fa fa-minus"></i></span>
+								<div class="menu__level-2 column-{{ headerlink.column }}">
+									{% for child in headerlink.children %}
+										<ul class="menu__level-2-ul {{ headerlink.column < 5 ? 'col-md-'~12/headerlink.column : 'col-md-4' }}">
+											<li class="menu__level-2-li">
+												<a class="menu__level-2-a {{ child.children ? 'has-children' }} {{ child.disabled ? 'disabled' }}" {{ child.disabled is empty ? 'href="'~child.href~'"' }}>{{ child.name }}</a>
+												{% if child.children and child.children|length > 0 %}
+													<span class="menu__pm menu__level-2-pm visible-xs visible-sm"><i class="fa fa-plus" ></i><i class="fa fa-minus" ></i></span>
+													<div class="menu__level-3">
+														<ul class="list-unstyled">
+															{% for child in child.children %}
+																<li class="menu__level-3-li">
+																	<a class="menu__level-3-a {{ child.disabled ? 'disabled' }}" {{ child.disabled is empty ? 'href="'~child.href~'"' }}>{{ child.name }}</a>
+																</li>
+															{% endfor %}
+														</ul>
+													</div>
+												{% endif %}
+											</li>
+										</ul>
+									{% endfor %}
+								</div>
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+			</nav>
+		</div>
+	{% endif %}
+	<script>uniMenuUpd('.menu2 .menu__collapse');</script>
+{% endif %}

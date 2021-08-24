@@ -1,0 +1,15 @@
+<div class="captcha form-group required">
+	<!-- <div class="captcha__title col-sm-12">* {{ text_captcha }}</div> -->
+	{% if route|slice(0, 9) == 'checkout/' %}
+		<label class="control-label" for="input-payment-captcha">{{ entry_captcha }}</label>
+		<input type="text" name="captcha" id="input-payment-captcha" class="form-control" autocomplete="off" />
+		<img src="index.php?route=extension/captcha/basic/captcha" alt="" />
+	{% else %}
+		<label class="captcha__label col-sm-2 control-label" for="input-captcha">{{ text_captcha }}</label>
+		<div class="col-sm-10">
+			<input type="text" name="captcha" id="input-captcha" class="captcha__input form-control" />
+			<img src="index.php?route=extension/captcha/basic/captcha" loading="lazy" alt="" class="captcha__img" />
+			{% if error_captcha %}<div class="text-danger">{{ error_captcha }}</div>{% endif %}
+		</div>
+	{% endif %}
+</div>

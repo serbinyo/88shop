@@ -1,0 +1,196 @@
+{{header}}
+<div id="product-compare" class="container">
+	<ul class="breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+			<li><a href="{{breadcrumb.href}}">{{breadcrumb.text}}</a></li>
+		{% endfor %}
+	</ul>
+	{% if success %}
+		<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{success}}
+			<!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
+		</div>
+	{% endif %}
+	<div class="row">
+		{{column_left}}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-9' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">
+			{{content_top}}
+			<div class="heading-h1"><h1>{{ heading_title }}</h1></div>
+			<div class="compare-page">
+				{% if products %}
+					<table class="table table-bordered">
+						<tr>
+							<td class="compare-page__info"></td>
+							{% for product in products %}
+								<td class="compare-page__prod-info text-center">
+								<div class="compare-page__img">
+									<a href="{{ product.href }}">
+										<img src="{{product.thumb}}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" />
+									</a>
+									<a href="{{ product.remove }}" class="compare-page__delete" title="{{ button_remove }}"><i class="far fa-trash-alt"></i></a>
+								</div>
+								<div class="compare-page__name"><a href="{{ product.href }}">{{ product.name }}</a></div>
+								<div class="compare-page__price">
+									<div class="price">
+										{% if product.special is empty %}
+											{{ product.price }}
+										{% else %}
+											<span class="price-old">{{ product.price }}</span> <span class="price-new">{{ product.special }}</span> 
+										{% endif %}
+									</div>
+									<button type="button" class="compare-page__cart add_to_cart button btn {{ product.cart_btn_class }} {{ product.product_id }}" data-pid="{{ product.product_id }}" title="{{ product.cart_btn_text }}" onclick="cart.add({{ product.product_id }}, this)"><i class="{{ product.cart_btn_icon }}"></i><span>{{ product.cart_btn_text }}</span></button>
+								</div>
+								</td>
+							{% endfor %}
+							<script>
+								uniAutoHeight('.compare-page__name');
+							</script>
+						</tr>
+						<tr>
+							<td>{{ text_model }}</td>
+							{% for product in products %}
+								<td>{{ product.model }}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<td>{{ text_manufacturer }}</td>
+							{% for product in products %}
+								<td>{{ product.manufacturer }}</td>
+							{% endfor %}
+						</tr>
+						<!--
+						<tr>
+							<td>{{ text_availability }}</td>
+							{% for product in products %}
+								<td>{{ product.availability }}</td>
+							{% endfor %}
+						</tr>
+						-->
+						{% if review_status %}
+							<tr>
+								<td>{{ text_rating }}</td>
+								{% for product in products %}
+									<td class="rating">
+										{% for i in 1..5 %}
+											<i class="{{ product.rating < i ? 'far' : 'fa' }} fa-star"></i>
+										{% endfor %} 
+										<br />
+										{{ product.reviews }}
+									</td>
+								{% endfor %}
+							</tr>
+						{% endif %}
+						<!--
+						<tr>
+							<td>{{text_summary}}</td>
+							{% for product in products %}
+								<td class="description">{{ product.description }}</td>
+							{% endfor %}
+						</tr>
+						-->
+						<tr>
+							<td>{{text_weight}}</td>
+							{% for product in products %}
+								<td>{{ product.weight }}</td>
+							{% endfor %}
+						</tr>
+						<tr>
+							<td>{{text_dimension}}</td>
+							{% for product in products %}
+								<td>{{ product.length }} x {{ product.width }} x {{ product.height }}</td>
+							{% endfor %}
+						</tr>
+						{% for attribute_group in attribute_groups %}
+							<tr>
+								<td colspan="{{ products|length + 1 }}"><strong>{{ attribute_group.name }}</strong></td>
+							</tr>
+							{% for key, attribute in attribute_group.attribute %}
+								<tr class="compare-page__attr">
+									<td>{{ attribute.name }}</td>
+									{% for product in products %}
+										{% if product.attribute[key] %}
+											<td class="compare-page__attr-val"><span>{{ product.attribute[key] }}</span></td>
+										{% else %}
+											<td> - </td>
+										{% endif %}
+									{% endfor %}
+								</tr>
+							{% endfor %}
+						{% endfor %}
+					</table>
+				{% else %}
+					<div class="div-text-empty">{{ text_empty }}</div>
+					<div class="buttons hidden">
+						<div class="pull-right"><a href="{{ continue }}" class="btn btn-default">{{ button_continue }}</a></div>
+					</div>
+				{% endif %}
+			</div>	
+			<script>
+				$(function() {
+					compareAttr();
+				});
+	
+				$('html body').on('click', '.compare-page__delete', function(e) {
+					e.preventDefault();
+			
+					let url = $(this).attr('href');
+		
+					$.ajax({
+						url: url,
+						type: 'post',
+						dataType: 'html',
+						success: function(html) {
+							let result = $(html).find('.alert-success');
+
+							if(result.length) {
+								$('.compare-page').html($(html).find('.compare-page').html())
+	
+								result.each(function() {
+									uniFlyAlert('success', $(this).text());
+								});
+								
+								compare.uniCompareUpd($('.compare-page__prod-info').length);
+					
+								compareAttr();
+							}
+						}
+					});
+				});
+					
+				function compareAttr() {
+					$('.compare-page__attr').each(function() {
+						let $this = $(this),
+							$thisChilds = $this.find('td.compare-page__attr-val');
+							
+						$thisChilds.each(function() {
+							let text = $(this).text(), i = 0;
+								
+							$this.children(':contains('+text+')').filter(function() {
+								let result = false;
+									
+								if($(this).text().toLowerCase() == text.toLowerCase()) {
+									i++;
+									result = true;
+								}
+								
+								return result;
+							}).children('span').toggleClass('highlight').css('font-weight', 400);
+								
+							if($thisChilds.length == i)	$thisChilds.children('span').removeClass('highlight');
+						});
+					})
+				}
+			</script>
+				
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }} 

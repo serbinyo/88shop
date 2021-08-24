@@ -1,0 +1,31 @@
+<div class="checkout-sticky col-md-3 col-lg-3">
+	<div class="checkout-sticky__wrapper">
+		<div class="checkout-sticky__heading"><span>{{ text_your_order }}</span></div>
+		<div class="checkout-sticky__total">
+			<div class="checkout-sticky__total-item product-total">
+				<div class="checkout-sticky__total-title">{{ text_product_total }}</div>
+				<div class="checkout-sticky__total-text"><a onclick="uniScrollTo('.checkout-sticky__header'); return false;">{{ product_total }}</a></div>
+			</div>
+			{% if weight_total %}
+				<div class="checkout-sticky__total-item product-weight">
+					<div class="checkout-sticky__total-title">{{ text_product_weight }}</div>
+					<div class="checkout-sticky__total-text">{{ weight_total }}</div>
+				</div>
+			{% endif %}
+			{% for total in totals %}
+				<div class="checkout-sticky__total-item {{ total.code }}">
+					<div class="checkout-sticky__total-title">{{ total.title }}:</div>
+					<div class="checkout-sticky__total-text"><span class="{{ total.code }}">{{ total.text }}</span></div>
+				</div>
+			{% endfor %}
+		</div>
+		<div class="checkout-sticky__confirm">
+			{% if text_confirm %}
+				<div class="checkout-sticky__confirm-agree">
+					<label class="input"><input type="checkbox" name="confirm" value="1" {{ confirm ? 'checked="checked"' }} id="agree" class="checkout-sticky__confirm-input" />{{ text_confirm }}</label>
+				</div>
+			{% endif %}
+			<button data-loading-text="{{ text_loading }}" id="confirm_checkout" class="checkout-sticky__confirm-btn btn btn-xl btn-block btn-primary">{{ button_confirm_checkout }}</button>
+		</div>
+	</div>
+</div>

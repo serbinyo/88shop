@@ -1,0 +1,78 @@
+<div id="cart" class="header-cart">
+	<button data-toggle="dropdown" class="header-cart__btn dropdown-toggle">
+		<i class="header-cart__icon fa fa-shopping-bag"></i>
+		<span id="cart-total" class="header-cart__total-items">{{ items }}</span>
+	</button>
+	<div class="header-cart__dropdown dropdown-menu pull-right">
+		{% if products or vouchers %}
+			<div class="header-cart__wrapper" data-products="{% for i, product in products %}{{ product.product_id }}{{ i + 1 < products|length ? ', ' }}{% endfor %}">
+			{% for product in products %}
+				<div class="header-cart__item">
+					{% if product.thumb %}
+						<div class="header-cart__image">
+							<a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a>
+						</div>
+					{% endif %}
+					<div class="header-cart__item-wrapper">
+						<div class="header-cart__name">
+							<a href="{{ product.href }}">{{ product.name }}</a>
+							{% if product.option %}
+								{% for option in product.option %}
+									<br /><small>{{ option.name }}: {{ option.value }}</small>
+								{% endfor %}
+							{% endif %}
+							{% if product.recurring %}
+								<br /><small>{{ text_recurring }} {{ product.recurring }}</small>
+							{% endif %}
+						</div>
+						<div class="header-cart__quantity">
+							<div class="qty-switch qty-switch__cart">
+								<i class="qty-switch__btn fa fa-minus btn-default"></i> 
+								<input type="text" name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}" data-minimum="{{ product.minimum }}" data-cid="{{ product.cart_id }}" data-pid="{{ product.product_id }}" class="qty-switch__input form-control" /> 
+								<i class="qty-switch__btn fa fa-plus btn-default"></i>
+							</div>
+						</div>
+						<div class="header-cart__price hidden-xs"><div class="header-cart__price-text">{{ column_price }}</div>{{ product.price }}</div>
+						<div class="header-cart__total"><div class="header-cart__total-text hidden-xs">{{ column_total }}</div>{{ product.total }}</div>
+					</div>
+					<div class="header-cart__remove">
+						<button type="button" onclick="cart.remove('{{ product.cart_id }}', {{ product.product_id }});" title="{{ button_remove }}" class="header-cart__remove-btn"><i class="far fa-trash-alt"></i></button>
+					</div>
+				</div>
+			{% endfor %}
+			{% for voucher in vouchers %}
+				<div class="header-cart__item">
+					<div></div>
+					<div class="header-cart__item-wrapper">
+						<div class="header-cart__name">{{ voucher.description }}</div>
+						<div class="header-cart__quantity"></div>
+						<div class="header-cart__price hidden-xs"><div class="header-cart__price-text">{{ column_price }}</div>{{ voucher.amount }}</div>
+						<div class="header-cart__total"><div class="header-cart__total-text hidden-xs">{{ column_total }}</div>{{ voucher.amount }}</div>
+					</div>
+					<div class="header-cart__remove">
+						<button type="button" onclick="voucher.remove('{{ voucher.key }}');" title="{{ button_remove }}" class="header-cart__remove-btn"><i class="far fa-trash-alt"></i></button>
+					</div>
+				</div>
+			{% endfor %}
+			</div>
+			<div class="header-cart__totals">
+				{% for total in totals %}
+					<div class="header-cart__totals-item">
+						<div class="header-cart__totals-title">{{ total.title }}:</div>
+						<div class="header-cart__totals-text">{{ total.text }}</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="header-cart__buttons">
+				{% if uni_checkout_href %}
+					<a href="{{ uni_checkout_href }}" class="btn btn-lg btn-primary">{{ button_to_checkout }}</a>
+				{% else %}
+					<!-- <a href="{{ cart }}"><small>{{ text_cart }}</small></a>&nbsp;&nbsp;&nbsp; -->
+					<a href="{{ checkout }}" class="btn btn-primary">{{ text_checkout }}</a>
+				{% endif %}
+			</div>
+		{% else %}
+			<div class="header-cart__empty">{{ text_empty }}</div>
+		{% endif %}
+	</div>
+</div>

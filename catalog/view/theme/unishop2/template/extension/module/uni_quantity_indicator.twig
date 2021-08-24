@@ -1,0 +1,13 @@
+{% if product.quantity_indicator %}
+	<div class="qty-indicator" data-text="{{ text_stock_indicator }}">
+		{% if product.quantity_indicator.type == 1 %}
+			<div class="qty-indicator__bar" data-toggle="tooltip" title="{{ product.quantity_indicator['title'] }}">
+				<div class="qty-indicator__percent percent-{{ product.quantity_indicator['items'] }}" style="width:{{ product.quantity_indicator['width'] }}%"></div>
+			</div>
+		{% else %}
+			<div class="qty-indicator__text text-{{ product.quantity_indicator['items'] }}">
+				{{ product.quantity_indicator['title'] }}
+			</div>
+		{% endif %}
+	</div>
+{% endif %}

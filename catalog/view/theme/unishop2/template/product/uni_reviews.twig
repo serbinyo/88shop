@@ -1,0 +1,90 @@
+{{ header }}
+<div class="container">
+	<ul class="breadcrumb {{ menu_expanded ? 'col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' }}">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key + 1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-6 col-lg-6 col-xxl-12' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="reviews-page {{ class }}">
+			{{ content_top }}
+			<div class="heading-h1"><h1>{{ heading_title }}</h1></div>
+			{% if reviews %}
+				<div class="sorts-block">
+					<div class="sorts-block__item hidden">
+						<div class="btn-group">
+							{% if show_grid_button %}<button type="button" id="grid-view" class="sorts-block__btn btn btn-default" title="{{ button_grid }}"><i class="fa fa-th-large"></i></button>{% endif %}
+							{% if show_list_button %}<button type="button" id="list-view" class="sorts-block__btn btn btn-default" title="{{ button_list }}"><i class="fa fa-th-list"></i></button>{% endif %}
+							{% if show_compact_button %}<button type="button" id="compact-view" class="sorts-block__btn btn btn-default hidden-xs hidden-sm" title="{{ button_compact }}"><i class="fa fa-align-justify"></i></button>{% endif %}
+						</div>
+					</div>
+					<div class="sorts-block__item hidden-xs"></div>
+					<div class="sorts-block__item">
+						<select id="input-limit" class="sorts-block__select sorts-block__limit form-control" onchange="location = this.value;">
+							{% for limits in limits %}
+								{% if limits.value == limit %}
+									<option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+								{% else %}
+									<option value="{{ limits.href }}">{{ limits.text }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<hr />
+				<div class="products-block row">
+
+					{% if column_left and column_right %}
+						{% set class = 'col-sm-12 col-md-12 col-lg-6 col-xxl-6-1' %}
+					{% elseif column_left or column_right %}
+						{% set class = 'col-sm-6 col-md-4 col-lg-4 col-xxl-5' %}
+					{% else %}
+						{% set class = 'col-sm-6 col-md-3 col-lg-3 col-xxl-4' %}
+					{% endif %}
+					
+					{% for review in reviews %}
+						<div class="product-layout col-xs-12 {{ class }}">
+							<div class="product-thumb-2 uni-item">
+								<div class="product-thumb__image">
+									<a href="{{ review.prod_href }}"><img src="{{ review.prod_thumb }}" alt="{{ review.prod_name }}" title="{{ review.prod_name }}" class="img-responsive" /></a>
+								</div>
+								<div class="product-thumb__caption">
+									<a class="product-thumb__name" href="{{ review.prod_href }}">{{ review.prod_name }}</a>
+									{% if review.rating %}
+										<div class="rating">
+											{% for i in 1..5 %}
+												<i class="{{ review.rating < i ? 'far fa-star' : 'fa fa-star' }}"></i>
+											{% endfor %}
+										</div>
+									{% endif %}
+									<p class="product-thumb__description reviews-page__description">{{ review.description }}</p>
+									<div class="reviews-page__author">{{ review.author }}</div>
+									<div class="reviews-page__date">{{ review.date_added }}</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				{{ pagination }}
+			    <div class="pagination-text">{{ results }}</div>
+			{% else %}
+				<p>{{ text_empty }}</p>
+			{% endif %}
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

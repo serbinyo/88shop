@@ -1,0 +1,7 @@
+{% if product.stickers %}
+	<div class="sticker">
+		{% for sticker in product.stickers %}
+			<div class="sticker__item {{sticker.name}}">{{ sticker.text }} {{ sticker.value }} {{ sticker.text_after }}</div>
+		{% endfor %}
+	</div>
+{% endif %}

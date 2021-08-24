@@ -1,0 +1,59 @@
+{% if categories or products or manufacturers %}
+	{% if manufacturers %}
+		<li class="live-search__section">{{ text_search_manufacturer }}</li>
+	{% endif %}
+	{% for manufacturer in manufacturers %}
+		<li class="live-search__category uni-href" data-href="{{ manufacturer.href }}">
+			<a>{{ manufacturer.name }}</a>
+		</li>
+	{% endfor %}
+	{% if categories %}
+		<li class="live-search__section">{{ text_search_category }}</li>
+	{% endif %}
+	{% for category in categories %}
+		<li class="live-search__category uni-href" data-href="{{ category.href }}">
+			<a>{{ category.name }}</a>
+		</li>
+	{% endfor %}
+	{% if products and (manufacturers or categories) %}
+		<li class="live-search__section">{{ text_search_product }}</li>
+	{% endif %}
+	{% for product in products %}
+		<li class="live-search__item uni-href" data-href="{{ product.href  }}">
+			{% if product.image %}
+				<div class="live-search__image"><img alt="{{ product.name }}" src="{{ product.image }}"></div>
+			{% endif %}
+			<div class="live-search__wrapper">
+				<div class="live-search__name">{{ product.name }}</div>
+				{% if product.description %}
+					<div class="live-search__description">
+						{{ product.description }}
+					</div>
+				{% endif %}
+				{% if product.rating >= 0 %}
+					<div class="live-search__rating rating">
+						{% for i in 1..5 %}
+							<i class="{{ product.rating < i ? 'far' : 'fa' }} fa-star"></i>
+						{% endfor %} 
+					</div>
+				{% endif %}
+			</div>
+			{% if product.price %}
+				<div class="live-search__price price">
+					{% if product.special %}
+						<span class="price-old">{{ product.price }}</span><span class="price-new">{{ product.special }}</span>
+					{% else %}
+						{{ product.price }}
+					{% endif %}
+				</div>
+			{% endif %}
+		</li>
+	{% endfor %}
+	{% if show_more %}
+		<li class="live-search__item live-search__more">
+			<a href="{{ show_more_link }}">{{ text_live_search_all }} ({{ products_total }})</a>
+		</li>
+	{% endif %}
+{% else %}
+	<li style="text-align:center;padding:5px 0;">{{ text_live_search_empty }}</li>
+{% endif %}

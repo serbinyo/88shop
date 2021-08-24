@@ -1,0 +1,10 @@
+{% if downloads %}
+	<div class="product-download">
+		{% for download in downloads %}
+			<div class="product-download__item">
+				<i class="product-download__icon far fa-{{ download.icon }}"></i> <a class="product-download__name uni-href" data-href="{{ download.href }}" data-target="_blank">{{ download.name }}</a> <span class="product-download__size">{{ download.size }}</span>
+			</div>
+		{% endfor %}
+	</div>
+	<script>$('body').find('.tab-download span').removeClass('hidden').text(' {{ downloads|length }}');</script>
+{% endif %}

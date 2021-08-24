@@ -1,0 +1,127 @@
+<div class="question-info">
+	<div class="question-info__total">{{ text_question_total }}</div>
+	<button class="btn btn-sm btn-primary" onclick="$('.question-form-wrapper').collapse('toggle');">{{ button_new_request }}</button>
+</div>
+<div class="question-form-wrapper collapse">
+	<form class="question-form form-horizontal uni-form" id="form-question">
+		{% if request_guest %}
+			<div class="form-group required">
+				<label class="col-sm-2 control-label" for="input-name">{{ entry_request_name }}</label>
+				<div class="col-sm-10">
+					<input type="text" name="name" value="{{ customer_firstname }}" id="input-username" class="form-control" />
+				</div>
+			</div>
+			{% if show_phone %}
+				<div class="form-group required">
+					<label class="col-sm-2 control-label" for="input-name">{{ entry_request_phone }}</label>
+					<div class="col-sm-10">
+						<input type="text" name="phone" value="{{ customer_telephone }}" id="input-phone" class="form-control" />
+					</div>
+				</div>
+			{% endif %}
+			{% if show_email %}
+				<div class="form-group {{ show_email_required ? 'required' }} ">
+					<label class="col-sm-2 control-label" for="input-name">{{ entry_request_mail }} {{ show_email_required is empty ? entry_request_mail_required }}</label>
+					<div class="col-sm-10">
+						<input type="text" name="mail" value="{{ customer_email }}" id="input-mail" class="form-control" />
+					</div>
+				</div>
+			{% endif %}
+			<div class="form-group required">
+				<label class="col-sm-2 control-label" for="input-request">{{ entry_request_text }}</label>
+				<div class="col-sm-10">
+					<textarea name="comment" rows="5" id="input-request" class="form-control"></textarea>
+					<div class="help-block"><small>{{ text_note }}</small></div>
+				</div>
+			</div>
+			{{ captcha }}
+			{% if text_agree %}
+				<div class="form-group">
+					<div class="col-sm-2 hidden-xs"></div>
+					<div class="col-sm-10">
+						<label class="question-form__agree input"><input id="confirm" type="checkbox" name="confirm" value="1" /><span>{{ text_agree }}</span></label>
+					</div>
+				</div>
+			{% endif %}
+			<div class="form-group">
+				<div class="col-sm-2 hidden-xs"></div>
+				<div class="col-sm-10">
+					<button type="button" id="button-request" data-loading-text="{{ text_loading }}" class="question-form__btn btn btn-lg btn-primary">{{ button_add_new_request }}</button>
+				</div>
+			</div>
+			
+			<input type="hidden" name="type" value="{{ type }}" />
+			<input type="hidden" name="product_id" value="{{ product_id }}" />
+			<input type="hidden" name="form-name" value="question" />
+		{% else %}
+			{{ text_login }}
+		{% endif %}
+	</form>
+</div>
+<div id="question-list">
+	{% if requests %}
+		{% for request in requests %}
+			<div class="question-list__item uni-item row">
+				<div class="col-xs-12 col-sm-2 col-xxl-3">
+					<div class="question-list__name"><i class="question-list__icon fa fa-user"></i>{{ request.name }}</div>
+					<div class="question-list__date"><i class="question-list__icon fa fa-calendar"></i>{{ request.date_added }}</div>
+				</div>
+				<div class="col-xs-12 col-sm-10 col-xxl-17">
+					<div class="question-list__comment">
+						{{ request.comment }}
+					</div>
+					{% if request.admin_comment != '' %}
+						<div class="question-list__reply">
+							<div class="question-list__reply-heading"><i class="question-list__reply-icon fa fa-reply"></i>{{ text_admin_reply }}</div>
+							{{ request.admin_comment }}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	{% else %}
+		<p>{{ text_no_requests }}</p>
+	{% endif %}
+	<div class="question-pagination text-center">
+		{{ pagination }}
+	</div>
+</div>
+<script>
+	$('body').find('.tab-question span').removeClass('hidden').text('{{ requests_total }}');
+		
+	$('#button-request').on('click', function() {
+		var form = '#form-question';
+		
+		$.ajax({
+			url: 'index.php?route=extension/module/uni_request/mail',
+			type: 'post',
+			data: $(form+' input, '+form+' textarea').serialize(),
+			dataType: 'json',
+			beforeSend: function() {
+				$('#button-request').button('loading');
+			},
+			complete: function() {
+				$('#button-request').button('reset');
+			},
+			success: function(json) {
+				$(form+' .text-danger').remove();
+					
+				if (json['success']) {
+					$(form).before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> '+json['success']+' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+					$(form).slideToggle();
+					$(form+' input, '+form+' textarea').val('');
+					
+					scroll_to('.alert.alert-success');
+				}
+				
+				if (json['error']) {
+					for (i in json['error']) {
+						form_error(form, i, json['error'][i]);
+					}
+					
+					uniFlyAlert('danger', json['error']);
+				}
+			}
+		});
+	});
+</script>

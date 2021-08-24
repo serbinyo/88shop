@@ -1,0 +1,72 @@
+{{ header }}
+<div id="account-address" class="container">
+	<ul class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key+1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	{% if success %}
+		<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+	{% endif %}
+	{% if error_warning %}
+		<div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+	{% endif %}
+	<div class="row">{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-6 col-lg-6 col-xxl-12' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">{{ content_top }}
+			<div class="heading-h1"><h1>{{ text_address_book }}</h1></div>
+			<div class="account-address-list">
+				<div class="buttons clearfix">
+					<!-- <div class="pull-left"><a href="{{ back }}" class="btn btn-default">{{ button_back }}</a></div> -->
+					<div class="pull-left"><button class="btn btn-sm btn-primary uni-href" data-href="{{ add }}"><i class="fas fa-plus"></i><span>{{ button_new_address }}</span></button></div>
+				</div>
+				{% if addresses %}
+					{% if column_left and column_right %}
+						{% set class = 'col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xxl-6-1' %}
+					{% elseif column_left or column_right %}
+						{% set class = 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xxl-6-1' %}
+					{% else %}
+						{% set class = 'col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xxl-6-1' %}
+					{% endif %}
+					<div class="row row-flex">
+						{% for key, result in addresses %}
+							<div class="{{ class }}">
+								<div class="account-address-list__item uni-item">
+									<div class="account-address-list__address-id"># {{ key+1 }}</div>
+									{% set arr = result.address|split('<br />') %}
+									
+									<div class="account-address-list__customer-name">{{ arr.0 }}</div>
+									<div class="account-address-list__customer-address">{{ arr.1 }}</div>
+									<div class="account-address-list__customer-city">{{ arr.2 }}</div>
+									<div class="account-address-list__customer-zone">{{ arr.3 }}</div>
+									<div class="account-address-list__customer-country">{{ arr.4 }}</div>
+								
+									{# result.address #}
+									
+									<div class="account-address-list__buttons">
+										<a href="{{ result.update }}" class="btn btn-primary"><i class="far fa-edit"></i><span>{{ button_edit }}</span></a> &nbsp; <a href="{{ result.delete }}" class="btn btn-default" title="{{ button_delete }}"><i class="far fa-trash-alt"></i></a>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% else %}
+					<div class="div-text-empty">{{ text_empty }}</div>
+				{% endif %}
+			</div>
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

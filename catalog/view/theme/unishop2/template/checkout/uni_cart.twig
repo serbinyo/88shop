@@ -1,0 +1,159 @@
+{% if error_warning %}
+	{% for error in error_warning %} 
+		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+	{% endfor %}
+{% endif %}
+{% if products or vouchers %}
+	<div class="checkout-cart__wrapper">
+		<div class="checkout-cart">
+			{% for product in products %}
+				<div class="checkout-cart__item">
+					<div class="checkout-cart__image"><img src="{{ product.thumb }}" class="checkout-cart__image-img img-responsive" title="{{ product.name }}" /></div>
+					<div class="checkout-cart__item-wrapper">
+						<div class="checkout-cart__name">
+							<a href="{{ product.href }}">{{ product.name }}</a>
+							{% if not product.stock %}<span style="color:#f00">***</span>{% endif %}
+							{% if product.option %} 
+								<div class="checkout-cart__options">
+								{% for option in product.option %}
+									<small class="checkout-cart__options-item">{{ option.name }}: {{ option.option_value }} {{ option.value }}</small>
+								{% endfor %}
+								</div>
+							{% endif %}
+							{% if product.reward %}
+								<small>{{ product.reward }}</small><br />
+							{% endif %}
+							{% if product.recurring %}
+								<span class="label label-info">{{ text_recurring_item }}</span> <small>{{ product.recurring }}</small>
+							{% endif %}
+						</div>
+						<div class="checkout-cart__model">{{ product.model }}</div>
+						<div class="checkout-cart__quantity">
+							<div class="qty-switch qty-switch__cart">
+								<i class="qty-switch__btn fa fa-minus btn-default"></i>
+								<input type="text" name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}" data-minimum="{{ product.minimum }}" data-cid="{{ product.cart_id }}" data-pid="{{ product.product_id }}" class="qty-switch__input form-control" />
+								<i class="qty-switch__btn fa fa-plus btn-default"></i>
+							</div>
+						</div>
+						<div class="checkout-cart__price hidden-xs"><div class="checkout-cart__price-text">{{ column_price }}</div>{{ product.price }}</div>
+						<div class="checkout-cart__total"><div class="checkout-cart__total-text hidden-xs">{{ column_total }}</div>{{ product.total }}</div>
+					</div>
+					<div class="checkout-cart__remove"><i onclick="cart.remove('{{ product.cart_id }}', {{ product.product_id }});" title="{{ button_remove }}" class="checkout-cart__remove-icon far fa-trash-alt"></i></div>
+				</div>
+			{% endfor %}
+			{% for voucher in vouchers %}
+				<div class="checkout-cart__item">
+					<div class="checkout-cart__image"></div>
+					<div class="checkout-cart__item-wrapper">
+						<div class="checkout-cart__name">{{ voucher.description }}</div>
+						<div class="checkout-cart__model"></div>
+						<div class="checkout-cart__quantity"></div>
+						<div class="checkout-cart__price hidden-xs"><div class="checkout-cart__price-text">{{ column_price }}</div>{{ voucher.amount }}</div>
+						<div class="checkout-cart__total"><div class="checkout-cart__total-text hidden-xs">{{ column_total }}</div>{{ voucher.amount }}</div>
+					</div>
+					<div class="checkout-cart__remove"><i onclick="uniVoucherRemove('{{ voucher.key }}');" title="{{ button_remove }}" class="checkout-cart__remove-icon far fa-trash-alt"></i></button></div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% if coupon_status or voucher_status or reward_status %}
+		<div class="text-right">
+			<div class="checkout-cart__text-additional">{{ text_additional }}</div>
+			{% if reward_user %}
+				<div class="checkout-cart__text-reward">{{ entry_reward }}</div>
+			{% endif %}
+		</div>
+		{% if coupon_status %}
+			<div class="checkout-cart__coupon text-right">
+				<input type="text" name="coupon" value="{{ totals.coupon ? totals.coupon.title ~': '~ totals.coupon.text }}" placeholder="{{ text_coupon }}" id="input-coupon" class="checkout-cart__coupon-input form-control" />
+				<button id="button-coupon" data-loading-text="{{ text_loading }}" class="checkout-cart__coupon-btn btn btn-default">{{ button_apply }}</button>
+			</div>
+		{% endif %}
+		{% if reward_status %}
+			<div class="checkout-cart__reward text-right">
+				<input type="text" name="reward" value="{{ reward }}" placeholder="{{ text_reward }}" id="input-reward" class="checkout-cart__reward-input form-control" />
+				<button id="button-reward" data-loading-text="{{ text_loading }}" class="checkout-cart__reward-btn btn btn-default">{{ button_apply }}</button>
+			</div>
+		{% endif %}
+		{% if voucher_status %}
+			<div class="checkout-cart__voucher text-right">
+				<input type="text" name="voucher" value="{{ voucher }}" placeholder="{{ text_voucher }}" id="input-voucher" class="checkout-cart__voucher-input form-control" />
+				<button id="button-voucher" data-loading-text="{{ text_loading }}" class="checkout-cart__voucher-btn btn btn-default">{{ button_apply }}</button>
+			</div>
+		{% endif %}
+	{% endif %}
+	<div class="checkout-cart__totals hidden">
+		<div class="checkout-cart__totals-item product-total">
+			<div class="checkout-cart__totals-title">{{ text_product_total }}</div>
+			<div class="checkout-cart__totals-text"><a onclick="uniScrollTo('.checkout-cart__header'); return false;">{{ product_total }}</a></div>
+		</div>
+		{% if weight_total %}
+			<div class="checkout-cart__totals-item product-weight">
+				<div class="checkout-cart__totals-title">{{ text_product_weight }}</div>
+				<div class="checkout-cart__totals-text">{{ weight_total }}</div>
+			</div>
+		{% endif %}
+		{% for total in totals %}
+			<div class="checkout-cart__totals-item {{ total.code }}">
+				<div class="checkout-cart__totals-title">{{ total.title }}:</div>
+				<div class="checkout-cart__totals-text"><span class="{{ total.code }}">{{ total.text }}</span></div>
+			</div>
+		{% endfor %}
+	</div>
+	<div style="height:20px"></div>
+	{% if related and products_related %}
+		<div class="heading"><span>{{ checkout_related_text }}</span></div>
+		<div class="uni-module product-related">
+			<div class="uni-module__wrapper">
+				{% for product in products_related %}
+					<div class="product-thumb-related uni-item">
+						<div class="product-thumb-related__image">
+							<a href="{{ product.href }}" title="{{ product.name }}">
+								<img src="{{ product.thumb }}" alt="{{ product.name }}" class="img-responsive" />
+							</a>
+						</div>
+						<div class="product-thumb-related__caption">
+							<a href="{{ product.href }}" class="product-thumb-related__name">{{ product.name }}</a>
+							{% include 'unishop2/template/extension/module/uni_options.twig' %}
+							{% if product.rating >= 0 and show_rating %}
+								<div class="rating">
+									{% for i in 1..5 %}
+										<i class="{{ product.rating < i ? 'far' : 'fa' }} fa-star"></i>
+									{% endfor %} 
+									{% if show_rating_count %}<a onclick="location='{{ product.href }}#tab-review'">{{ product.num_reviews }}</a>{% endif %}
+								</div>
+							{% endif %}
+							{% if product.price %}
+								<div class="product-thumb-related__price price" data-price="{{ product.price_value }}" data-special="{{ product.special_value }}" data-discount="{{ product.discounts }}">
+									{% if product.special %}
+										<span class="price-old">{{ product.price }}</span> <span class="price-new">{{ product.special }}</span> 
+									{% else %}
+										{{ product.price }}
+									{% endif %}
+									{% if product.tax %}
+										<span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+									{% endif %}
+								</div>
+							{% endif %}
+							<div class="cart">
+								<button type="button" class="add_to_cart btn {{ product.cart_btn_class }} {{ product.product_id }} btn-sm" title="{{ product.cart_btn_text }}" onclick="cart.add({{ product.product_id }}, this)"><i class="{{ product.cart_btn_icon }}"></i><span>{{ product.cart_btn_text }}</span></button>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		<script type="text/javascript">
+			$('.product-related').uniModules({
+				type:'{{ type_view is defined ? type_view : 'carousel' }}',
+				items:{0:{items:1},580:{items:2},720:{items:2},992:{items:3},1050:{items:3 }},
+				autoheight:['product-thumb-related__name', 'option'],
+				loop: {{ products_related|length > 4 ? 'true' : 'false' }}
+			});
+		</script>
+	{% endif %}
+{% else %}
+	<script>
+		$('#content').load('index.php?route=checkout/cart #content > *');
+	</script>
+{% endif %}

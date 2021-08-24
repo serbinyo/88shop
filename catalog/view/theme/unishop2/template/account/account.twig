@@ -1,0 +1,113 @@
+{{ header }}
+<div class="container">
+	<ul class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key+1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	{% if success %}
+		<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}</div>
+	{% endif %}
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-6 col-lg-6 col-xxl-12' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }} account-index">
+			{{ content_top }}
+			<div class="heading-h1"><h1>{{ text_my_account }}</h1></div>
+			
+			{% set class = 'col-xs-6 col-sm-4 col-md-3 col-lg-3 col-xxl-4' %}
+			
+			<div class="row row-flex">
+				<div class="{{ class }}">
+					<a href="{{ order }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-history"></i><span class="account-index__text">{{ text_order }}</span></a>
+				</div>
+				<div class="{{ class }}">
+					<a href="{{ edit }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-edit"></i><span class="account-index__text">{{ text_edit }}</span></a>
+				</div>
+				<div class="{{ class }}">
+					<a href="{{ password }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-ellipsis-h"></i><span class="account-index__text">{{ text_password }}</span></a>
+				</div>
+				<div class="{{ class }}">
+					<a href="{{ address }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-address-book"></i><span class="account-index__text">{{ text_address }}</span></a>
+				</div>
+				{% if account_page.hide_wishlist is not defined %}
+					<div class="{{ class }}">
+						<a href="{{ wishlist }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-heart"></i><span class="account-index__text">{{text_wishlist }}</span></a>
+					</div>
+				{% endif %}
+				{% if account_page.hide_download is not defined %}
+					<div class="{{ class }}">
+						<a href="{{ download }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-download"></i><span class="account-index__text">{{ text_download }}</span></a>
+					</div>
+				{% endif %}
+				{% if reward and account_page.hide_reward is not defined %}
+					<div class="{{ class }}">
+						<a href="{{ reward }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-gift"></i><span class="account-index__text">{{ text_reward }}</span></a>
+					</div>
+				{% endif %}
+				{% if account_page.hide_return is not defined %}
+					<div class="{{ class }}">
+						<a href="{{return}}" class="account-index__item uni-item"><i class="account-index__icon fa fa-reply"></i><span class="account-index__text">{{ text_return }}</span></a>
+					</div>
+				{% endif %}
+				{% if account_page.hide_transaction is not defined %}
+					<div class="{{ class }}">
+						<a href="{{ transaction }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-exchange-alt"></i><span class="account-index__text">{{ text_transaction }}</span></a>
+					</div>
+				{% endif %}
+				{% if account_page.hide_recurring is not defined %}
+					<div class="{{ class }}">
+						<a href="{{ recurring }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-user"></i><span class="account-index__text">{{ text_recurring }}</span></a>
+					</div>
+				{% endif %}
+				<div class="{{ class }}">
+					<a href="{{ newsletter }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-newspaper"></i><span class="account-index__text">{{ text_newsletter }}</span></a>
+				</div>
+			</div>
+			{% if account_page.hide_affiliate is not defined %}
+				<br />
+				<div class="row row-flex">
+					<div class="heading col-xs-12"><span>{{ text_my_affiliate }}</span></div>
+					<div class="{{ class }}">
+						<a href="{{ affiliate }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-users"></i><span class="account-index__text">{{ tracking is empty ? text_affiliate_add : text_affiliate_edit }}</span></a>
+					</div>
+					{% if tracking %}
+						<div class="{{ class }}">
+							<a href="{{ tracking }}" class="account-index__item uni-item"><i class="account-index__icon fa fa-edit"></i><span class="account-index__text">{{ text_tracking }}</span></a>
+						</div>
+					{% endif %}
+				</div>
+			{% endif %}
+			{% if credit_cards %}
+				<div class="row">
+					<div class="heading col-xs-12"><span>{{text_credit_card}}</span></div>
+					<div class="col-xs-12">
+						<ul class="list-unstyled">
+							{% for credit_card in credit_cards %}
+								<li><a href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			{% endif %}
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+<script>
+	if (typeof(uniDelPageCache) === 'function') {
+		uniDelPageCache();
+	}
+</script>
+{{ footer }}

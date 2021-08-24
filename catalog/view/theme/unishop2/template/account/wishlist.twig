@@ -1,0 +1,113 @@
+{{ header }}
+<div id="account-wishlist" class="container">
+	<ul class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key+1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	{% if success %}
+		<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+			<!-- <button type="button" class="close" data-dismiss="alert">&times;</button> -->
+		</div>
+	{% endif %}
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-9' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">
+			{{ content_top }}
+			<div class="heading-h1"><h1>{{ heading_title }}</h1></div>
+			<div class="account-wishlist">
+				{% if products %}
+					{% if column_left and column_right %}
+						{% set class = 'product-grid grid-view col-sm-12 col-md-12 col-lg-6 col-xxl-6-1' %}
+					{% elseif column_left or column_right %}
+						{% set class = 'product-grid grid-view col-sm-6 col-md-4 col-lg-4 col-xxl-5' %}
+					{% else %}
+						{% set class = 'product-grid grid-view col-sm-6 col-md-3 col-lg-3 col-xxl-4' %}
+					{% endif %}
+			
+					{% for key, product in products %}
+						<div class="product-layout {{ class }}">
+							<div class="product-thumb uni-item">
+								<div class="product-thumb__image" {{ product.special_date_end ? 'data-special-end="'~product.special_date_end~'"' }}>
+									<a href="{{ product.href }}" title="{{ product.name }}">
+										<img src="{{ product.thumb }}" {{ product.additional_image ? 'data-additional="'~product.additional_image~'"' }} alt="{{ product.name }}" class="img-responsive" width="{{ img_width }}" height="{{ img_height }}" />
+									</a>
+									<a href="{{ product.remove }}" data-href="" title="{{ button_remove }}" class="account-wishlist__delete"><i class="far fa-trash-alt"></i></a>
+								</div>
+								<div class="product-thumb__caption">
+									<a class="product-thumb__name" href="{{ product.href }}">{{ product.name }}</a>
+									{% if product.price %}
+										<div class="product-thumb__price price" data-price="{{ product.price_value }}" data-special="{{ product.special_value }}" data-discount="{{ product.discounts }}">
+											{% if not product.special %}
+												{{ product.price }}
+											{% else %}
+												<span class="price-old">{{ product.price }}</span> <span class="price-new">{{ product.special }}</span> 
+											{% endif %}
+										</div>
+										{% if product.tax %}<div class="price-tax">{{ text_tax }} {{ product.tax }}</div>{% endif %}
+									{% endif %}
+									<div class="product-thumb__cart cart {{ product.cart_btn_class }}">
+										<button type="button" class="product-thumb__add-to-cart add_to_cart btn {{ product.cart_btn_class }}" title="{{ product.cart_btn_text }}" data-pid="{{ product.product_id }}" onclick="cart.add({{ product.product_id }}, this)"><i class="{{ product.cart_btn_icon }}"></i><span class="hidden-sm hidden-md">{{ product.cart_btn_text }}</span></button>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div style="margin:0 10px">
+						<div class="div-text-empty">{{ text_empty }}</div>
+					</div>
+				{% endif %}
+				<div class="buttons clearfix hidden">
+					<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+				</div>
+			</div>
+			
+			<script>
+				uniAutoHeight('.product-thumb__name');
+						
+				$('html body').on('click', '.account-wishlist__delete', function(e) {
+					e.preventDefault();
+							
+					let url = $(this).attr('href');
+						
+					$.ajax({
+						url: url,
+						type: 'post',
+						dataType: 'html',
+						success: function(html) {
+							let result = $(html).find('.alert-success');
+							
+							if(result.length) {
+								$('.account-wishlist').html($(html).find('.account-wishlist').html())
+								
+								uniAutoHeight('.product-thumb__name');
+									
+								result.each(function() {
+									uniFlyAlert('success', $(this).text());
+								});
+								
+								wishlist.uniWishlistUpd($('.product-thumb').length);
+							}
+						}
+					});
+				});
+			</script>
+			
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+{{ footer }}

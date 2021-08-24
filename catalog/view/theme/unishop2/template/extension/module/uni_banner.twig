@@ -1,0 +1,30 @@
+{% if banners %}
+	<div class="uni-banner row row-flex">
+		{% if banners|length == 5 or banners|length == 6 %}
+			{% set class = 'col-xs-6 col-sm-2 col-md-2' %}
+		{% elseif banners|length == 4 %}
+			{% set class = 'col-xs-6 col-sm-3 col-md-3' %}
+		{% elseif banners|length == 3 %}
+			{% set class = 'col-xs-6 col-sm-4 col-md-4' %}
+		{% elseif banners|length == 2 %}
+			{% set class = 'col-xs-6 col-sm-6 col-md-6' %}
+		{% elseif banners|length == 1 %}
+			{% set class = 'col-xs-12 col-sm-12 col-md-12' %}			
+		{% endif %}
+		{% for banner in banners %}
+			<div class="uni-banner__item {{ class }}">
+				{% if banner.link %}
+					<a href="{{ banner.link }}" title="{{ banner.title }}" class="uni-banner__a">
+						<img src="{{ banner.image }}" loading="lazy" alt="{{ banner.title }}" class="uni-banner__img img-responsive" width="{{ banner.width }}" height="{{ banner.height }}" />
+						<span class="uni-banner__title banner-label btn-primary">{{ banner.title }}</span>
+					</a>
+				{% else %}
+					<div class="uni-banner__div">
+						<img src="{{ banner.image }}" loading="lazy" alt="{{ banner.title }}" title="{{ banner.title }}" class="uni-banner__img img-responsive" width="{{ banner.width }}" height="{{ banner.height }}" />
+						<span class="uni-banner__title banner-label btn-primary">{{ banner.title }}</span>
+					</div>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
+{% endif %}

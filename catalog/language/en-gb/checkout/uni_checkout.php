@@ -1,0 +1,36 @@
+<?php
+$_['text_additional'] = 'If you have a coupon code for a discount or the bonus points that you want to use, select the appropriate option.';
+$_['text_coupon'] = 'Enter the coupon code';
+$_['text_reward'] = 'Use points';
+$_['text_voucher'] = 'Enter certificate code';
+$_['text_loading'] = 'Loading...';
+$_['text_total_checkout'] = 'The amount of your order: ';
+$_['button_confirm_checkout'] = 'Confirm order';
+$_['button_apply'] = 'To apply';
+$_['text_checkout'] = 'Ordering';
+$_['text_product_weight'] = 'The weight of the items in the basket: ';
+$_['button_remove'] = 'To remove';
+$_['shipping_address'] = 'Shipping address';
+$_['select_country'] = 'Select a country';
+$_['text_delivery_methods'] = 'Shipping methods';
+$_['text_payment_methods'] = 'Payment methods';
+$_['text_comment2'] = 'Comment';
+$_['text_login2'] = 'Login';
+$_['text_register3'] = 'To register';
+$_['text_register2'] = 'Already registered?';
+$_['text_cart_empty'] = 'Your basket is empty';
+$_['heading_title'] = 'Checkout';
+$_['entry_reward'] = 'You have %s points. In this order you can use %s of them.';
+$_['text_unspecified'] = 'Not specified';
+$_['text_address_unspecified'] = 'Address is not specified';
+$_['text_postcode_unspecified'] = 'The index is not specified';
+$_['text_city_unspecified'] = 'The city is not specified';
+$_['error_exists'] = 'This e-mail is already registered, please <a href="%s"><b>log in</b></a>';
+$_['error_checkout_guest'] = 'Ordering is available only to registered buyers. Please <a href="%s">log in</a> or <a href="%s">sign up</a>';
+$_['error_minimum_summ'] = 'Minimum order in our store %s';
+$_['text_your_order'] = 'Your order';
+$_['text_coupon_success'] = 'Coupon discount applied successfully';
+$_['text_reward_success'] = 'Bonus points discount successfully applied';
+$_['text_voucher_success'] = 'Gift certificate discount successfully applied';
+$_['text_product_total'] = 'Products in the cart:';
+?>

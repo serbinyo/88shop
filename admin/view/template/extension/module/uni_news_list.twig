@@ -1,0 +1,111 @@
+{{header}}
+{{column_left}}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<a href="{{insert}}" data-toggle="tooltip" title="{{button_add}}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+				<button onclick="confirm('{{ text_confirm }}') ? $('#form').submit() : false;" type="button" data-toggle="tooltip" title="{{button_delete}}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+				<a href="{{link_settings}}" data-toggle="tooltip" title="{{button_settings}}" class="btn btn-primary"><i class="fa fa-cog"></i></a>
+			</div>
+			<h1>{{heading_title}}</h1><br />
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{breadcrumb.href}}">{{breadcrumb.text}}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{error_warning}}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{success}}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-list"></i> {{text_news_list}}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{delete}}" method="post" enctype="multipart/form-data" id="form" name="newslist">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<td width="1" align="center"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+									<td class="center">{{column_image}}</td>
+									<td class="left">
+										{% if sort == 'nd.name' %}
+											<a href="{{sort_name}}" class="{{ order|lower }}">{{column_title}} ({{totalnews}})</a>
+										{% else %}
+											<a href="{{sort_name}}">{{column_title}} ({{totalnews}})</a>
+										{% endif %}
+									</td>
+									<td class="left">
+										{% if sort == 'n.date_added' %}
+											<a href="{{sort_date_added}}" class="{{order}}">{{column_date_added}}</a>
+										{% else %}
+											<a href="{{sort_date_added}}">{{column_date_added}}</a>
+										{% endif %}
+									</td>
+									<td class="left">
+										{% if sort == 'n.viewed' %}
+											<a href="{{sort_viewed}}" class="{{order}}">{{column_viewed}}</a>
+										{% else %}
+											<a href="{{sort_viewed}}">{{column_viewed}}</a>
+										{% endif %}
+									</td>
+									<td class="left">
+										{% if sort == 'n.status' %}
+											<a href="{{sort_status}}" class="{{order}}">{{column_status}}</a>
+										{% else %}
+											<a href="{{sort_status}}">{{column_status}}</a>
+										{% endif %}
+									</td>
+									<td class="text-right">{{column_action}}</td>
+								</tr>
+							</thead>
+							<tbody>
+								{% if news %}
+									{% for news in news %}
+										<tr>
+											<td><input type="checkbox" name="selected[]" value="{{news.news_id}}" {{news_story.selected ? 'checked="checked"'}} /></td>
+											<td><img src="{{news.image}}" alt="{{news.name}}" style="padding:1px; border:1px solid #DCDCDC;" /></td>
+											<td>{{news.name}}</td>
+											<td>{{news.date_added}}</td>
+											<td>{{news.viewed}}</td>
+											<td>{{news.status}}</td>
+											<td class="text-right">
+												<a target="_blank" href="{{news.shop_href}}" data-toggle="tooltip" title="{{button_shop}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
+												{% for action in news.action %}
+													<a href="{{action.href}}" data-toggle="tooltip" title="{{button_edit}}" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+												{% endfor %}
+											</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td colspan="7">{{text_no_results}}</td>
+									</tr>
+								{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</form>
+				<div class="pagination">{{ pagination }}</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$('.nav-tabs').each(function() {
+	$(this).find('li:first a').tab('show');
+});
+
+{% if setting is empty %}
+	$('.panel.panel-default').before('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> Обязательно откройте страницу <a href="{{link_settings}}" style="text-decoration:underline !important">настроек новостей</a> и сохраните их. <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+{% endif %}
+
+</script>
+{{footer}}

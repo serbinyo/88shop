@@ -1,0 +1,70 @@
+{{ header }}
+<div class="container">
+	<ul class="breadcrumb {{ menu_expanded ? 'col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' }}">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key + 1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-6 col-lg-6 col-xxl-12' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">
+			{{ content_top }}
+			<h1 class="heading"><span>{{ heading_title }}</span></h1>
+			{% if categories %}
+				<p><strong>{{ text_index }}</strong>
+					{% for category in categories %}
+						&nbsp;&nbsp;&nbsp;<a href="index.php?route=product/manufacturer#{{ category.name }}">{{ category.name }}</a>
+					{% endfor %}
+				</p>
+				{% for category in categories %}
+					<h2 id="{{ category.name }}" class="heading"><span>{{ category.name }}</span></h2>
+					{% if category.manufacturer %}
+						{% for manufacturers in category.manufacturer|batch(4) %}
+							<div class="row">
+								{% for manufacturer in manufacturers %}
+									<div class="col-sm-2"><a href="{{ manufacturer.href }}">{{ manufacturer.name }}</a></div>
+								{% endfor %}
+							</div>
+							<br />
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				<p>{{ text_empty }}</p>
+				<div class="buttons clearfix">
+					<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+				</div>
+			{% endif %}
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+<script type="application/ld+json">
+	{
+		"@context": "http://schema.org",
+		"@type": "BreadcrumbList",
+		"itemListElement": [
+		{% for i, breadcrumb in breadcrumbs %}
+			{
+			"@type": "ListItem",
+			"position": {{ i+1 }},
+			"name": "{{ i == 0 ? shop_name: breadcrumb.text }}",
+			"item": "{{ breadcrumb.href }}"
+			{{ i + 1 < breadcrumbs|length ? '},' : '}' }}
+		{% endfor %}
+		]
+	}
+</script>
+{{ footer }}

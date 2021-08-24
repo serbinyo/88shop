@@ -1,0 +1,30 @@
+{{ text_welcome }}
+
+{% if text_subscribe %}
+{{ text_subscribe }}
+	
+{% endif %}
+{% if not approval %}
+{{ text_login }}
+
+{{ login }}
+	
+{% if text_user_login and text_user_password %}
+{{ text_user_login }}
+{{ text_user_password }}
+		
+{% endif %}
+{{ text_service }}
+{% else %}
+{{ text_approval }}
+
+{{ login}}
+	
+{% if text_user_login and text_user_password %}
+{{ text_user_login }}
+{{ text_user_password}}
+{% endif %}
+{% endif %}
+
+{{ text_thanks }}
+{{ store }}

@@ -1,0 +1,278 @@
+{{ header }}
+<div id="contact-page" class="container">
+	<ul class="breadcrumb {{ menu_expanded ? 'col-md-offset-3 col-lg-offset-3 col-xxl-offset-4' }}">
+		{% for key, breadcrumb in breadcrumbs %}
+			{% if key + 1 < breadcrumbs|length %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% else %}
+				<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<div class="row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-4 col-md-4 col-lg-6' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-8 col-md-9 col-lg-9 col-xxl-16' %}
+		{% else  %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">
+			{{ content_top }}
+			<div class="heading-h1"><h1>{{ heading_title }}</h1></div>
+			{% if image %}
+				<div class="row">
+					<div class="col-sm-12">
+						<img src="{{ image }}" alt="{{ store }}" title="{{ store }}" class="img-responsive" />
+					</div>
+				</div>
+				<hr />
+			{% endif %}
+			<div class="row">
+			
+				<div class="xs-12 col-sm-6">
+					<div class="heading"><span>{{ text_contacts }}</span></div>
+					<div class="row">
+						<div class="xs-12 col-sm-6">
+							<ul class="contact-list__address list-unstyled">
+								<li class="contact-list__item">{{ text_address }}</li>
+								<li class="contact-list__item">{{ address }}</li>
+								{% if open %}
+									<li class="contact-list__item">{{ text_open }}</li>
+									<li class="contact-list__item">{{ open }}</li>
+								{% endif %}
+								{% if geocode %}
+									<li class="contact-list__item"><a href="https://maps.google.com/maps?q={{ geocode|url_encode }}&hl={{ geocode_hl }}&t=m&z=15" target="_blank" class="btn btn-default"><i class="fa fa-map-marker"></i> {{ button_map }}</a></li>
+								{% endif %}
+							</ul>
+						</div>
+						<div class="xs-12 col-sm-6">
+							<ul class="contact-list list-unstyled">
+								<li class="contact-list__item">{{ text_contacts }}</li>
+								<li class="contact-list__item uni-href" data-href="tel:{{ telephone }}"><i class="contact-list__icon fa fa-phone-alt fa-fw"></i><span>{{ telephone }}</span></li>
+								{% for contact in contacts %}
+									<li class="contact-list__item uni-href" data-href="{{ contact.href }}">{% if contact.icon and 'fa-' in contact.icon %}<i class="contact-list__icon {{ contact.icon }} fa-fw"></i>{% elseif contact.icon %}<img src="image/{{ contact.icon }}" alt="" />{% endif %}
+										<span>{{ contact.number }}</span>
+									</li>
+								{% endfor %}
+								{% if fax %}
+									<li class="contact-list__item"><i class="fa fa-fax fa-fw" aria-hidden="true"></i><span>{{ fax }}</span></li>
+								{% endif %}
+								{% if shop_email %}
+									<li class="contact-list__item uni-href" data-href="mailto:{{ shop_email }}"><i class="contact-list__icon far fa-envelope fa-fw" aria-hidden="true"></i><span>{{ shop_email }}</span></li>
+								{% endif %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				{% if comment %}
+					<div class="xs-12 col-sm-6">
+						<div class="heading"><span>{{ text_contact_comment }}</span></div>
+						{{ comment }}
+					</div>
+				{% endif %}
+			</div>
+			{% if text_in_contacts %}
+				<div class="row">
+					<div class="col-sm-12">
+						{{ text_in_contacts }}
+					</div>
+				</div>
+				<br />
+			{% endif %}
+			{% if contact_map %}
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="heading"><span>{{ text_location }}</span></div>
+						{{ contact_map }}
+					</div>
+				</div>
+				<br />
+			{% endif %}
+			{% if locations %}
+				<div class="heading"><span>{{ text_store }}</span></div>
+				
+				{% if column_left and column_right %}
+					{% set class = 'col-sm-12 col-md-12 col-lg-6 col-xxl-6-1' %}
+				{% elseif column_left or column_right %}
+					{% set class = 'col-sm-6 col-md-4 col-lg-4 col-xxl-5' %}
+				{% else %}
+					{% set class = 'col-sm-6 col-md-3 col-lg-3 col-xxl-4' %}
+				{% endif %}
+				
+				<div class="contact-locations row">
+					{% for location in locations %}
+						<div class="contact-locations__layout {{ class }}">
+							<div class="contact-locations__item uni-item">
+								{% if location.image %}
+									<div class="contact-locations__image">
+										<img src="{{ location.image }}" loading="lazy" alt="{{ news.name }}" title="{{ news.name }}" class="img-responsive" width="{{ img_width }}" height="{{ img_height }}" />
+									</div>
+								{% endif %}
+								<ul class="contact-locations__ul">
+									<li class="contact-locations__li">{{ location.name }}</li>
+									<li class="contact-locations__li">{{ location.address }}</li>
+									<li class="contact-locations__li">{{ text_telephone }}</li>
+									<li class="contact-locations__li">{{ location.telephone }}</li>
+									{% if location.fax %}
+										<li class="contact-locations__li">{{ text_fax }}</li>
+										<li class="contact-locations__li">{{ location.fax }}</li>
+									{% endif %}
+									{% if location.open %}
+										<li class="contact-locations__li">{{ text_open }}</li>
+										<li class="contact-locations__li">{{ location.open }}</li>
+									{% endif %}
+									{% if location.comment %}
+										<li class="contact-locations__li">{{ text_comment }}</li>
+										<li class="contact-locations__li">{{ location.comment }}</li>
+									{% endif %}
+								</ul>
+								
+								{% if location.geocode %}
+								<br />
+									<a href="https://maps.google.com/maps?q={{ location.geocode|url_encode }}&hl={{ geocode_hl }}&t=m&z=15" target="_blank" class="btn btn-primary"><i class="fa fa-map-marker"></i><span>{{ button_map }}</span></a>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+			<div class="heading"><span>{{ text_contact }}</span></div>
+			<div class="contact-page__form uni-form form-horizontal">
+				<!--
+				<div class="form-group">
+					<label class="col-sm-2 hidden-xs"></label>
+					<div class="col-sm-10">
+						<h3 class="contact-page__heading"><span></h3>
+					</div>
+				</div>
+				-->
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" id="input-name" class="form-control" />
+							{% if error_name %}
+								<div class="text-danger">{{ error_name }}</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-email">{{ entry_email }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="email" value="{{ email }}" id="input-email" class="form-control" />
+							{% if error_email %}
+								<div class="text-danger">{{ error_email }}</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group required">
+						<label class="col-sm-2 control-label" for="input-enquiry">{{ entry_enquiry }}</label>
+						<div class="col-sm-10">
+							<textarea name="enquiry" rows="10" id="input-enquiry" class="form-control">{{ enquiry }}</textarea>
+							{% if error_enquiry %}
+								<div class="text-danger">{{ error_enquiry }}</div>
+							{% endif %}
+						</div>
+					</div>
+					
+					{{ captcha }}
+					
+					{% if text_agree %}
+						<div class="form-group">
+							<label class="col-sm-2 hidden-xs"></label>
+							<div class="col-sm-10">
+								{% if text_agree %}
+									<label class="input"><input type="checkbox" name="agree" value="1" checked="checked" /><span>{{ text_agree }}</span></label>
+								{% else %}
+									<label class="input"><input type="checkbox" name="agree" value="1" /><span>{{ text_agree }}</span></label>
+								{% endif %}
+							</div>
+						</div>
+					{% endif %}
+				</form>
+					
+				<div class="form-group">
+					<label class="col-sm-2 hidden-xs"></label>
+					<div class="col-sm-10">
+						<button class="contact-page__btn btn btn-lg btn-primary" data-loading-text="{{ text_loading }}">{{ button_submit }}</button>
+					</div>
+				</div>
+			</div>
+			
+			<script>
+				$('.contact-page__btn').on('click', function() {
+	
+					var form = '.contact-page__form';
+	
+					$.ajax({
+						url: 'index.php?route=information/contact',
+						type: 'post',
+						data: $(form+' input, '+form+' textarea').serialize(),
+						dataType: 'html',
+						beforeSend: function() {
+							$('.contact-page__btn').button('loading');
+						},
+						complete: function() {
+							$('.contact-page__btn').button('reset');
+						},
+						success: function(html) {
+							
+							let result = $(html).find('.text-danger');
+							
+							if(result.length) {
+								result.each(function() {
+								
+									form_error(form, $(this).text());
+									
+									uniFlyAlert('danger', $(this).text());
+								});
+							} else {
+								window.location = 'index.php?route=information/contact/success';
+							}
+						}
+					});
+				});
+			</script>
+				
+			{{ content_bottom }}
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+<script type="application/ld+json">
+	{
+		"@context": "http://schema.org",
+		"@type": "BreadcrumbList",
+		"itemListElement": [
+		{% for i, breadcrumb in breadcrumbs %}
+			{
+			"@type": "ListItem",
+			"position": {{ i+1 }},
+			"name": "{{ i == 0 ? shop_name: breadcrumb.text }}",
+			"item": "{{ breadcrumb.href }}"
+			{{ i + 1 < breadcrumbs|length ? '},' : '}' }}
+		{% endfor %}
+		]
+	}
+</script>
+<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "Store",
+		"name": "{{ microdata.name }}",
+		"url": "{{ microdata.url }}",
+		"image": "{{ microdata.image }}",
+		"description": "{{ microdata.description }}",
+		"email": "{{ microdata.email }}",
+		"telephone": "{{ microdata.telephone }}",
+		"openingHours": "{{ microdata.open_hours }}",
+		"priceRange": "{{ microdata.currency }}",
+		"address": {
+			"@type": "PostalAddress",
+			"streetAddress": "{{ microdata.address }}"
+		}
+}
+</script>
+{{ footer }}

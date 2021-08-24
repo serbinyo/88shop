@@ -1,0 +1,216 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<a onclick="$('#form-module').submit();" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></a>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<br />
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="row">
+					<label class="col-sm-2 control-label">{{ entry_banner }}</label>
+					<div class="col-sm-10">
+					<ul id="language" class="nav nav-tabs">
+						{% for language in languages %}
+							<li><a href="#language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></a></li>
+						{% endfor %}
+					</ul>
+					<div class="tab-content" style="overflow:hidden">
+						{% for language in languages %}
+							<div id="language-{{ language.language_id }}" class="tab-pane">
+								<div class="form-group" style="padding-top:0;">
+									<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+									<div class="col-sm-10">
+										<input name="description[{{language.language_id}}][name]" class="form-control" value="{{ description[language.language_id].name }}" />
+										{% if error_name[language.language_id] %}
+											<span class="text-danger">{{error_name[language.language_id]}}</span>
+										{% endif %}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-name">{{ entry_image }}</label>
+									<div class="col-sm-10">
+										<a href="" id="thumb-image-{{language.language_id}}" data-toggle="image" class="img-thumbnail">
+											<img src="{{ thumb[language.language_id] ? thumb[language.language_id] : placeholder}}" alt="" title="" data-placeholder="{{ placeholder }}" />
+										</a>
+										<input type="hidden" name="description[{{language.language_id}}][image]" value="{{ description[language.language_id].image }}" id="image-{{ language.language_id }}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-name">{{ entry_description }}</label>
+									<div class="col-sm-10">
+										<textarea name="description[{{language.language_id}}][description]" id="description-{{language.language_id}}" rows="3" class="form-control" data-toggle="summernote">{{ description[language.language_id].description }}</textarea>
+										{% if error_description[language.language_id] %}<span class="text-danger">{{error_description[language.language_id]}}</span>{% endif %}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-name">{{ entry_button }}</label>
+									<div class="col-sm-10">
+										<input name="description[{{language.language_id}}][button]" class="form-control" value="{{ description[language.language_id].button }}" />
+										{% if error_button[language.language_id] %}
+											<span class="text-danger">{{error_name[language.language_id]}}</span>
+										{% endif %}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" for="input-name">{{ entry_link }}</label>
+									<div class="col-sm-10">
+										<input name="description[{{language.language_id}}][link]" class="form-control" value="{{ description[language.language_id].link }}" />
+										{% if error_button[language.language_id] %}
+											<span class="text-danger">{{error_name[language.language_id]}}</span>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+					</div>
+					</div>
+					<hr />
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_category }}</label>
+						<div class="col-sm-10">
+							<div class="well well-sm" style="height:400px;overflow:auto;">
+								{% for key, category in categories %} 
+									<label>
+										<input type="checkbox" name="categories[]" value="{{ category.category_id }}" {{ category.category_id in categories_selected ? 'checked="checked"'}} /> 
+										<span>{{category.name}}</span>
+									</label>
+									<br />
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_store }}</label>
+						<div class="col-sm-10">
+							<div class="well well-sm" style="height:100px;overflow:auto;">
+								{% for key, store in stores %} 
+									<label>
+										<input type="checkbox" name="stores[]" value="{{ store.store_id }}" {{ store.store_id in stores_selected ? 'checked="checked"'}} /> 
+										<span>{{store.name}}</span>
+									</label>
+									<br />
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="form-group hidden">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_type }}</label>
+						<div class="col-sm-10">
+							<select name="type" class="form-control">
+								<option value="1" {{ type == 1  ? 'selected="selected"' }}>{{ text_type1 }}</option>
+								<option value="2" {{ type == 2 ? 'selected="selected"' }}>{{ text_type2 }}</option>
+							</select>
+						</div>
+					</div>
+					<input type="hidden" name="type" value="2" />
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_image_dimension }}</label>
+						<div class="col-sm-10">
+							<div class="row">
+							<div class="col-sm-6">
+								<div class="input-group">
+									<input type="text" name="width" value="{{ width }}" class="form-control">
+									<span class="input-group-addon">пикс.</span>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="input-group">
+									<input type="text" name="height" value="{{ height }}" class="form-control">
+									<span class="input-group-addon">пикс.</span>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_position }}</label>
+						<div class="col-sm-10">
+							<div class="row">
+								<div class="col-sm-6">
+								<div class="input-group">
+								<span class="input-group-addon">{{ text_position }}</span>
+								<select name="position" class="form-control">
+									<option value="1" {{ position == 1  ? 'selected="selected"' }}>1</option>
+									<option value="4" {{ position == 4 ? 'selected="selected"' }}>4</option>
+									<option value="7" {{ position == 7 ? 'selected="selected"' }}>7</option>
+									<option value="10" {{ position == 10 ? 'selected="selected"' }}>10</option>
+									<option value="13" {{ position == 13 ? 'selected="selected"' }}>13</option>
+									<option value="17" {{ position == 17 ? 'selected="selected"' }}>17</option>
+								</select>
+								</div>
+								</div>
+								<div class="col-sm-6">
+								<div class="input-group">
+								<span class="input-group-addon">{{ text_position2 }}</span>
+								<select name="position2" class="form-control">
+									<option value="1" {{ position2 == 1  ? 'selected="selected"' }}>1</option>
+									<option value="5" {{ position2 == 5 ? 'selected="selected"' }}>5</option>
+									<option value="9" {{ position2 == 9 ? 'selected="selected"' }}>9</option>
+									<option value="13" {{ position2 == 13 ? 'selected="selected"' }}>13</option>
+									<option value="17" {{ position2 == 17 ? 'selected="selected"' }}>17</option>
+									<option value="21" {{ position2 == 21 ? 'selected="selected"' }}>21</option>
+								</select>
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_date }}</label>
+						<div class="col-sm-10">
+							<div class="row">
+								<div class="col-sm-6">
+									<input type="text" name="date_start" value="{{ date_start }}" class="form-control date" data-date-format="YYYY-MM-DD">
+								</div>
+								<div class="col-sm-6">
+									<input type="text" name="date_end" value="{{ date_end }}" class="form-control date" data-date-format="YYYY-MM-DD">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<select name="status" class="form-control">
+								<option value="1" {{ status ? 'selected="selected"' }}>{{ text_enabled }}</option>
+								<option value="0" {{ status == 0 ? 'selected="selected"' }}>{{ text_disabled }}</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script>
+		$('#language a:first').tab('show');
+		
+		$('.date').datetimepicker({
+			language: '{{ datepicker }}',
+			pickTime: false
+		});
+	</script>
+</div>
+{{ footer }}

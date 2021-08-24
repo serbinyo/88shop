@@ -1,0 +1,11 @@
+.compare-page{overflow-x:auto}
+.compare-page .table-bordered td{padding:10px;border-color:#eee}
+.compare-page .table-bordered tr td{width:20%}
+.compare-page__name{min-width:160px;margin:0 0 10px;font-weight:500}
+.compare-page__img{position:relative;margin:0 0 10px}
+.compare-page__delete{display:flex;align-items:center;justify-content:center;position:absolute;top:0px;right:0;z-index:1;width:30px;height:30px;background:#f7f7f7;border:none;border-radius:100%;opacity:.9}
+.compare-page__price{margin:0 0 5px}
+.compare-page__price .price{justify-content:center;margin:0 0 15px;font-size:1.3em}
+.compare-page__cart span{padding:0}
+.compare-page .rating{display:table-cell}
+.compare-page__attr span{padding:2px 5px}

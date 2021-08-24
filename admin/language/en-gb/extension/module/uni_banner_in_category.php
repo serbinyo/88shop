@@ -1,0 +1,36 @@
+<?php
+$_['heading_title'] = '<b>UniShop2</b> Banners in categories';
+$_['text_module'] = 'Modules';
+$_['text_success'] = 'Settings successfully changed!';
+$_['text_edit'] = 'Edit';
+$_['column_name'] = 'Name';
+$_['column_category'] = 'Category';
+$_['column_date'] = 'The beginning and the end of the show';
+$_['column_status'] = 'Status';
+$_['column_edit'] = 'Action';
+$_['text_list'] = 'List of banners';
+$_['text_type1'] = 'As a unit goods';
+$_['text_type2'] = 'A strip the whole width of the block category';
+$_['text_position'] = 'Permission from 992px to 1600px';
+$_['text_position2'] = 'Resolution from 1600px and up';
+$_['text_date_undefined'] = 'Not specified';
+$_['entry_banner'] = 'Multilingual data';
+$_['entry_name'] = 'Name';
+$_['entry_image'] = 'Image';
+$_['entry_description'] = 'The banner text';
+$_['entry_button'] = 'The text on the button';
+$_['entry_link'] = 'Link';
+$_['entry_category'] = 'Show in categories';
+$_['entry_store'] = 'Show in stores';
+$_['entry_type'] = 'The display';
+$_['entry_position'] = 'Position in list of products';
+$_['entry_image_dimension'] = 'The size of the image (max)';
+$_['entry_date'] = 'The start date and the end of the show';
+$_['entry_status'] = 'Status';
+$_['entry_status_mod'] = 'The status of the module';
+$_['error_permission'] = 'You are not allowed to make changes!';
+$_['button_add'] = 'Add';
+$_['button_save'] = 'Save';
+$_['button_delete'] = 'Remove';
+$_['button_cancel'] = 'Cancel';
+?>

@@ -1,0 +1,120 @@
+{{header}}
+{{column_left}}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<a href="{{add}}" data-toggle="tooltip" title="{{button_add}}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+				<button onclick="confirm('{{ text_confirm }}') ? $('#form').submit() : false;" type="button" data-toggle="tooltip" title="{{button_delete}}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+				<a href="{{link_settings}}" data-toggle="tooltip" title="{{button_settings}}" class="btn btn-primary"><i class="fa fa-cog"></i></a>
+			</div>
+			<h1>{{heading_title}}</h1><br />
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{breadcrumb.href}}">{{breadcrumb.text}}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{error_warning}}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		{% if success %}
+			<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{text_category_add_success}}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-list"></i> {{text_category_list}}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{delete}}" method="post" enctype="multipart/form-data" id="form" name="newslist">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<td width="1" align="center"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+									<td class="left">
+										{% if sort == 'name' %}
+											<a href="{{sort_name}}" class="{{ order|lower }}">{{column_title}}</a>
+										{% else %}
+											<a href="{{sort_name}}">{{column_title}}</a>
+										{% endif %}
+									</td>
+									<td class="text-right">
+										{% if sort == 'sort_order' %}
+											<a href="{{sort_sort_order}}" class="{{order}}">{{column_sort_order}}</a>
+										{% else %}
+											<a href="{{sort_sort_order}}">{{column_sort_order}}</a>
+										{% endif %}
+									</td>
+									<td class="text-right">{{column_action}}</td>
+								</tr>
+							</thead>
+							<tbody>
+								{% if categories %}
+									{% for category in categories %}
+										<tr>
+											<td align="center"><input type="checkbox" name="selected[]" value="{{category.category_id}}" {{news_story.selected ? 'checked="checked"'}} /></td>
+											<td class="left">{{category.name}}</td>
+											<td class="text-right">{{category.sort_order}}</td>
+											<td class="text-right">
+												<a target="_blank" href="{{category.shop_href}}" data-toggle="tooltip" title="{{ button_shop }}" class="btn btn-success"><i class="fa fa-eye"></i></a>
+												{% for action in category.action %}
+													<a href="{{action.href}}" data-toggle="tooltip" title="{{button_edit}}" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+												{% endfor %}
+											</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td class="center" colspan="7">{{text_no_results}}</td>
+									</tr>
+								{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</form>
+			<div class="pagination">{{pagination}}</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$('.nav-tabs').each(function() {
+	$(this).find('li:first a').tab('show');
+});
+
+if(window.location.hash == '#settings') {
+	$('.sett').show();
+}
+
+function save() {
+	data = $('#form-news-setting input, #form-news-setting textarea, #form-news-setting select').serialize();
+	$.ajax({
+		url: 'index.php?route=extension/module/uni_news/save&user_token={{user_token}}',
+		type: 'post',
+		data: data,
+		dataType: 'html',
+		beforeSend: function() {
+			$('.save.btn.btn-primary').button('loading');
+		},
+		complete: function() {
+			$('.save.btn.btn-primary').button('reset');
+		},
+		success: function(data) {
+			if(data == 'success') {
+				$('.sett').slideToggle();
+			} else {
+				$('.save.btn.btn-primary').html('<i class="fa fa-remove"></i>').attr('data-original-title', 'У вас недостаточно прав для управления настройками модуля').attr('class', 'btn btn-danger');
+			}
+		}
+	});
+}
+
+{% if uni_news is empty %}
+	save();
+{% endif %}
+
+</script>
+{{footer}}

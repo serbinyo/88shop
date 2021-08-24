@@ -1,0 +1,7 @@
+.topstripe .container{position:relative;display:flex;align-items:center;justify-content:center;font-size:.9em;margin-top:-100%;transition:margin-top ease-in-out .3s}
+.topstripe .container.active{margin-top:0}
+.topstripe__container-text{padding:10px 15px}
+.topstripe__container-img .topstripe__text {position:absolute}
+.topstripe__container-img .topstripe__close {position:absolute;right:30px}
+.topstripe__text{padding:0 15px 0 0}
+.topstripe__close{width:20px;text-align:center;line-height:19px;cursor:pointer}
