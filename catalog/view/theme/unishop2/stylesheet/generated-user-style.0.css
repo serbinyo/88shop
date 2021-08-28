@@ -1,0 +1,24 @@
+header {
+    background: linear-gradient(230deg, #ED1E79 0%, #e2d92d 80%);
+}
+
+#menu2 {
+    //background: linear-gradient(230deg, #ED1E79 0%, #e2d92d 80%);
+    background: linear-gradient(230deg, #ED1E79 0%, #e2d92d 80%);
+}
+
+.header-block {
+    padding: 40px 0 35px;
+}
+
+.menu {
+    border-radius: 10px !important;
+}
+
+footer {
+    background: linear-gradient(to right,#e44194 0,#d43394 100%) no-repeat;
+}
+
+.top-menu {
+    background: rgba(0, 0, 0, .08) !important;
+}
