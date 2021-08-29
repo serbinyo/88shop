@@ -245,7 +245,22 @@ class Cart {
 				}
 
                 #region Добавление опции установки цены
-				if (true === $setPriceFromOption) {
+                # Что бы опции установки цены работали со скидками и акциями
+                if (true === $setPriceFromOption) {
+
+                    //Если установленны скидки считаем в процентах скидку и применяем к опциям
+                    if ($product_discount_query->num_rows) {
+                        $product_discount_discount = ($product_discount_query->row['price'] /  $product_query->row['price'] ) * 100;
+                        $product_discount_discount = round($product_discount_discount, 0);
+                        $option_price = ($option_price / 100) * $product_discount_discount;
+
+                        //Если скидок нет, проверяем акции. Считаем в процентах акцию и применяем к опциям
+                    }elseif ($product_special_query->num_rows) {
+                        $product_special_discount = ($product_special_query->row['price'] / $product_query->row['price'] ) * 100;
+                        $product_special_discount = round($product_special_discount, 0);
+                        $option_price = ($option_price / 100) * $product_special_discount;
+                    }
+
                     $price = 0;
                 }
                 #endregion Добавление опции установки цены
