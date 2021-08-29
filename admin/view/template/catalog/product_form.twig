@@ -584,6 +584,7 @@
                               <thead>
                                 <tr>
                                   <td class="text-left">{{ entry_option_value }}</td>
+                                  <td class="text-left">{{ entry_model }}</td>
                                   <td class="text-right">{{ entry_quantity }}</td>
                                   <td class="text-left">{{ entry_subtract }}</td>
                                   <td class="text-right">{{ entry_price }}</td>
@@ -621,6 +622,7 @@
 
 
                                       </select> <input type="hidden" name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][product_option_value_id]" value="{{ product_option_value.product_option_value_id }}"/></td>
+                                    <td class="text-left"><input type="text" name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][model]" value="{{ product_option_value.model }}" placeholder="{{ entry_model }}" class="form-control" /></td>
                                     <td class="text-right"><input type="text" name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][quantity]" value="{{ product_option_value.quantity }}" placeholder="{{ entry_quantity }}" class="form-control"/></td>
                                     <td class="text-left"><select name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][subtract]" class="form-control">
 
@@ -1417,11 +1419,12 @@
 		  }
 
 		  if (item['type'] == 'select' || item['type'] == 'radio' || item['type'] == 'checkbox' || item['type'] == 'image') {
-			  html += '<div class="table-responsive">';
+			  html += '<div class="table-responsive">12213213213213213';
 			  html += '  <table id="option-value' + option_row + '" class="table table-striped table-bordered table-hover">';
 			  html += '  	 <thead>';
 			  html += '      <tr>';
 			  html += '        <td class="text-left">{{ entry_option_value }}</td>';
+              html += '	 <td class="text-left">{{ entry_model }}</td>';
 			  html += '        <td class="text-right">{{ entry_quantity }}</td>';
 			  html += '        <td class="text-left">{{ entry_subtract }}</td>';
 			  html += '        <td class="text-right">{{ entry_price }}</td>';
@@ -1490,6 +1493,7 @@
 	  html += '  <td class="text-left"><select name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][option_value_id]" class="form-control">';
 	  html += $('#option-values' + option_row).html();
 	  html += '  </select><input type="hidden" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][product_option_value_id]" value="" /></td>';
+      html += '  <td class="text-left"><input type="text" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][model]" value="" placeholder="{{ entry_model }}" class="form-control" /></td>';
 	  html += '  <td class="text-right"><input type="text" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][quantity]" value="" placeholder="{{ entry_quantity }}" class="form-control" /></td>';
 	  html += '  <td class="text-left"><select name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][subtract]" class="form-control">';
 	  html += '    <option value="1">{{ text_yes }}</option>';
