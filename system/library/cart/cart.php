@@ -42,6 +42,9 @@ class Cart {
 
 			if ($product_query->num_rows && ($cart['quantity'] > 0)) {
 				$option_price = 0;
+				#region Добавление опции установки цены
+				$setPriceFromOption = false;
+                #endregion Добавление опции установки цены
 				$option_points = 0;
 				$option_weight = 0;
 
@@ -60,6 +63,12 @@ class Cart {
 								} elseif ($option_value_query->row['price_prefix'] == '-') {
 									$option_price -= $option_value_query->row['price'];
 								}
+								#region Добавление опции установки цены
+								elseif ($option_value_query->row['price_prefix'] == '=') {
+                                    $option_price = $option_value_query->row['price'];
+                                    $setPriceFromOption = true;
+                                }
+                                #endregion Добавление опции установки цены
 
 								if ($option_value_query->row['points_prefix'] == '+') {
 									$option_points += $option_value_query->row['points'];
@@ -234,6 +243,12 @@ class Cart {
 				} else {
 					$recurring = false;
 				}
+
+                #region Добавление опции установки цены
+				if (true === $setPriceFromOption) {
+                    $price = 0;
+                }
+                #endregion Добавление опции установки цены
 
 				$product_data[] = array(
 					'cart_id'         => $cart['cart_id'],
