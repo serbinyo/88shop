@@ -42,9 +42,6 @@ class Cart {
 
 			if ($product_query->num_rows && ($cart['quantity'] > 0)) {
 				$option_price = 0;
-				#region Добавление опции установки цены
-				$setPriceFromOption = false;
-                #endregion Добавление опции установки цены
 				$option_points = 0;
 				$option_weight = 0;
                 $option_model = '';
@@ -65,12 +62,6 @@ class Cart {
 								} elseif ($option_value_query->row['price_prefix'] == '-') {
 									$option_price -= $option_value_query->row['price'];
 								}
-								#region Добавление опции установки цены
-								elseif ($option_value_query->row['price_prefix'] == '=') {
-                                    $option_price = $option_value_query->row['price'];
-                                    $setPriceFromOption = true;
-                                }
-                                #endregion Добавление опции установки цены
 
 								if ($option_value_query->row['points_prefix'] == '+') {
 									$option_points += $option_value_query->row['points'];
@@ -245,27 +236,6 @@ class Cart {
 				} else {
 					$recurring = false;
 				}
-
-                #region Добавление опции установки цены
-                # Что бы опции установки цены работали со скидками и акциями
-                if (true === $setPriceFromOption) {
-
-                    //Если установленны скидки считаем в процентах скидку и применяем к опциям
-                    if ($product_discount_query->num_rows) {
-                        $product_discount_discount = ($product_discount_query->row['price'] /  $product_query->row['price'] ) * 100;
-                        $product_discount_discount = round($product_discount_discount, 0);
-                        $option_price = ($option_price / 100) * $product_discount_discount;
-
-                        //Если скидок нет, проверяем акции. Считаем в процентах акцию и применяем к опциям
-                    }elseif ($product_special_query->num_rows) {
-                        $product_special_discount = ($product_special_query->row['price'] / $product_query->row['price'] ) * 100;
-                        $product_special_discount = round($product_special_discount, 0);
-                        $option_price = ($option_price / 100) * $product_special_discount;
-                    }
-
-                    $price = 0;
-                }
-                #endregion Добавление опции установки цены
 
 				$product_data[] = array(
 					'cart_id'         => $cart['cart_id'],

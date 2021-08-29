@@ -675,22 +675,6 @@
 
                                         {% endif %}
 
-                                        {# region Добавление опции установки цены #}
-                                        {% if product_option_value.price_prefix == '=' %}
-
-
-                                          <option value="=" selected="selected">=</option>
-
-
-                                        {% else %}
-
-
-                                          <option value="=">=</option>
-
-
-                                        {% endif %}
-                                        {# endregion Добавление опции установки цены #}
-
 
                                       </select> <input type="text" name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][price]" value="{{ product_option_value.price }}" placeholder="{{ entry_price }}" class="form-control"/></td>
                                     <td class="text-right"><select name="product_option[{{ option_row }}][product_option_value][{{ option_value_row }}][points_prefix]" class="form-control">
