@@ -3,16 +3,11 @@ header {
 }
 
 #menu2 {
-    //background: linear-gradient(230deg, #ED1E79 0%, #e2d92d 80%);
     background: linear-gradient(230deg, #ED1E79 0%, #e2d92d 80%);
 }
 
 .header-block {
     padding: 40px 0 35px;
-}
-
-.menu {
-    border-radius: 10px !important;
 }
 
 footer {
@@ -21,4 +16,9 @@ footer {
 
 .top-menu {
     background: rgba(0, 0, 0, .08) !important;
+}
+
+.btn-primary {
+    color: #000000;
+    background: #ffcf00;
 }
